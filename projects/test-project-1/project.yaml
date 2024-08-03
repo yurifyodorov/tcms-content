@@ -4,8 +4,8 @@ id: "clze3v7n50000tw9a9afxfwy3"
 title: "Test project"
 description: |
   ## Project the best
-  - 1
-  - 2 
+  - 1. Пункт первый
+  - 2. Пункт второй
   - [3](https://google.com)
 cases:
   - "case-1"
