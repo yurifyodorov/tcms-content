@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/project.schema.json
+
+id: "clze3v7n50000tw9a9afxfwy3"
+title: "Test project"
+description: |
+  ## Project the best
+  - 1
+  - 2 
+  - [3](https://google.com)
+cases:
+  - "case-1"
