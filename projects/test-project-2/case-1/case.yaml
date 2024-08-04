@@ -1,10 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
 
-id: "clzfm0ddv0004089a3op77nv3"
-title: "Название тест-кейса"
+id: "clzfqb5fg0001yytlct9y3h7f"
+title: "Название тест-кейса 2"
 blocks:
   - type: "text"
-    id: "clze3v7nc0002tw9a23prc4mq"
+    id: "clzfqb5fi0002yytlhoj1a2ex"
     text: |
 
       <img width="50%" src="https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/test.png"/>
@@ -15,11 +15,11 @@ blocks:
   
 
   - type: "video"
-    id: "clzfm0ddv0005089a2ant1i7k"
+    id: "clzfqb5fi0003yytlbiiee5ea"
     url: "https://example.com/video/step-to-reproduce"
 
   - type: "text"
-    id: "clzfm0ddv0006089ahypzch2v"
+    id: "clzfqb5fi0004yytl0of405f9"
     text: |
       ## Какой-то заголовок
 
@@ -29,13 +29,13 @@ blocks:
       - пункт 3
 
   - type: "question"
-    id: "clzfm0ddv0007089ahesrbt4c"
+    id: "clzfqb5fi0005yytlbc94988j"
     answerOptions:
       - text: "Во всех браузерах проверено?"
-        id: "clzfm0ddv0008089aeda5fmpu"
+        id: "clzfqb5fi0006yytl0h8o7nqv"
         isRight: false
       - text: "А на реальном устройстве?"
-        id: "clzfm0ddv0009089ad1u16cvk"
+        id: "clzfqb5fj0007yytlas2f612i"
         isRight: true
     explanation: |
       ### Объяснение

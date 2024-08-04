@@ -1,21 +1,13 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/project.schema.json
 
-id: "clzfm0m6k000a089a7l88de4f"
-thumbnail: ""
-image: ""
-title: "Project 2"
-shortDescription: "short description example"
+id: "clzfqb5fl0008yytl76k84r3s"
+title: "Test project 2"
 description: |
-  *Еще один проект*
-  
-  
-  > что-нибудь тут написано
-  
-  ``
-
-  ### Заголовок
-
-  какой-то текст
-
+  ## Project the best
+  - 1
+  - 2 
+  - [3](https://google.com)
 cases:
   - "case-1"
+thumbnail: ""
+image: ""
