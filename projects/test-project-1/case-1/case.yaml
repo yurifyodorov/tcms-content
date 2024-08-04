@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
 
-id: "clze3v7nc0001tw9a6u524hmd"
+id: "clzfm0ddv0004089a3op77nv3"
 title: "Название тест-кейса"
 blocks:
   - type: "text"
@@ -15,11 +15,11 @@ blocks:
   
 
   - type: "video"
-    id: "clze3v7nc0003tw9a56zc28d4"
+    id: "clzfm0ddv0005089a2ant1i7k"
     url: "https://example.com/video/step-to-reproduce"
 
   - type: "text"
-    id: "clze3v7nc0004tw9aatzihtg6"
+    id: "clzfm0ddv0006089ahypzch2v"
     text: |
       ## Какой-то заголовок
 
@@ -29,13 +29,13 @@ blocks:
       - пункт 3
 
   - type: "question"
-    id: "clze3v7nc0005tw9a1tjr2dvy"
+    id: "clzfm0ddv0007089ahesrbt4c"
     answerOptions:
       - text: "Во всех браузерах проверено?"
-        id: "clze3v7nc0006tw9a235b5b34"
+        id: "clzfm0ddv0008089aeda5fmpu"
         isRight: false
       - text: "А на реальном устройстве?"
-        id: "clze3v7nc0007tw9af6jad0es"
+        id: "clzfm0ddv0009089ad1u16cvk"
         isRight: true
     explanation: |
       ### Объяснение
