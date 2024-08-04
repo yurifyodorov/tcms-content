@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/project.schema.json
+
+id: "clzfm0m6k000a089a7l88de4f"
+thumbnail: ""
+image: ""
+title: "Project 2"
+shortDescription: "short description example"
+description: |
+  *Еще один проект*
+  
+  
+  > что-нибудь тут написано
+  
+  ``
+
+  ### Заголовок
+
+  какой-то текст
+
+cases:
+  - "case-1"

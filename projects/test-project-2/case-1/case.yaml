@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
+
+id: "clzfm0ddv0004089a3op77nv3"
+title: "Название тест-кейса"
+blocks:
+  - type: "text"
+    id: "clze3v7nc0002tw9a23prc4mq"
+    text: |
+
+      <img width="50%" src="https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/test.png"/>
+
+      ## Что будем тестировать
+
+      Что-нибудь.
+  
+
+  - type: "video"
+    id: "clzfm0ddv0005089a2ant1i7k"
+    url: "https://example.com/video/step-to-reproduce"
+
+  - type: "text"
+    id: "clzfm0ddv0006089ahypzch2v"
+    text: |
+      ## Какой-то заголовок
+
+      Какое-то описание:
+      - пункт 1
+      - пункт 2
+      - пункт 3
+
+  - type: "question"
+    id: "clzfm0ddv0007089ahesrbt4c"
+    answerOptions:
+      - text: "Во всех браузерах проверено?"
+        id: "clzfm0ddv0008089aeda5fmpu"
+        isRight: false
+      - text: "А на реальном устройстве?"
+        id: "clzfm0ddv0009089ad1u16cvk"
+        isRight: true
+    explanation: |
+      ### Объяснение
+
+      Этот тест поможет проверить такую-то фичу.
+      Каждый вопрос направлен на проверку того что тестировщик ничего не забыл.
+    successMessage: |
+      🎉 **Отлично! Вы успешно провели тестирование! Гуд Job**
