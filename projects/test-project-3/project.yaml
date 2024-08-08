@@ -3,11 +3,11 @@
 id: "test-course-3"
 thumbnail: "https://uploads.sitepoint.com/wp-content/uploads/2017/04/1493235373large_react_apps_A-01.png"
 image: "https://s3.timeweb.com/132514fc-images-staging/content/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg"
-title: "Test course 3"
+title: "Test project 3"
 shortDescription: |
   consectetur adipiscing elit. Nunc facilisis turpis vitae
   sollicitudin interdum. Quisque nibh nibh, semper ut libero id,
 description: |
-  *super puper description course*
+  *super puper description project*
 cases:
   - "test-case"
