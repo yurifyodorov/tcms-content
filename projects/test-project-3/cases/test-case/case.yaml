@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
+id: "test-course-3_test-lesson"
+title: "Продвинутое программирование на Python fasdk;fjas;dkfjas;dkfja;skdf"
+blocks:
+  - type: "text"
+    id: "test-course-3_test-lesson_block-1"
+    text: |
+
+      <img width="50%" src="https://s3.timeweb.com/132514fc-images-staging/content/1 0 (7).png"/>
+
+      ## Что будем сегодня изучать
+
+      Вопрос открытый.
+      Были бы мы классными поциками, то играли бы в прядки, а так рубим бабосики
+
+  - type: "text"
+    id: "test-course-3_test-lesson_block-2"
+    text: |
+      ## Введение в продвинутое программирование на Python
+
+      В этом разделе мы погрузимся в продвинутые темы программирования на Python, включая:
+      - ООП (Объектно-ориентированное программирование)
+      - Работа с базами данных
+      - Многопоточность и асинхронное программирование

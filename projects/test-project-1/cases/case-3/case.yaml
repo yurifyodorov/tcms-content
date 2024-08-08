@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
+id: "test-project-1_case-3"
+title: "Rtqx с кодом"
+shortDescription: |
+  VASd dsf.
+
+  Были бы мы клаsdffsdf, fa;slkdfja;slkdfja;sldkfja; sldkfjasdklfja;slkdjfa;s kldjfa;slkdjfa;skdjfk;adsjf
+  - sdf
+  - sdf
+  - sdf
+
+  тdsfdsff
+
+blocks:
+  - type: "text"
+    id: "test-project0_case-3_block-1"
+    text: |
+
+      <Sandpack 
+        template="react"
+        files={{
+          "/App.js": `export default function App() {
+          return <h1>Hello Sandpack</h1>
+      }`,
+        }}
+      />
+
+      ## Что будем сегодня
+
+      Вопрос открытый.
+      !!!!!

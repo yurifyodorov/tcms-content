@@ -1,47 +1,29 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/project.schema.json
-
-id: "clzfm0m6k000a089a7l88de4f"
-thumbnail: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/logo-react.svg"
-image: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/images.jpeg"
-title: "Test project 242 !!!111"
-shortDescription: "short description example"
+id: "test-course-1"
+thumbnail: "https://uploads.sitepoint.com/wp-content/uploads/2017/04/1493235373large_react_apps_A-01.png"
+image: "https://s3.timeweb.com/132514fc-images-staging/content/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg"
+title: "Подготовка к тестированию"
 description: |
-  *Project the best 123*
-  
-  ![some text](https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/images.jpeg)
-  
-  > цитата
-  
-  
-  ```html
-    <div>123</div>
-  ```
-  
-  - 1. Пункт первый
-  - 2. Пункт второй
-  - 3. [Пункт третий](https://google.com)
 
-  ### Заголовок два
+  В sefefes sefesf esf:
+  - sefefss
+  - sefefs
+  - efsfes
+  - refesfse
 
-  тест текст 123!!!
-  
-  
-  <details>
-    <summary>Click me</summary>
+  **awdwdawd!** Нwadwfbwa 😊
+shortDescription: |
 
-    ### Heading
-    1. Foo
-    2. Bar
-       * Baz
-       * Qux
+  В sefefes sefesf esf:
+  - sefefss
+  - sefefs
+  - efsfes
+  - refesfse
 
-    ### Some Javascript
-    ```js
-    function logSomething(something) {
-      console.log('Something', something);
-    }
-    ```
-  </details>
 
+dependencies:
+  - "test-project-2"
 cases:
   - "case-1"
+  - "case-2"
+  - "case-3"
