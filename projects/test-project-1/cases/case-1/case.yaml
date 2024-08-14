@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
 id: "test-project-1_case-1"
-title: "Урок с картинкой"
+title: "Кейс с картинкой"
 shortDescription: |
   Вопрос открытый.
 
