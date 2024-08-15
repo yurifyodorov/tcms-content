@@ -5,9 +5,19 @@ image: "https://s3.timeweb.com/132514fc-images-staging/content/lautaro-andreani-
 title: "Test project 2"
 description: |
   *project the best description*
+  
+  Example
+  ```javascript
+    console.log("Hello, World!");
+  ```
 shortDescription: Lorem ipsum dolor sit amet,
   consectetur adipiscing elit. Nunc facilisis turpis vitae
   sollicitudin interdum. Quisque nibh nibh, semper ut libero id,
+
+  Example
+  ```javascript
+  console.log("Hello, World!");
+  ```
 dependencies:
   - "test-project-3"
 cases:

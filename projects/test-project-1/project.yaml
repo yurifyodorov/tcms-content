@@ -8,8 +8,11 @@ description: |
   В sefefes sefesf esf:
   - sefefss
   - sefefs
-  - efsfes
-  - refesfse
+  
+    Example
+    ```javascript
+      console.log("Hello, World!");
+    ```
 
 shortDescription: |
 

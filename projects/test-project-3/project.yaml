@@ -5,8 +5,10 @@ thumbnail: "https://qaforce.co.uk/wp-content/uploads/2018/01/93df749e28b1d2b1068
 image: "https://s3.timeweb.com/132514fc-images-staging/content/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg"
 title: "Test project 3"
 shortDescription: |
-  consectetur adipiscing elit. Nunc facilisis turpis vitae
-  sollicitudin interdum. Quisque nibh nibh, semper ut libero id,
+  Example
+  ```javascript
+    console.log("Hello, World!");
+  ```
 description: |
   *super puper description project*
 cases:
