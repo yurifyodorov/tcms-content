@@ -1,23 +1,19 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/project.schema.json
 id: "test-project-2"
-thumbnail: "https://qaforce.co.uk/wp-content/uploads/2018/01/93df749e28b1d2b1068013fc484f6407-nfl-memes-san-francisco-ers.jpg"
+thumbnail: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/New-Hire-Form-Cover.webp"
 image: "https://s3.timeweb.com/132514fc-images-staging/content/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg"
-title: "Test project 2"
+title: "Пройти ознакомительный этапe"
 description: |
-  *project the best description*
-  
-  Example
-  ```javascript
-    console.log("Hello, World!");
-  ```
-shortDescription: Lorem ipsum dolor sit amet,
-  consectetur adipiscing elit. Nunc facilisis turpis vitae
-  sollicitudin interdum. Quisque nibh nibh, semper ut libero id,
+  *test the best description*
 
-  Example
-  ```javascript
-  console.log("Hello, World!");
-  ```
+shortDescription:
+  Подробно заполните свой профиль
+
+  Заполнить поля
+  - имя
+  - адрес
+  - телефон
+
 dependencies:
   - "test-project-3"
 cases:
