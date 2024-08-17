@@ -10,9 +10,11 @@ shortDescription:
   Подробно заполните свой профиль
 
   Заполнить поля
-  - имя
-  - адрес
-  - телефон
+  
+  - [x] Write the press release
+  - [ ] Update the website
+  - [ ] Contact the media
+
 
 dependencies:
   - "test-project-3"
