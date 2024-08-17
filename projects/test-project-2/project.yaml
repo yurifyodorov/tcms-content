@@ -12,8 +12,13 @@ description: |
   - [ ] телефон
   - [ ] адрес
 
-shortDescription:
-  Подробно заполните свой профиль
+shortDescription: |
+
+  Заполнить поля
+  
+  - [x] имя
+  - [ ] телефон
+  - [ ] адрес
 
 
 dependencies:
