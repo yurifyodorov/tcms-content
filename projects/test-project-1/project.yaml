@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/project.schema.json
 id: "test-project-1"
-thumbnail: "https://qaforce.co.uk/wp-content/uploads/2018/01/93df749e28b1d2b1068013fc484f6407-nfl-memes-san-francisco-ers.jpg"
+thumbnail: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/Login-Form-Modal.gif"
 image: "https://s3.timeweb.com/132514fc-images-staging/content/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg"
 title: "Регистрация в системе"
 description: |
