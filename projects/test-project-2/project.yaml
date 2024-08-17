@@ -11,9 +11,9 @@ shortDescription:
 
   Заполнить поля
   
-  - [x] Write the press release
-  - [ ] Update the website
-  - [ ] Contact the media
+  - [x] имя
+  - [ ] телефон
+  - [ ] адрес
 
 
 dependencies:
