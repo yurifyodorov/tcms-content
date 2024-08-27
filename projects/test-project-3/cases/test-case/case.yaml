@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
 id: "test-project-3_test-lesson"
-title: "TESTTT fasdk;fjas;dkfjas;dkfja;skdf"
+title: "Тест-кейс №1"
 blocks:
   - type: "text"
     id: "test-project-3_test-case_block-1"
