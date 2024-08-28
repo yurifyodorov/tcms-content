@@ -1,14 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
-id: "test-project-1_case-3"
-title: "Кейс #3"
+id: "test-project-1_case-4"
+title: "Кейс #4"
 shortDescription: |
-  Тестовое описание
-  Тестовое описание
   Тестовое описание
 
 blocks:
   - type: "text"
-    id: "test-project0_case-3_block-1"
+    id: "test-project0_case-4_block-1"
     text: |
 
       <Sandpack 
