@@ -16,7 +16,7 @@ blocks:
   - type: "text"
     id: "test-project-2_test-case_block-2"
     text: |
-      ## TESDDD
+      ## Введение в продвинутое программирование на Python
 
       Tedsdsdsdsdsd:
       - sdds

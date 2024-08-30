@@ -13,7 +13,7 @@ blocks:
 
       <Player url="https://www.youtube.com/watch?v=7m0UyCjfNgM" />
 
-      ## Title test
+      ## Что будем сегодня изучать
 
       Вопрос открытый.
       dfxfdxfx
@@ -21,7 +21,7 @@ blocks:
   - type: "text"
     id: "test-project-1_case-2_block-2"
     text: |
-      ## Title test
+      ## Введение в продвинутое программирование на Python
 
       TestTestTestTestTestTestTest:
       - wdwdw
@@ -31,7 +31,7 @@ blocks:
   - type: "text"
     id: "test-project-1_case-2_block-3"
     text: |
-      ## Title test
+      ## Введение в продвинутое программирование на Python
 
       TestTestTestTestTestTestTest:
       - wdwdw
