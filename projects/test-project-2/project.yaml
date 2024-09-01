@@ -27,3 +27,5 @@ dependencies:
   - "test-project-3"
 cases:
   - "test-case"
+product:
+  access: public

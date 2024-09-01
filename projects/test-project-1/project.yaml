@@ -4,7 +4,6 @@ thumbnail: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/Login-Form-Mod
 image: "https://s3.timeweb.com/132514fc-images-staging/content/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg"
 title: "Регистрация в системе"
 description: |
-
   В первую очередь тебе надо:
   - тест
   - тест
@@ -15,13 +14,11 @@ description: |
     ```
 
 shortDescription: |
-
   Сделать следующее:
   - зайти туда
   - нажать сюда
   - ввести буковки
   - нажать кнопку
-
 
 dependencies:
   - "test-project-2"
@@ -29,3 +26,6 @@ cases:
   - "case-1"
   - "case-2"
   - "case-3"
+product:
+  access: private
+  price: 3999
