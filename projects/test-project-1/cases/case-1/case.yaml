@@ -1,36 +1,25 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
 id: "test-project-1_case-1"
-title: "Кейс с картинкой"
+title: "Кейс #1"
 shortDescription: |
-  Вопрос открытый.
-
-  Былsdsdzsбы мы, fa;slkdfja;slkdfja;sldkfja; sldkfjasdklfja;slkdjfa;s kldjfa;slkdjfa;skdjfk;adsjf
-  - sdf
-  - sdf
-  - sdf
-
-  то играли бы в прядки, а так рубим бабосики
+  Тестовое описание
+  Тестовое описание
+  Тестовое описание
 
 blocks:
   - type: "text"
     id: "test-project-1_case-1_block-1"
     text: |
 
-      <NextImage width="500" height="500" src="https://s3.timeweb.com/132514fc-images-staging/content/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg"/>
-
-
-      ## ТЕСТ
-
-  
+      <NextImage width="500" height="500" src="https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/28147d49c5164610be2e586dbaa53e91.gif"/>
 
   - type: "text"
     id: "test-project-1_case-1_block-2"
     text: |
 
-      <NextImage width="500" height="500" src="https://s3.timeweb.com/132514fc-images-staging/content/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg"/>
+      <NextImage width="500" height="500" src="https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/28147d49c5164610be2e586dbaa53e91.gif"/>
 
 
-      ## Что будем сегодня тестить
 
       Test212323123
 

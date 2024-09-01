@@ -1,15 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
 id: "test-project-1_case-2"
-title: "Кейс с видео"
+title: "Кейс #2"
 shortDescription: |
-  Вопрос открытый.
-
-  Бcfgfgcы мы класfgfdgи, fa;slkdfja;slkdfja;sldkfja; sldkfjasdklfja;slkdjfa;s kldjfa;slkdjfa;skdjfk;adsjf
-  - sdf
-  - sdf
-  - sdf
-
-  ntcsfdffd
+  Тестовое описание
+  Тестовое описание
+  Тестовое описание
 
 blocks:
   - type: "text"
@@ -18,7 +13,7 @@ blocks:
 
       <Player url="https://www.youtube.com/watch?v=7m0UyCjfNgM" />
 
-      ## Title test
+      ## Что будем сегодня изучать
 
       Вопрос открытый.
       dfxfdxfx
@@ -26,7 +21,7 @@ blocks:
   - type: "text"
     id: "test-project-1_case-2_block-2"
     text: |
-      ## Title test
+      ## Введение в продвинутое программирование на Python
 
       TestTestTestTestTestTestTest:
       - wdwdw
@@ -36,7 +31,7 @@ blocks:
   - type: "text"
     id: "test-project-1_case-2_block-3"
     text: |
-      ## Title test
+      ## Введение в продвинутое программирование на Python
 
       TestTestTestTestTestTestTest:
       - wdwdw
