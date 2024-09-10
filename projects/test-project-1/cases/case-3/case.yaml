@@ -9,18 +9,4 @@ shortDescription: |
 blocks:
   - type: "text"
     id: "test-project0_case-3_block-1"
-    text: |
-
-      <Sandpack 
-        template="react"
-        files={{
-          "/App.js": `export default function App() {
-          return <h1>Hello Sandpack</h1>
-      }`,
-        }}
-      />
-
-      ## Что будем сегодня изучать
-
-      Вопрос открытый.
-      !!!!!
+    text: Это тест блока третьего кейса

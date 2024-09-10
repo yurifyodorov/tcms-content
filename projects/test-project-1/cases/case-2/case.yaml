@@ -1,39 +1,17 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
 id: "test-project-1_case-2"
 title: "Кейс #2"
-shortDescription: |
-  Тестовое описание
-  Тестовое описание
-  Тестовое описание
+shortDescription: Тестовое описание
 
 blocks:
   - type: "text"
     id: "test-project-1_case-2_block-1"
-    text: |
-
-      <Player url="https://www.youtube.com/watch?v=fZAABzRl_IU" />
-
-      ## Что будем сегодня изучать
-
-      Вопрос открытый.
-      dfxfdxfx
+    text: Это тест блока1 второго кейса
 
   - type: "text"
     id: "test-project-1_case-2_block-2"
-    text: |
-      ## Введение в продвинутое программирование на Python
-
-      TestTestTestTestTestTestTest:
-      - wdwdw
-      - dwwd
-      - wdwd
+    text: Это тест блока2 второго кейса
 
   - type: "text"
     id: "test-project-1_case-2_block-3"
-    text: |
-      ## Введение в продвинутое программирование на Python
-
-      TestTestTestTestTestTestTest:
-      - wdwdw
-      - dwwd
-      - wdwd
+    text: Это тест блока3 второго кейса
