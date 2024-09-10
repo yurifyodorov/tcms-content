@@ -3,8 +3,8 @@ id: "test-project-2"
 thumbnail: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/New-Hire-Form-Cover.webp"
 image: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/New-Hire-Form-Cover.webp"
 title: "Пройти ознакомительный этап"
-description: подробное описание для проекта №3
-shortDescription: Краткое описание для проекта №3
+description: подробное описание для проекта №2
+shortDescription: Краткое описание для проекта №2
 dependencies:
   - "test-project-3"
 cases:
