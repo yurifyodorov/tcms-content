@@ -1,17 +1,17 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
 id: "test-project-1_case-2"
-title: "Кейс #2"
-shortDescription: Тестовое описание
+title: "Case 2"
+shortDescription: test description
 
 blocks:
   - type: "text"
     id: "test-project-1_case-2_block-1"
-    text: Это тест блока1 второго кейса
+    text: block1 case
 
   - type: "text"
     id: "test-project-1_case-2_block-2"
-    text: Это тест блока2 второго кейса
+    text: block2 case
 
   - type: "text"
     id: "test-project-1_case-2_block-3"
-    text: Это тест блока3 второго кейса
+    text: block3 case

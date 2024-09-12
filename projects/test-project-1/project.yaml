@@ -2,9 +2,39 @@
 id: "test-project-1"
 thumbnail: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/Login-Form-Modal.gif"
 image: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/Login-Form-Modal.gif"
-title: "Регистрация в системе"
-description: подробное описание для проекта №1
-shortDescription: Краткое описание для проекта №1
+title: "Test project 3"
+description: | 
+  test description 1
+  
+  # Заголовок
+  ## Заголовок
+  ### Заголовок
+  
+  - элемент списка 1 тест
+  - item 2
+  
+  1. элемент списка 1 тест
+  2. item 2
+  
+  ---
+  
+  > Dorothy followed her through many of the beautiful rooms in her castle.
+  
+  I love supporting the **[EFF](https://eff.org)**.
+  This is the *[Markdown Guide](https://www.markdownguide.org)*.
+  See the section on [`code`](#code).
+  
+  Это **слово** жирное. This <em>word</em> is italic.
+  
+
+  
+  ```
+    <div className="flex pt-5">
+      code block!
+    </div>
+  ```
+
+shortDescription: test shortDescription 1
 dependencies:
   - "test-project-2"
 cases:
