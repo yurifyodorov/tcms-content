@@ -2,11 +2,12 @@
 id: "test-project-2"
 thumbnail: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/New-Hire-Form-Cover.webp"
 image: "https://s3.timeweb.cloud/ca1c67e1-tcms-images/content/New-Hire-Form-Cover.webp"
-title: "Test project 2"
-description: test description 1
-shortDescription: test shortDescription 1
-dependencies:
-  - "test-project-3"
+title: "Тестовый проект №2"
+description: |
+  *Project the best description*
+shortDescription: Lorem ipsum dolor sit amet,
+  consectetur adipiscing elit. Nunc facilisis turpis vitae
+  sollicitudin interdum. Quisque nibh nibh, semper ut libero id,
 cases:
   - "test-case"
 product:

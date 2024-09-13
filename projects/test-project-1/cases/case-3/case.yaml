@@ -1,12 +1,28 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
 id: "test-project-1_case-3"
-title: "Case 3"
+title: "Кейс #3 с кодом"
 shortDescription: |
-  test shortDescription
-  test shortDescription
-  test shortDescription
+  Текс.
+
+      Ниже список:
+      - пункт 1
+      - пункт 2
+      - пункт 3
+
+  то играли бы в прядки, а так рубим бабосики
 
 blocks:
   - type: "text"
     id: "test-project-1_case-3_block-1"
-    text: text for test
+    text: |
+
+      Какой-то <Sandpack/> должен отображаться здесь 
+      
+      <Sandpack 
+        template="react"
+        files={{
+          "/App.js": `export default function App() {
+          return <h1>Hello Sandpack</h1>
+      }`,
+        }}
+      />
