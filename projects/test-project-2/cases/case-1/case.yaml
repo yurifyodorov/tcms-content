@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
-id: "test-project-1_test-case"
+id: "test-project-1_case-1"
 title: "Test Case 1"
 blocks:
   - type: "text"

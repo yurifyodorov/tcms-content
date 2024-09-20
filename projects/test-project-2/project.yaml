@@ -9,6 +9,6 @@ shortDescription: Lorem ipsum dolor sit amet,
   consectetur adipiscing elit. Nunc facilisis turpis vitae
   sollicitudin interdum. Quisque nibh nibh, semper ut libero id,
 cases:
-  - "test-case"
+  - "case-1"
 product:
   access: public
