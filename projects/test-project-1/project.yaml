@@ -42,4 +42,4 @@ cases:
   - "case-2"
   - "case-3"
 product:
-  access: private
+  access: public
