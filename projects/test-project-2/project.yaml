@@ -11,4 +11,4 @@ shortDescription: Lorem ipsum dolor sit amet,
 cases:
   - "case-1"
 product:
-  access: public
+  access: private
