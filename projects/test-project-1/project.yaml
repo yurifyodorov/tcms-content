@@ -34,7 +34,7 @@ description: |
     </div>
   ```
 
-shortDescription: test shortDescription 1
+shortDescription: это краткое описание для проекта "test-project-1"
 dependencies:
   - "test-project-2"
 cases:
