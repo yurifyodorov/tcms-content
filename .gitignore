@@ -1,0 +1,34 @@
+# See https://help.github.com/articles/ignoring-files/ for more blaze-slider ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# Environment
+.idea
+.env
+
+# Reports
+tests/reports
+tests/downloads
+tests/screenshots
+
+# Temp files
+tests/temp

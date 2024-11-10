@@ -1,0 +1,40 @@
+{
+  "name": "tcms-content",
+  "version": "1.0.0",
+  "description": "Хранилище тест кейсов для [TCMS](https://tcms.yurifedorov.com/)",
+  "main": "index.js",
+  "scripts": {
+    "test:chrome": "node tests/scripts/run-tests-in-chrome.js",
+    "test:edge": "node tests/scripts/run-tests-in-edge.js",
+    "test:firefox": "node tests/scripts/run-tests-in-firefox.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "stepDefinitions": [
+      "tests/e2e/steps/**/*.ts"
+    ],
+    "messages": {
+      "enabled": true,
+      "output": "tests/reports/cucumber-messages.ndjson"
+    },
+    "json": {
+      "enabled": true,
+      "output": "tests/reports/cucumber-report.json"
+    },
+    "html": {
+      "enabled": true,
+      "output": "tests/reports/cucumber-report.html"
+    }
+  },
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^21.0.2",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.3",
+    "cypress": "^13.15.2",
+    "dotenv": "^16.4.5",
+    "multiple-cucumber-html-reporter": "^3.8.0",
+    "onecolor": "^4.1.0",
+    "typescript": "^5.6.3"
+  }
+}
