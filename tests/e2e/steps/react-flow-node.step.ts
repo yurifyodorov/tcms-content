@@ -4,9 +4,9 @@ import { MapPage } from "@tests/pages/Map.page";
 
 const page = new MapPage()
 
-BeforeAll(() => {
-  cy.exec('npx prisma db seed')
-});
+// BeforeAll(() => {
+//   cy.exec('npx prisma db seed')
+// });
 
 Then('I click on project node', function () {
   page.reactFlowNode.click('test-project-2-node')
