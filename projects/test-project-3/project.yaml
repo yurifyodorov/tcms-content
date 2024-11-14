@@ -9,3 +9,5 @@ cases:
   - "case-1"
 product:
   access: private
+contentUrl: "https://example.com/test-repository3"
+contentToken: "test-token-3"
