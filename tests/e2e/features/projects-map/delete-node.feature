@@ -7,10 +7,10 @@ Feature: Delete node
     And I click on map link
     And I am on the map page
 
-  Scenario: Delete project node
-    When I click on project node
+  Scenario: Delete feature node
+    When I click on feature node
     And I click on trash icon
-    Then the project node should not be displayed on the map
+    Then the feature node should not be displayed on the map
 
   Scenario: Delete image node
     When I am on the map page

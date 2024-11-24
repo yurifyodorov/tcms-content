@@ -8,8 +8,8 @@ const page = new MapPage()
 //   cy.exec('npx prisma db seed')
 // });
 
-Then('I click on project node', function () {
-  page.reactFlowNode.click('test-project-2-node')
+Then('I click on feature node', function () {
+  page.reactFlowNode.click('test-feature-2-node')
 })
 
 Then('I click on image node', function () {
@@ -42,7 +42,7 @@ Then('I click on hide toggle', function () {
 
 
 Then('the node become a hidden', function () {
-  page.reactFlowNode.getNodeCard('test-project-2-node').then(($node) => {
+  page.reactFlowNode.getNodeCard('test-feature-2-node').then(($node) => {
     cy.wrap($node).verifyCSS('opacity', '0.5');
   });
   cy.stepScreenshot('hide-node');
@@ -55,7 +55,7 @@ Then('I am enter a new X position', function () {
 
 Then('the node X position should be updated', function () {
   cy.get('@newX').then((newX) => {
-    page.reactFlowNode.getNode('test-project-2-node').then(($node) => {
+    page.reactFlowNode.getNode('test-feature-2-node').then(($node) => {
       const transform = $node[0].style.transform;
       const actualX = (transform.match(/translate\(([^,]+),/) || [])[1]?.trim();
       expect(actualX).to.equal(`${Number(newX)}px`);
@@ -71,7 +71,7 @@ Then('I am enter a new Y position', function () {
 
 Then('the node Y position should be updated', function () {
   cy.get('@newY').then((newY) => {
-    page.reactFlowNode.getNode('test-project-2-node').then(($node) => {
+    page.reactFlowNode.getNode('test-feature-2-node').then(($node) => {
       const transform = $node[0].style.transform;
       const actualY = (transform.match(/translate\([^,]+,\s*([^)]*)\)/) || [])[1]?.trim();
       expect(actualY).to.equal(`${Number(newY)}px`);
@@ -90,7 +90,7 @@ Then('the node z-index should be updated', function () {
   cy.get('@newZ').then((newZ) => {
     const expectedZ = defaultZ + Number(newZ);
 
-    page.reactFlowNode.getNode('test-project-2-node').then(($node) => {
+    page.reactFlowNode.getNode('test-feature-2-node').then(($node) => {
       const zIndex = Number($node[0].style.zIndex);
       expect(zIndex).to.equal(expectedZ);
     });
@@ -105,7 +105,7 @@ Then('I am enter a new width value', function () {
 Then('the node width should be updated', function () {
   cy.get('@newWidth').then((newWidth) => {
     const expectedWidth = `${Number(newWidth)}px`;
-    page.reactFlowNode.getNodeCard('test-project-2-node').then(($node) => {
+    page.reactFlowNode.getNodeCard('test-feature-2-node').then(($node) => {
       const width = $node[0].style.width;
       expect(width).to.equal(expectedWidth);
     });
@@ -121,7 +121,7 @@ Then('I am enter a new height value', function () {
 Then('the node height should be updated', function () {
   cy.get('@newHeight').then((newHeight) => {
     const expectedHeight = `${Number(newHeight)}px`;
-    page.reactFlowNode.getNodeCard('test-project-2-node').then(($node) => {
+    page.reactFlowNode.getNodeCard('test-feature-2-node').then(($node) => {
       const height = $node[0].style.height;
       expect(height).to.equal(expectedHeight);
     });
@@ -136,7 +136,7 @@ Then('I am enter a new scale value', function () {
 
 Then('the node scale should be updated', function () {
   cy.get('@newScale').then((newScale) => {
-    page.reactFlowNode.getNodeCard('test-project-2-node').then(($node) => {
+    page.reactFlowNode.getNodeCard('test-feature-2-node').then(($node) => {
       const scale = $node[0].style.transform;
       const actualRotation = (scale.match(/scale\(([^)]+)\)/) || [])[1]?.trim();
       expect(actualRotation).to.equal(`${Number(newScale)}`);
@@ -152,7 +152,7 @@ Then('I am enter a new rotation value', function () {
 
 Then('the node rotation should be updated', function () {
   cy.get('@newRotation').then((newRotation) => {
-    page.reactFlowNode.getNodeCard('test-project-2-node').then(($node) => {
+    page.reactFlowNode.getNodeCard('test-feature-2-node').then(($node) => {
       const transform = $node[0].style.transform;
       const actualRotation = (transform.match(/rotate\(([^)]+)\)/) || [])[1]?.trim();
       expect(actualRotation).to.equal(`${Number(newRotation)}deg`);
@@ -161,9 +161,9 @@ Then('the node rotation should be updated', function () {
   cy.stepScreenshot('new-node-rotation');
 });
 
-Then('the project node should not be displayed on the map', function () {
-  page.reactFlowNode.getNode('test-project-2-node').should('not.exist')
-  cy.stepScreenshot('remove-project-node');
+Then('the feature node should not be displayed on the map', function () {
+  page.reactFlowNode.getNode('test-feature-2-node').should('not.exist')
+  cy.stepScreenshot('remove-feature-node');
 })
 
 Then('the image node should not be displayed on the map', function () {

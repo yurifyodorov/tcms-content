@@ -1,5 +1,5 @@
 @skip
-Feature: Get projects list
+Feature: Get features list
 
   Background:
     Given I open website on desktop

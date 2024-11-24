@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yurifyodorov/tcms-content-schema/main/schemas/case.schema.json
-id: "test-project-1_case-3"
+id: "test-feature-1_case-3"
 title: "Кейс #3 с кодом"
 shortDescription: |
   Текс.
@@ -13,7 +13,7 @@ shortDescription: |
 
 blocks:
   - type: "text"
-    id: "test-project-1_case-3_block-1"
+    id: "test-feature-1_case-3_block-1"
     text: |
 
       Какой-то <Sandpack/> должен отображаться здесь 
