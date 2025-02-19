@@ -3,6 +3,7 @@ require('dotenv').config();
 import { defineConfig } from 'cypress';
 import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
+import { runTests, saveBrowserDetails, saveSystemInfo, saveResults, sendSlackReport } from '@yurifyodorov/tcms-test-runner';
 
 // @ts-ignore
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
@@ -16,11 +17,19 @@ export default defineConfig({
       await addCucumberPreprocessorPlugin(on, config);
 
       on(
-        'file:preprocessor',
-        createBundler({
-          plugins: [createEsbuildPlugin(config)],
-        })
+          'file:preprocessor',
+          createBundler({
+            plugins: [createEsbuildPlugin(config)],
+          })
       );
+
+      on('after:run', async () => {
+        await runTests();
+        await saveBrowserDetails();
+        await saveSystemInfo();
+        await saveResults();
+        await sendSlackReport();
+      });
 
       return config;
     },
@@ -34,7 +43,6 @@ export default defineConfig({
       filterSpecs: true,
     },
   },
-  // defaultCommandTimeout: 10000,
   retries: {
     runMode: 0,
     openMode: 0
