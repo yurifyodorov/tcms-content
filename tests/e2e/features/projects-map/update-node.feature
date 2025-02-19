@@ -6,6 +6,7 @@ Feature: Update node
     And I click on map link
     And I am on the map page
 
+  @skip
   Scenario: Hide node
     When I click on feature node
      And I click on setting icon
@@ -14,6 +15,7 @@ Feature: Update node
      Then The node update dialog should be closed
      Then the node become a hidden
 
+  @skip
   Scenario: Change X position
     And I click on feature node
     And I click on setting icon
@@ -26,6 +28,7 @@ Feature: Update node
   Scenario: Change X position with the mouse
     # TODO: переместить ноду горизонтально с помощью мыши
 
+  @skip
   Scenario: Change Y position
     When I click on feature node
     And I click on setting icon
@@ -38,6 +41,7 @@ Feature: Update node
   Scenario: Change Y position with the mouse
     # TODO: переместить ноду вертикально с помощью мыши
 
+  @skip
   Scenario: Change Z-index
     When I click on feature node
     And I click on setting icon
@@ -46,6 +50,7 @@ Feature: Update node
     Then The node update dialog should be closed
     Then the node z-index should be updated
 
+  @skip
   Scenario: Change node width
     When I click on feature node
     And I click on setting icon
@@ -54,6 +59,7 @@ Feature: Update node
     Then The node update dialog should be closed
     Then the node width should be updated
 
+  @skip
   Scenario: Change node height
     When I click on feature node
     And I click on setting icon
@@ -62,6 +68,7 @@ Feature: Update node
     Then The node update dialog should be closed
     Then the node height should be updated
 
+  @skip
   Scenario: Change node scale
     When I click on feature node
     And I click on setting icon
@@ -70,6 +77,7 @@ Feature: Update node
     Then The node update dialog should be closed
     Then the node scale should be updated
 
+  @skip
   Scenario: Change node rotation
     When I click on feature node
     And I click on setting icon

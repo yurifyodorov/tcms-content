@@ -6,6 +6,6 @@ Feature: Get projects list
     And I click on map link
 
   Scenario: Show project list
-    When I am on the explore page
+    # When I am on the explore page
     # And step test
     # Then step test

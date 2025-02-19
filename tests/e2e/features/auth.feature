@@ -3,7 +3,7 @@ Feature: Auth
   Background:
     Given I open website on desktop
 
-  Scenario Outline: Sign in with Email
+  Scenario Outline: Sign in with Email - "<userEmail>"
     When I am on the home page
     And I click on sign in button
     And I enter the user email: <userEmail>

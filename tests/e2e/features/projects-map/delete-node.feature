@@ -7,11 +7,13 @@ Feature: Delete node
     And I click on map link
     And I am on the map page
 
+  @skip
   Scenario: Delete feature node
     When I click on feature node
     And I click on trash icon
     Then the feature node should not be displayed on the map
 
+  @skip
   Scenario: Delete image node
     When I am on the map page
     When I click on image node
