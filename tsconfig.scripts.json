@@ -1,0 +1,11 @@
+{
+  "baseUrl": ".",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2022",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+  },
+  "include": ["tests/scripts/**/*.ts"]
+}

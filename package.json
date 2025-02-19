@@ -4,9 +4,10 @@
   "description": "Хранилище тест кейсов для [TCMS](https://tcms.yurifedorov.com/)",
   "main": "index.js",
   "scripts": {
-    "test:chrome": "node tests/scripts/run-tests-in-chrome.js",
-    "test:edge": "node tests/scripts/run-tests-in-edge.js",
-    "test:firefox": "node tests/scripts/run-tests-in-firefox.js"
+    "test": "ts-node --project tsconfig.scripts.json tests/scripts/run-tests.ts",
+    "test:chrome": "npm run test -- chrome",
+    "test:edge": "npm run test -- edge",
+    "test:firefox": "npm run test -- firefox"
   },
   "author": "",
   "license": "ISC",
@@ -28,13 +29,20 @@
       "output": "tests/reports/cucumber-report.html"
     }
   },
-  "devDependencies": {
+  "dependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^21.0.2",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.3",
-    "cypress": "^13.15.2",
-    "dotenv": "^16.4.5",
+    "@faker-js/faker": "^9.5.0",
+    "@paralleldrive/cuid2": "^2.2.2",
+    "@prisma/client": "^6.4.0",
+    "cypress": "^13.17.0",
     "multiple-cucumber-html-reporter": "^3.8.0",
-    "onecolor": "^4.1.0",
+    "onecolor": "^4.1.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "prisma": "^6.4.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   }
 }
