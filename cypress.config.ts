@@ -5,6 +5,8 @@ import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
 import runner from "@yurifyodorov/tcms-test-runner";
 import { specPaths } from "@/tests/specs";
+
+// @ts-ignore
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
 
 export default defineConfig({
@@ -13,17 +15,6 @@ export default defineConfig({
     specPattern: specPaths,
     supportFile: 'tests/support/e2e.ts',
     async setupNodeEvents(on, config) {
-      const browser = process.env.BROWSER;
-
-      console.log('Configured browser:', browser);
-
-      if (browser) {
-        config.env.browser = browser;
-      } else {
-        console.error('❌ Browser not specified!');
-        process.exit(1);
-      }
-
       await addCucumberPreprocessorPlugin(on, config);
 
       on(
@@ -34,16 +25,11 @@ export default defineConfig({
       );
 
       on('after:run', async () => {
-        const browserFromEnv = config.env.browser;
-        if (browserFromEnv) {
-          await runner.runTests(specPaths, browserFromEnv);
-          runner.saveBrowserDetails();
-          runner.saveSystemInfo();
-          runner.saveResults();
-          runner.sendSlackReport();
-        } else {
-          console.error('❌ Browser not specified in config.env.browser');
-        }
+        runner.runTests()
+        runner.saveBrowserDetails();
+        runner.saveSystemInfo();
+        runner.saveResults();
+        runner.sendSlackReport();
       });
 
       return config;
@@ -60,6 +46,6 @@ export default defineConfig({
   },
   retries: {
     runMode: 0,
-    openMode: 0,
+    openMode: 0
   },
 });
