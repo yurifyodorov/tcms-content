@@ -5,9 +5,12 @@ import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
 import runner from "@yurifyodorov/tcms-test-runner";
 import { specPaths } from "@/tests/specs";
-
-// @ts-ignore
+import { createId } from '@/tests/shared/lib/id';
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
+
+const runId = createId();
+const browser = 'chrome'
+const platform = process.platform
 
 export default defineConfig({
   e2e: {
@@ -25,7 +28,7 @@ export default defineConfig({
       );
 
       on('after:run', async () => {
-        runner.runTests()
+        runner.runTests(runId, specPaths, browser, platform)
         runner.saveBrowserDetails();
         runner.saveSystemInfo();
         runner.saveResults();
