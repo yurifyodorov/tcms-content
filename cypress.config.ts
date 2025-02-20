@@ -19,13 +19,8 @@ export default defineConfig({
     supportFile: "tests/support/e2e.ts",
 
     async setupNodeEvents(on, config) {
-      // Подключаем плагин Cucumber и обрабатываем ошибки
-      await addCucumberPreprocessorPlugin(on, config).catch((err) => {
-        console.error("❌ Ошибка в addCucumberPreprocessorPlugin:", err);
-        throw err;
-      });
+      await addCucumberPreprocessorPlugin(on, config);
 
-      // Указываем обработчик файлового препроцессора
       on(
           "file:preprocessor",
           createBundler({
@@ -33,20 +28,16 @@ export default defineConfig({
           })
       );
 
-      // Отключаем кэширование глобального состояния Cucumber (иногда помогает)
       config.env = config.env || {};
       config.env.resetRunState = true;
 
-      // Запускаем тесты перед `before:run`
-      console.log(`🚀 Запуск тестов: runId=${runId}, browser=${browser}, platform=${platform}`);
       try {
-        await runner.runTests(runId, specPaths, browser, platform);
-        console.log("✅ Функция runTests выполнена успешно!");
+        runner.runTests(runId, specPaths, browser, platform);
       } catch (error) {
         console.error("❌ Ошибка в runTests:", error);
       }
 
-      // После завершения тестов
+
       on("after:run", async () => {
         console.log("📦 Сохранение результатов тестов...");
         try {
