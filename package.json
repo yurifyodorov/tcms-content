@@ -4,10 +4,10 @@
   "description": "Хранилище тест кейсов для [TCMS](https://tcms.yurifedorov.com/)",
   "main": "index.js",
   "scripts": {
-    "test": "ts-node --project tsconfig.scripts.json tests/scripts/run-tests.ts",
-    "test:chrome": "npm run test -- chrome",
-    "test:edge": "npm run test -- edge",
-    "test:firefox": "npm run test -- firefox"
+    "test": "cypress run",
+    "test:chrome": "npm run test -- --browser chrome",
+    "test:edge": "npm run test -- --browser edge",
+    "test:firefox": "npm run test -- --browser firefox"
   },
   "author": "",
   "license": "ISC",
@@ -35,7 +35,7 @@
     "@faker-js/faker": "^9.5.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^6.4.0",
-    "@yurifyodorov/tcms-test-runner": "^0.1.23",
+    "@yurifyodorov/tcms-test-runner": "^0.1.25",
     "cypress": "^13.17.0",
     "onecolor": "^4.1.0"
   },

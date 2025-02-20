@@ -5,15 +5,20 @@ import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
 import runner from "@yurifyodorov/tcms-test-runner";
 
-// @ts-ignore
+import { specPaths } from "@/tests/specs";
+
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
 
 export default defineConfig({
   e2e: {
     baseUrl: process.env.TEST_ENV_BASE_URL,
-    specPattern: '**/*.feature',
+    specPattern: specPaths,
     supportFile: 'tests/support/e2e.ts',
     async setupNodeEvents(on, config) {
+      if (process.env.npm_config_browser) {
+        config.env.browser = process.env.npm_config_browser;
+      }
+
       await addCucumberPreprocessorPlugin(on, config);
 
       on(
@@ -24,7 +29,14 @@ export default defineConfig({
       );
 
       on('after:run', async () => {
-        runner.runTests();
+        const browser = config.env.browser;
+
+        if (!browser) {
+          console.error('Ошибка: Не указан браузер в конфигурации (config.env.browser).');
+          process.exit(1);
+        }
+
+        await runner.runTests(specPaths, browser);
         runner.saveBrowserDetails();
         runner.saveSystemInfo();
         runner.saveResults();
