@@ -19,7 +19,9 @@ async function setupNodeEvents(
     omitAfterScreenshotHandler: true,
   });
 
-  on("before:run", async () => { await beforeRunHandler(config) });
+  on("before:run", async () => {
+    await beforeRunHandler(config)
+  });
 
   on("after:run", async () => {
     const runId = createId();
@@ -37,7 +39,6 @@ async function setupNodeEvents(
         tcms.saveResults(runId, browser, platform, testData, databaseUrl);
       }
 
-      // Отправляем отчет в Slack
       await tcms.sendSlackReport();
     }
   });
