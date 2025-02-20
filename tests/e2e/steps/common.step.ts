@@ -1,9 +1,4 @@
-import { Before, Given } from "@badeball/cypress-cucumber-preprocessor";
-import { saveBrowserDetails } from "@tests/support/utils";
-
-Before(() => {
-  saveBrowserDetails();
-})
+import { Given } from "@badeball/cypress-cucumber-preprocessor";
 
 Given('I open website on desktop', function () {
   const deviceName = 'macbook-16';
