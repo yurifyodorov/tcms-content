@@ -14,7 +14,7 @@ const platform = process.platform;
 
 export default defineConfig({
   e2e: {
-    baseUrl: process.env.TEST_ENV_BASE_URL || "http://localhost:3000",
+    baseUrl: process.env.TEST_ENV_BASE_URL,
     specPattern: specPaths,
     supportFile: "tests/support/e2e.ts",
 
@@ -31,24 +31,11 @@ export default defineConfig({
       config.env = config.env || {};
       config.env.resetRunState = true;
 
-      try {
-        runner.runTests(runId, specPaths, browser, platform);
-      } catch (error) {
-        console.error("❌ Ошибка в runTests:", error);
-      }
-
+      runner.runTests(runId, specPaths, browser, platform);
 
       on("after:run", async () => {
-        console.log("📦 Сохранение результатов тестов...");
-        try {
-          await runner.saveBrowserDetails();
-          await runner.saveSystemInfo();
-          await runner.saveResults();
-          await runner.sendSlackReport();
-          console.log("✅ Все данные успешно сохранены!");
-        } catch (error) {
-          console.error("❌ Ошибка при сохранении результатов:", error);
-        }
+        await runner.saveResults();
+        await runner.sendSlackReport();
       });
 
       return config;
