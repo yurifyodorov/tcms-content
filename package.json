@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "cypress run",
-    "test:chrome": "npm run test -- --browser chrome",
-    "test:edge": "npm run test -- --browser edge",
-    "test:firefox": "npm run test -- --browser firefox"
+    "test:chrome": "cross-env BROWSER=chrome npm run test",
+    "test:edge": "cross-env BROWSER=edge npm run test",
+    "test:firefox": "cross-env BROWSER=firefox npm run test"
   },
   "author": "",
   "license": "ISC",
@@ -40,6 +40,7 @@
     "onecolor": "^4.1.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "prisma": "^6.4.0",
     "ts-node": "^10.9.2",

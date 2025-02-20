@@ -13,18 +13,19 @@ export default defineConfig({
     specPattern: specPaths,
     supportFile: 'tests/support/e2e.ts',
     async setupNodeEvents(on, config) {
-      const browser = process.argv.includes('--browser')
-          ? process.argv[process.argv.indexOf('--browser') + 1] : undefined;
+      const browser = process.env.BROWSER;
 
       console.log('Configured browser:', browser);
 
       if (browser) {
         config.env.browser = browser;
       } else {
-        console.error('Browser not specified!');
+        console.error('❌ Browser not specified!');
+        process.exit(1);
       }
 
       await addCucumberPreprocessorPlugin(on, config);
+
       on(
           'file:preprocessor',
           createBundler({
@@ -41,7 +42,7 @@ export default defineConfig({
           runner.saveResults();
           runner.sendSlackReport();
         } else {
-          console.error('Browser not specified in config.env.browser');
+          console.error('❌ Browser not specified in config.env.browser');
         }
       });
 
