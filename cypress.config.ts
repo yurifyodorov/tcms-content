@@ -3,7 +3,7 @@ require('dotenv').config();
 import { defineConfig } from 'cypress';
 import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
-import { runTests, saveBrowserDetails, saveSystemInfo, saveResults, sendSlackReport } from '@yurifyodorov/tcms-test-runner';
+import runner from "@yurifyodorov/tcms-test-runner";
 
 // @ts-ignore
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
@@ -24,11 +24,11 @@ export default defineConfig({
       );
 
       on('after:run', async () => {
-        await runTests();
-        await saveBrowserDetails();
-        await saveSystemInfo();
-        await saveResults();
-        await sendSlackReport();
+        runner.runTests();
+        runner.saveBrowserDetails();
+        runner.saveSystemInfo();
+        runner.saveResults();
+        runner.sendSlackReport();
       });
 
       return config;
