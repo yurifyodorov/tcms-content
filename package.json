@@ -4,10 +4,10 @@
   "description": "Хранилище тест кейсов для [TCMS](https://tcms.yurifedorov.com/)",
   "main": "index.js",
   "scripts": {
-    "test": "ts-node --project tsconfig.scripts.json tests/scripts/run-tests.ts",
-    "test:chrome": "npm run test -- chrome",
-    "test:edge": "npm run test -- edge",
-    "test:firefox": "npm run test -- firefox"
+    "test": "cypress run",
+    "test:chrome": "cross-env BROWSER=chrome npm run test",
+    "test:edge": "cross-env BROWSER=edge npm run test",
+    "test:firefox": "cross-env BROWSER=firefox npm run test"
   },
   "author": "",
   "license": "ISC",
