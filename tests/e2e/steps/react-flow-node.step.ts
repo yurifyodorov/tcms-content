@@ -45,7 +45,6 @@ Then('the node become a hidden', function () {
   page.reactFlowNode.getNodeCard('test-feature-2-node').then(($node) => {
     cy.wrap($node).verifyCSS('opacity', '0.5');
   });
-  cy.stepScreenshot('hide-node');
 });
 
 Then('I am enter a new X position', function () {
@@ -61,7 +60,6 @@ Then('the node X position should be updated', function () {
       expect(actualX).to.equal(`${Number(newX)}px`);
     });
   });
-  cy.stepScreenshot('new-X-position');
 });
 
 Then('I am enter a new Y position', function () {
@@ -77,7 +75,6 @@ Then('the node Y position should be updated', function () {
       expect(actualY).to.equal(`${Number(newY)}px`);
     });
   });
-  cy.stepScreenshot('new-Y-position');
 });
 
 Then('I am enter a new z-index value', function () {
@@ -110,7 +107,6 @@ Then('the node width should be updated', function () {
       expect(width).to.equal(expectedWidth);
     });
   });
-  cy.stepScreenshot('new-node-width');
 });
 
 Then('I am enter a new height value', function () {
@@ -126,7 +122,6 @@ Then('the node height should be updated', function () {
       expect(height).to.equal(expectedHeight);
     });
   });
-  cy.stepScreenshot('new-node-height');
 });
 
 Then('I am enter a new scale value', function () {
@@ -142,7 +137,6 @@ Then('the node scale should be updated', function () {
       expect(actualRotation).to.equal(`${Number(newScale)}`);
     });
   });
-  cy.stepScreenshot('new-node-scale');
 })
 
 Then('I am enter a new rotation value', function () {
@@ -158,15 +152,12 @@ Then('the node rotation should be updated', function () {
       expect(actualRotation).to.equal(`${Number(newRotation)}deg`);
     });
   });
-  cy.stepScreenshot('new-node-rotation');
 });
 
 Then('the feature node should not be displayed on the map', function () {
   page.reactFlowNode.getNode('test-feature-2-node').should('not.exist')
-  cy.stepScreenshot('remove-feature-node');
 })
 
 Then('the image node should not be displayed on the map', function () {
   page.reactFlowNode.getNode('image-node-1').should('not.exist')
-  cy.stepScreenshot('remove-image-node');
 })

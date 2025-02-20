@@ -33,14 +33,31 @@ export default defineConfig({
       config.env.resetRunState = true;
 
       on("after:run", () => {
+        const filePath = "tests/reports/cucumber-report.json";
 
-        const testData = JSON.parse(fs.readFileSync("tests/reports/cucumber-report.json", "utf8"));
-        // TODO: удалить сначала все "embeddings" перед передачей в saveResults
+        console.log("Путь к файлу:", filePath);
 
-        tcms.saveResults(runId, browser, platform, testData);
+        try {
+          const rawTestData = fs.readFileSync(filePath, "utf8");
+          const testData = JSON.parse(rawTestData);
 
-        // Отправка отчета в Slack
-        tcms.sendSlackReport();
+
+          console.log("Полученные данные теста:", testData);
+
+          const databaseUrl = process.env.DATABASE_URL;
+
+          if (databaseUrl) {
+            tcms.saveResults(runId, browser, platform, testData, databaseUrl);
+          } else {
+            console.error("Не найден DATABASE_URL в переменных окружения");
+          }
+
+          // Отправка отчета в Slack
+          tcms.sendSlackReport();
+        } catch (error) {
+          // Логируем ошибку, если возникнет
+          console.error("Ошибка при чтении или обработке файла:", error);
+        }
       });
 
       return config;

@@ -25,15 +25,12 @@ Then('I select system theme', function () {
 
 Then('The site is displayed in a light theme', function () {
   page.header.themeToggle.checkTheme('light', '#ffffff')
-  cy.stepScreenshot('theme-light');
 })
 
 Then('The site is displayed in a dark theme', function () {
   page.header.themeToggle.checkTheme('dark', '#020817')
-  cy.stepScreenshot('theme-dark');
 })
 
 Then('The site is displayed in a system theme', function () {
   page.header.themeToggle.checkTheme('system', null);
-  cy.stepScreenshot('theme-system');
 });
