@@ -3,7 +3,7 @@ import * as path from 'path';
 require('dotenv').config();
 import { defineConfig } from 'cypress';
 import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
-import {addCucumberPreprocessorPlugin, beforeRunHandler, afterRunHandler } from '@badeball/cypress-cucumber-preprocessor';
+import { addCucumberPreprocessorPlugin, beforeRunHandler } from '@badeball/cypress-cucumber-preprocessor';
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
 import { specPaths } from "@tests/specs";
 import { createId } from "@/tests/shared/lib/id";
@@ -20,29 +20,31 @@ async function setupNodeEvents(
   });
 
   on("before:run", async () => { await beforeRunHandler(config) });
-  on("after:run", async () => { await afterRunHandler(config) });
+
+  on("after:run", async () => {
+    const runId = createId();
+    const browser = process.env.BROWSER || "chrome";
+    const platform = process.platform;
+    const databaseUrl = process.env.DATABASE_URL;
+
+    const reportPath = path.join(__dirname, "tests/reports/cucumber-report.json");
+
+    if (fs.existsSync(reportPath)) {
+      const rawTestData = fs.readFileSync(reportPath, "utf8");
+      const testData = JSON.parse(rawTestData);
+
+      if (databaseUrl) {
+        tcms.saveResults(runId, browser, platform, testData, databaseUrl);
+      }
+
+      // Отправляем отчет в Slack
+      await tcms.sendSlackReport();
+    }
+  });
+
   on("file:preprocessor", createBundler({ plugins: [createEsbuildPlugin(config)] }));
 
   return config;
-}
-
-const runId = createId();
-const browser = process.env.BROWSER || "chrome";
-const platform = process.platform;
-
-const databaseUrl = process.env.DATABASE_URL;
-
-const reportPath = path.join(__dirname, "tests/reports/cucumber-report.json");
-
-if (fs.existsSync(reportPath)) {
-  const rawTestData = fs.readFileSync(reportPath, "utf8");
-  const testData = JSON.parse(rawTestData);
-
-  if (databaseUrl) {
-    tcms.saveResults(runId, browser, platform, testData, databaseUrl);
-  }
-
-  tcms.sendSlackReport();
 }
 
 export default defineConfig({
