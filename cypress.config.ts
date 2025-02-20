@@ -36,7 +36,7 @@ async function setupNodeEvents(
       const testData = JSON.parse(rawTestData);
 
       if (databaseUrl) {
-        tcms.saveResults(runId, browser, platform, testData, databaseUrl);
+        tcms.saveResults(runId, browser, platform, databaseUrl, testData);
       }
 
       await tcms.sendSlackReport();
