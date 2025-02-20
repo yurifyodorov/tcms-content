@@ -4,9 +4,7 @@ import { defineConfig } from 'cypress';
 import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
 import { addCucumberPreprocessorPlugin } from '@badeball/cypress-cucumber-preprocessor';
 import runner from "@yurifyodorov/tcms-test-runner";
-
 import { specPaths } from "@/tests/specs";
-
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
 
 export default defineConfig({
@@ -15,12 +13,18 @@ export default defineConfig({
     specPattern: specPaths,
     supportFile: 'tests/support/e2e.ts',
     async setupNodeEvents(on, config) {
-      if (process.env.npm_config_browser) {
-        config.env.browser = process.env.npm_config_browser;
+      const browser = process.argv.includes('--browser')
+          ? process.argv[process.argv.indexOf('--browser') + 1] : undefined;
+
+      console.log('Configured browser:', browser);
+
+      if (browser) {
+        config.env.browser = browser;
+      } else {
+        console.error('Browser not specified!');
       }
 
       await addCucumberPreprocessorPlugin(on, config);
-
       on(
           'file:preprocessor',
           createBundler({
@@ -29,18 +33,16 @@ export default defineConfig({
       );
 
       on('after:run', async () => {
-        const browser = config.env.browser;
-
-        if (!browser) {
-          console.error('Ошибка: Не указан браузер в конфигурации (config.env.browser).');
-          process.exit(1);
+        const browserFromEnv = config.env.browser;
+        if (browserFromEnv) {
+          await runner.runTests(specPaths, browserFromEnv);
+          runner.saveBrowserDetails();
+          runner.saveSystemInfo();
+          runner.saveResults();
+          runner.sendSlackReport();
+        } else {
+          console.error('Browser not specified in config.env.browser');
         }
-
-        await runner.runTests(specPaths, browser);
-        runner.saveBrowserDetails();
-        runner.saveSystemInfo();
-        runner.saveResults();
-        runner.sendSlackReport();
       });
 
       return config;
@@ -57,6 +59,6 @@ export default defineConfig({
   },
   retries: {
     runMode: 0,
-    openMode: 0
+    openMode: 0,
   },
 });
