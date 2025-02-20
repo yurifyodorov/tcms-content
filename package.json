@@ -30,12 +30,12 @@
     }
   },
   "dependencies": {
-    "@badeball/cypress-cucumber-preprocessor": "^21.0.2",
+    "@badeball/cypress-cucumber-preprocessor": "^21.0.3",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.3",
     "@faker-js/faker": "^9.5.0",
     "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^6.4.0",
-    "@yurifyodorov/tcms-test-runner": "^0.1.26",
+    "@yurifyodorov/tcms-test-runner": "^0.1.27",
     "cypress": "^13.17.0",
     "onecolor": "^4.1.0"
   },
