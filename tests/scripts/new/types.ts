@@ -24,6 +24,13 @@ export interface Scenario {
     type: 'scenario';
 }
 
+export interface ParsedScenario {
+    id: string;
+    name: string;
+    steps: string[];
+    status: 'passed' | 'failed' | 'skipped';
+}
+
 export interface Feature {
     description: string;
     elements: Scenario[];

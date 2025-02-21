@@ -10,7 +10,7 @@ import { createId } from "@/tests/shared/lib/id";
 import tcms from "@yurifyodorov/tcms-data-sync";
 
 // FIXME: remove this later (for debug)
-import { saveResults } from "@/tests/scripts/save-results-new"
+import { saveResults } from "@tests/scripts/new/save-results"
 
 async function setupNodeEvents(
     on: Cypress.PluginEvents,
@@ -42,7 +42,7 @@ async function setupNodeEvents(
         // FIXME: remove this later (for debug)
         saveResults(runId, browser, platform, databaseUrl, testData)
 
-        // TODO: use this larer
+        // TODO: use this later
         // tcms.saveResults(runId, browser, platform, databaseUrl, testData);
       }
 
