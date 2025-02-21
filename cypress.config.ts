@@ -9,6 +9,9 @@ import { specPaths } from "@tests/specs";
 import { createId } from "@/tests/shared/lib/id";
 import tcms from "@yurifyodorov/tcms-data-sync";
 
+// FIXME: remove this later (for debug)
+import { saveResults } from "@/tests/scripts/save-results-new"
+
 async function setupNodeEvents(
     on: Cypress.PluginEvents,
     config: Cypress.PluginConfigOptions
@@ -36,7 +39,11 @@ async function setupNodeEvents(
       const testData = JSON.parse(rawTestData);
 
       if (databaseUrl) {
-        tcms.saveResults(runId, browser, platform, databaseUrl, testData);
+        // FIXME: remove this later (for debug)
+        saveResults(runId, browser, platform, databaseUrl, testData)
+
+        // TODO: use this larer
+        // tcms.saveResults(runId, browser, platform, databaseUrl, testData);
       }
 
       await tcms.sendSlackReport();
