@@ -23,7 +23,6 @@ const collectScenarios = (testData: TestData): ParsedScenario[] => {
         });
     });
 
-    console.log("Parsed scenarios:", JSON.stringify(scenarios, null, 2));
     return scenarios;
 };
 

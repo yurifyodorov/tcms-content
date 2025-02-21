@@ -13,6 +13,12 @@ export interface Step {
     };
 }
 
+export interface ParsedStep {
+    name: string;
+    keyword: string;
+    scenarioIds: string[];
+}
+
 export interface Scenario {
     description: string;
     id: string;
