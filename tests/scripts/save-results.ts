@@ -159,8 +159,9 @@ export async function saveResults(runId: string, browserName: string): Promise<v
     await dbClient.run.create({
         data: {
             id: runId,
-            environment: environment || '',
             status: status,
+            browser: 'test',
+            platform: 'test',
             featuresCount,
             scenariosCount,
             passCount,
@@ -168,8 +169,6 @@ export async function saveResults(runId: string, browserName: string): Promise<v
             skipCount,
             stepsCount,
             auto: true,
-            browser: browserInfo || null,
-            system: systemInfo || null,
             duration: runDuration,
         }
     });

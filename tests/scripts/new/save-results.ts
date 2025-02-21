@@ -6,6 +6,8 @@ import { collectFeatures } from "@tests/scripts/new/collect-features";
 import { collectScenarios } from './collect-scenarios';
 import { collectSteps } from './collect-steps';
 
+// TODO: используй рабочий код отсюда tests/scripts/save-results.ts
+
 const saveResults = (
     runId: string,
     browser: string,

@@ -14,10 +14,13 @@ export interface Step {
 }
 
 export interface ParsedStep {
+    id: string;
     name: string;
     keyword: string;
     scenarioIds: string[];
+    status: 'passed' | 'failed' | 'skipped';
 }
+
 
 export interface Scenario {
     description: string;
@@ -50,6 +53,7 @@ export interface Feature {
 
 export interface ParsedFeature {
     id: string;
+    description: string;
     name: string;
     uri: string;
     scenarioIds: string[];

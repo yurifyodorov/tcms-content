@@ -1,4 +1,5 @@
 import { ParsedScenario, ParsedStep } from './types';
+import { createId } from '@tests/shared/lib/id';
 
 const collectSteps = (scenarios: ParsedScenario[]): ParsedStep[] => {
     const stepsMap = new Map<string, ParsedStep>();
@@ -7,9 +8,11 @@ const collectSteps = (scenarios: ParsedScenario[]): ParsedStep[] => {
         scenario.steps.forEach(stepName => {
             if (!stepsMap.has(stepName)) {
                 stepsMap.set(stepName, {
+                    id: createId(),
                     name: stepName,
                     keyword: "",
-                    scenarioIds: [scenario.id]
+                    scenarioIds: [scenario.id],
+                    status: scenario.status,
                 });
             } else {
                 stepsMap.get(stepName)!.scenarioIds.push(scenario.id);

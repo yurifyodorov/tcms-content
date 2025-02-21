@@ -10,10 +10,9 @@ datasource db {
 model Run {
   id             String    @id @default(cuid())
   runNumber      Int       @unique @default(autoincrement())
-  environment    String
   status         String
-  browser        Json
-  system         Json
+  browser        String
+  platform       String
   featuresCount  Int
   scenariosCount Int
   stepsCount     Int
@@ -27,7 +26,7 @@ model Run {
   auto           Boolean
 
   @@index([status])
-  @@index([environment])
+  @@index([platform])
   @@index([auto])
   @@index([createdAt])
   @@index([status, createdAt])
