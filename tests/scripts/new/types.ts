@@ -48,4 +48,11 @@ export interface Feature {
     uri: string;
 }
 
+export interface ParsedFeature {
+    id: string;
+    name: string;
+    uri: string;
+    scenarioIds: string[];
+}
+
 export type TestData = Feature[];
