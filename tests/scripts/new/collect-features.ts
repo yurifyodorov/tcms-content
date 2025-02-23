@@ -5,6 +5,7 @@ const collectFeatures = (testData: TestData, scenarioMap: Map<string, string>): 
     return testData.map(feature => ({
         id: createId(),
         name: feature.name,
+        description: feature.description,
         uri: feature.uri,
         scenarioIds: feature.elements.map(scenario => scenarioMap.get(scenario.id) || ""),
     }));
