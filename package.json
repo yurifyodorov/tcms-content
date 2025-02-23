@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "cypress run",
-    "test:chrome": "cross-env BROWSER=chrome npm run test",
-    "test:edge": "cross-env BROWSER=edge npm run test",
-    "test:firefox": "cross-env BROWSER=firefox npm run test"
+    "test:chrome": "npm run test -- chrome",
+    "test:edge": "npm run test -- edge",
+    "test:firefox": "npm run test -- firefox"
   },
   "author": "",
   "license": "ISC",

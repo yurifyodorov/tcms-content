@@ -10,7 +10,7 @@ import { createId } from "@/tests/shared/lib/id";
 import tcms from "@yurifyodorov/tcms-data-sync";
 
 // FIXME: remove this later (for debug)
-import { saveResults } from "@tests/scripts/new/save-results"
+import { saveResults } from "@tests/scripts/save-results";
 
 async function setupNodeEvents(
     on: Cypress.PluginEvents,
@@ -31,6 +31,7 @@ async function setupNodeEvents(
     const browser = process.env.BROWSER || "chrome";
     const platform = process.platform;
     const databaseUrl = process.env.DATABASE_URL;
+    const environment = process.env.ENVIRONMENT || "localhost"
 
     const reportPath = path.join(__dirname, "tests/reports/cucumber-report.json");
 
@@ -40,7 +41,7 @@ async function setupNodeEvents(
 
       if (databaseUrl) {
         // FIXME: remove this later (for debug)
-        saveResults(runId, browser, platform, databaseUrl, testData)
+        await saveResults(runId, browser, platform, environment, databaseUrl, testData)
 
         // TODO: use this later
         // tcms.saveResults(runId, browser, platform, databaseUrl, testData);

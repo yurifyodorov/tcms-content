@@ -29,7 +29,7 @@ export interface Scenario {
     line: number;
     name: string;
     steps: Step[];
-    tags: string[];
+    tags: { name: string }[];
     type: 'scenario';
 }
 

@@ -4,43 +4,42 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { dbClient } from '../shared/lib/db';
 import { createId } from '../shared/lib/id';
+import { TestData } from "@tests/scripts/types";
 
-export async function saveResults(runId: string, browserName: string): Promise<void> {
+import { collectFeatures } from "./collect-features";
+import { collectScenarios } from './collect-scenarios';
+import { collectSteps } from './collect-steps';
 
-    const currentEnv = process.env.ENVIRONMENT;
-    console.log('Current Environment:', currentEnv);
+export async function saveResults(
+    runId: string,
+    browser: string,
+    platform: string,
+    environment: string,
+    databaseUrl: string,
+    testData: TestData
+): Promise<void> {
 
-    const reportFilePath = path.resolve('tests/reports/cucumber-report.json');
+    console.log(`runId: ${runId}`);
+    console.log(`browser: ${browser}`);
+    console.log(`platform: ${platform}`);
+    console.log(`environment: ${environment}`);
+    console.log(`databaseUrl: ${databaseUrl}`);
 
-    if (!fs.existsSync(reportFilePath)) {
-        return;
-    }
+    const scenarios = collectScenarios(testData);
+    console.log("Scenarios to be saved:", JSON.stringify(scenarios, null, 2));
 
-    const reportData = JSON.parse(fs.readFileSync(reportFilePath, 'utf-8'));
+    const scenarioMap = new Map<string, string>();
+    testData.forEach((feature, featureIndex) => {
+        feature.elements.forEach((scenario, scenarioIndex) => {
+            scenarioMap.set(scenario.id, scenarios[featureIndex * feature.elements.length + scenarioIndex].id);
+        });
+    });
 
-    let browserInfo = null;
-    const browserInfoFilePath = path.join(process.cwd(), 'temp', 'browsers', `${browserName}.json`);
+    const features = collectFeatures(testData, scenarioMap);
+    console.log("Features to be saved:", JSON.stringify(features, null, 2));
 
-    if (fs.existsSync(browserInfoFilePath)) {
-        try {
-            const rawBrowserData = fs.readFileSync(browserInfoFilePath, 'utf-8').trim();
-            browserInfo = JSON.parse(rawBrowserData);
-        } catch (error: unknown) {
-            console.error('Error reading browser info from file:', error instanceof Error ? error.message : 'Unknown error');
-        }
-    }
-
-    let systemInfo = null;
-    const systemInfoFilePath = path.join(process.cwd(), 'temp', 'system.json');
-
-    if (fs.existsSync(systemInfoFilePath)) {
-        try {
-            const rawSystemData = fs.readFileSync(systemInfoFilePath, 'utf-8').trim();
-            systemInfo = JSON.parse(rawSystemData);
-        } catch (error: unknown) {
-            console.error('Error reading system info from file:', error instanceof Error ? error.message : 'Unknown error');
-        }
-    }
+    const steps = collectSteps(scenarios);
+    console.log("Steps to be saved:", JSON.stringify(steps, null, 2));
 
     let featuresCount = 0;
     let scenariosCount = 0;
@@ -55,15 +54,9 @@ export async function saveResults(runId: string, browserName: string): Promise<v
 
     let status = 'completed';
 
-    let environment: string | null = null;
-
-    if (currentEnv) {
-        environment = currentEnv;
-    }
-
     let runDuration = 0;
 
-    for (const feature of reportData) {
+    for (const feature of testData) {
         let featureDuration = 0;
         featuresCount++;
 
@@ -103,9 +96,9 @@ export async function saveResults(runId: string, browserName: string): Promise<v
             let scenarioFailed = false;
             let scenarioSkipped = true;
 
-            for (const step of scenario.steps.filter((step: any) => !['Before', 'BeforeAll', 'After', 'AfterAll'].includes(step.keyword))) {
-                const stepDuration = step.result.duration; // in nanoseconds
-                const stepDurationInMs = Math.floor(stepDuration / 1000000); // Convert from nanoseconds to milliseconds
+            for (const step of scenario.steps) {
+                const stepDuration = step.result.duration;
+                const stepDurationInMs = Math.floor(stepDuration / 1000000);
                 scenarioDuration += stepDurationInMs;
 
                 const stepData = {
