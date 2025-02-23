@@ -21,7 +21,6 @@ export interface ParsedStep {
     status: 'passed' | 'failed' | 'skipped';
 }
 
-
 export interface Scenario {
     description: string;
     id: string;
@@ -36,9 +35,11 @@ export interface Scenario {
 export interface ParsedScenario {
     id: string;
     name: string;
-    steps: string[];
+    featureIds: string[];
+    stepsIds: string[];
     status: 'passed' | 'failed' | 'skipped';
 }
+
 
 export interface Feature {
     description: string;

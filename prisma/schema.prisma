@@ -8,79 +8,57 @@ datasource db {
 }
 
 model Run {
-  id             String    @id @default(cuid())
-  runNumber      Int       @unique @default(autoincrement())
-  status         String
-  browser        String
-  platform       String
-  featuresCount  Int
-  scenariosCount Int
-  stepsCount     Int
-  passCount      Int       @default(0)
-  failCount      Int       @default(0)
-  skipCount      Int       @default(0)
-  features       Feature[]
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  duration       Int?
-  auto           Boolean
+  id        String   @id @default(cuid())
+  runNumber Int      @unique @default(autoincrement())
+  status    String
+  browser   String
+  platform  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  duration  Int?
+  auto      Boolean
+
+  runFeatures  RunFeature[]
+  runScenarios RunScenario[]
+  runSteps     RunStep[]
 
   @@index([status])
   @@index([platform])
-  @@index([auto])
   @@index([createdAt])
-  @@index([status, createdAt])
   @@map("runs")
 }
 
 model Feature {
-  id          String     @id @default(cuid())
-  name        String
-  description String?
-  uri         String
-  runId       String
-  run         Run        @relation(fields: [runId], references: [id])
-  scenarios   Scenario[]
-  duration    Int?
+  id   String @id @default(cuid())
+  name String @unique
 
-  @@index([runId])
+  scenarioFeatures ScenarioFeature[]
+  runFeatures      RunFeature[]
+
   @@map("features")
 }
 
 model Scenario {
-  id        String   @id @default(cuid())
-  featureId String
-  runId     String
-  name      String
-  line      Int?
-  status    String
-  message   String?
-  tags      String[]
-  feature   Feature  @relation(fields: [featureId], references: [id])
-  steps     Step[]
-  duration  Int?
+  id     String @id @default(cuid())
+  name   String
+  status String
 
-  @@index([featureId])
-  @@index([runId])
+  scenarioFeatures ScenarioFeature[]
+  scenarioSteps    ScenarioStep[]
+  runScenarios     RunScenario[]
+
+  @@unique([name])
   @@map("scenarios")
 }
 
 model Step {
-  id         String     @id @default(cuid())
-  scenarioId String
-  runId      String
-  name       String
-  status     StepStatus
-  duration   Int?
-  message    String?
-  media      Json?
-  scenario   Scenario   @relation(fields: [scenarioId], references: [id])
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id     String     @id @default(cuid())
+  name   String     @unique
+  status StepStatus
 
-  @@index([scenarioId])
-  @@index([status])
-  @@index([runId])
+  scenarioSteps ScenarioStep[]
+  runSteps      RunStep[]
+
   @@map("steps")
 }
 
@@ -88,4 +66,59 @@ enum StepStatus {
   passed
   failed
   skipped
+}
+
+model ScenarioFeature {
+  id         String   @id @default(cuid())
+  scenario   Scenario @relation(fields: [scenarioId], references: [id])
+  scenarioId String
+  feature    Feature  @relation(fields: [featureId], references: [id])
+  featureId  String
+
+  @@unique([scenarioId, featureId])
+  @@map("scenario_features")
+}
+
+model RunFeature {
+  id        String  @id @default(cuid())
+  run       Run     @relation(fields: [runId], references: [id])
+  runId     String
+  feature   Feature @relation(fields: [featureId], references: [id])
+  featureId String
+
+  @@unique([runId, featureId])
+  @@map("run_features")
+}
+
+model RunScenario {
+  id         String   @id @default(cuid())
+  run        Run      @relation(fields: [runId], references: [id])
+  runId      String
+  scenario   Scenario @relation(fields: [scenarioId], references: [id])
+  scenarioId String
+
+  @@unique([runId, scenarioId])
+  @@map("run_scenarios")
+}
+
+model RunStep {
+  id     String @id @default(cuid())
+  run    Run    @relation(fields: [runId], references: [id])
+  runId  String
+  step   Step   @relation(fields: [stepId], references: [id])
+  stepId String
+
+  @@unique([runId, stepId])
+  @@map("run_steps")
+}
+
+model ScenarioStep {
+  id         String   @id @default(cuid())
+  scenario   Scenario @relation(fields: [scenarioId], references: [id])
+  scenarioId String
+  step       Step     @relation(fields: [stepId], references: [id])
+  stepId     String
+
+  @@unique([scenarioId, stepId])
+  @@map("scenario_steps")
 }
