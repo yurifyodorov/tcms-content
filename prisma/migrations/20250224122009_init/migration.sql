@@ -28,7 +28,6 @@ CREATE TABLE "features" (
     "keyword" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "tags" TEXT[],
 
     CONSTRAINT "features_pkey" PRIMARY KEY ("id")
 );
@@ -39,7 +38,6 @@ CREATE TABLE "scenarios" (
     "featureId" TEXT NOT NULL,
     "keyword" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "tags" TEXT[],
 
     CONSTRAINT "scenarios_pkey" PRIMARY KEY ("id")
 );
@@ -53,6 +51,38 @@ CREATE TABLE "steps" (
     "media" JSONB,
 
     CONSTRAINT "steps_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "scenario_steps" (
+    "scenarioId" TEXT NOT NULL,
+    "stepId" TEXT NOT NULL,
+
+    CONSTRAINT "scenario_steps_pkey" PRIMARY KEY ("scenarioId","stepId")
+);
+
+-- CreateTable
+CREATE TABLE "tags" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "tags_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "features_tags" (
+    "featureId" TEXT NOT NULL,
+    "tagId" TEXT NOT NULL,
+
+    CONSTRAINT "features_tags_pkey" PRIMARY KEY ("featureId","tagId")
+);
+
+-- CreateTable
+CREATE TABLE "scenarios_tags" (
+    "scenarioId" TEXT NOT NULL,
+    "tagId" TEXT NOT NULL,
+
+    CONSTRAINT "scenarios_tags_pkey" PRIMARY KEY ("scenarioId","tagId")
 );
 
 -- CreateIndex
@@ -78,3 +108,24 @@ CREATE INDEX "scenarios_featureId_idx" ON "scenarios"("featureId");
 
 -- CreateIndex
 CREATE INDEX "steps_scenarioId_idx" ON "steps"("scenarioId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "tags_name_key" ON "tags"("name");
+
+-- AddForeignKey
+ALTER TABLE "scenario_steps" ADD CONSTRAINT "scenario_steps_scenarioId_fkey" FOREIGN KEY ("scenarioId") REFERENCES "scenarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "scenario_steps" ADD CONSTRAINT "scenario_steps_stepId_fkey" FOREIGN KEY ("stepId") REFERENCES "steps"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "features_tags" ADD CONSTRAINT "features_tags_featureId_fkey" FOREIGN KEY ("featureId") REFERENCES "features"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "features_tags" ADD CONSTRAINT "features_tags_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "tags"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "scenarios_tags" ADD CONSTRAINT "scenarios_tags_scenarioId_fkey" FOREIGN KEY ("scenarioId") REFERENCES "scenarios"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "scenarios_tags" ADD CONSTRAINT "scenarios_tags_tagId_fkey" FOREIGN KEY ("tagId") REFERENCES "tags"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

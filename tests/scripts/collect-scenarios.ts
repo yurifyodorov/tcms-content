@@ -8,8 +8,12 @@ const collectScenarios = (testData: TestData): ParsedScenario[] => {
         feature.elements.forEach(scenario => {
             scenarios.push({
                 id: createId(),
+                featureId: feature.id,
+                keyword: feature.keyword,
                 name: scenario.name,
-                tags: scenario.tags || [],
+                tags: {
+                    connect: scenario.tags ? scenario.tags.map(tag => ({ id: tag.id })) : []
+                }
             });
         });
     });
@@ -18,4 +22,3 @@ const collectScenarios = (testData: TestData): ParsedScenario[] => {
 };
 
 export { collectScenarios };
-export type { ParsedScenario };

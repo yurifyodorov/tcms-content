@@ -1,10 +1,10 @@
 import { dbClient } from '../shared/lib/db';
 import { createId } from '../shared/lib/id';
-import { TestData } from "@tests/scripts/types";
-
+import { TestData, FeatureTag, ScenarioTag } from "@tests/scripts/types";
 import { collectFeatures } from "./collect-features";
 import { collectScenarios } from './collect-scenarios';
-// import { collectSteps } from './collect-steps';
+import { collectSteps } from './collect-steps';
+import { collectTags } from "./collect-tags";
 
 export async function saveResults(
     runId: string,
@@ -31,11 +31,11 @@ export async function saveResults(
         });
     });
 
-    const features = collectFeatures(testData, scenarioMap);
+    const features = collectFeatures(testData);
     console.log("Features to be saved:", JSON.stringify(features, null, 2));
 
-    // const steps = collectSteps(scenarios);
-    // console.log("Steps to be saved:", JSON.stringify(steps, null, 2));
+    const steps = collectSteps(testData);
+    console.log("Steps to be saved:", JSON.stringify(steps, null, 2));
 
     let featuresCount = 0;
     let scenariosCount = 0;
@@ -46,58 +46,95 @@ export async function saveResults(
 
     let featuresToCreate = [];
     let scenariosToCreate = [];
-    // let stepsToCreate = [];
+    let stepsToCreate = [];
 
     let status = 'completed';
 
     let runDuration = 0;
 
-    for (const feature of testData) {
+    const featureTagsToCreate: FeatureTag[] = [];
+    const scenarioTagsToCreate: ScenarioTag[] = [];
 
+    const tagsSet = new Set<string>();
+
+    // Получаем все теги из базы данных
+    const tagsInDb = await dbClient.tag.findMany();
+    const tagMap = new Map<string, string>();
+    tagsInDb.forEach(tag => {
+        tagMap.set(tag.name, tag.id);
+    });
+
+    for (const feature of testData) {
         featuresCount++;
 
         const featureId = createId();
 
         const tags = (feature.tags || []).map((tag: { name: string }) => tag.name);
 
+        // Сначала сохраняем Feature без поля tags
         const featureData = {
             id: featureId,
             keyword: feature.keyword,
             name: feature.name,
             description: feature.description || '',
-            tags: tags,
         };
 
         featuresToCreate.push(featureData);
 
+        // Добавляем теги в Set и связываем их с Feature
+        tags.forEach((tagName: string) => {
+            tagsSet.add(tagName);
+            const tagId = tagMap.get(tagName);
+            if (tagId) {
+                featureTagsToCreate.push({
+                    featureId: featureId,
+                    tagId: tagId, // Используем ID тега
+                });
+            } else {
+                console.warn(`Tag with name ${tagName} not found in database.`);
+            }
+        });
+
+        // Дальше обработка сценариев с аналогичными изменениями
         for (const scenario of feature.elements) {
             const scenarioId = createId();
 
-            const tags = (scenario.tags || []).map((tag: { name: string }) => tag.name);
+            const scenarioTags = (scenario.tags || []).map((tag: { name: string }) => tag.name);
+            // Добавляем теги сценариев в Set
+            scenarioTags.forEach((tagName: string) => {
+                tagsSet.add(tagName);
+                const tagId = tagMap.get(tagName);
+                if (tagId) {
+                    scenarioTagsToCreate.push({
+                        scenarioId: scenarioId,
+                        tagId: tagId, // Используем ID тега
+                    });
+                } else {
+                    console.warn(`Tag with name ${tagName} not found in database.`);
+                }
+            });
 
             const scenarioData = {
                 id: scenarioId,
                 featureId: featureId,
                 keyword: feature.keyword,
                 name: scenario.name,
-                tags: tags,
             };
 
             scenariosToCreate.push(scenarioData);
 
-            // for (const step of scenario.steps) {
-            //
-            //     const stepData = {
-            //         id: createId(),
-            //         scenarioId: scenarioId,
-            //         keyword: step.keyword,
-            //         name: step.name,
-            //         media: step.media
-            //     };
-            //
-            //     stepsToCreate.push(stepData);
-            //     stepsCount++;
-            // }
+            for (const step of scenario.steps) {
+                const stepData = {
+                    id: createId(),
+                    scenarioId: scenarioId,
+                    keyword: step.keyword,
+                    name: step.name,
+                    media: step.media
+                };
+
+                stepsToCreate.push(stepData);
+                stepsCount++;
+            }
 
             scenariosCount++;
         }
@@ -106,6 +143,17 @@ export async function saveResults(
     if (failCount > 0) {
         status = 'failed';
     }
+
+    // Создаем все теги в базе данных, если их еще нет
+    const tagsToCreate = Array.from(tagsSet).map(tagName => ({
+        name: tagName,
+    }));
+
+    // Используем createMany, чтобы добавить все уникальные теги
+    await dbClient.tag.createMany({
+        data: tagsToCreate,
+        skipDuplicates: true, // Пропускаем дубли
+    });
 
     await dbClient.run.create({
         data: {
@@ -124,10 +172,13 @@ export async function saveResults(
         }
     });
 
+    // Теперь можно безопасно добавить связи между тегами и фичами/сценариями
     await dbClient.$transaction([
         dbClient.feature.createMany({ data: featuresToCreate }),
         dbClient.scenario.createMany({ data: scenariosToCreate }),
-        // dbClient.step.createMany({ data: stepsToCreate }),
+        dbClient.step.createMany({ data: stepsToCreate }),
+        dbClient.featureTag.createMany({ data: featureTagsToCreate }),
+        dbClient.scenarioTag.createMany({ data: scenarioTagsToCreate }),
         dbClient.run.update({
             where: { id: runId },
             data: {

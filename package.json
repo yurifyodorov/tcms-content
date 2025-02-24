@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "cypress run",
-    "test:chrome": "npm run test -- chrome",
-    "test:edge": "npm run test -- edge",
-    "test:firefox": "npm run test -- firefox"
+    "test:chrome": "cross-env CYPRESS_BROWSER=chrome cypress run --browser chrome",
+    "test:edge": "cross-env CYPRESS_BROWSER=edge cypress run --browser edge",
+    "test:firefox": "cross-env CYPRESS_BROWSER=firefox cypress run --browser firefox"
   },
   "author": "",
   "license": "ISC",
@@ -44,6 +44,6 @@
     "dotenv": "^16.4.5",
     "prisma": "^6.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.3"
   }
 }

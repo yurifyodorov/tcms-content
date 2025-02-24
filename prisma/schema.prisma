@@ -33,21 +33,23 @@ model Run {
 }
 
 model Feature {
-  id          String   @id @default(cuid())
+  id          String       @id @default(cuid())
   keyword     String
   name        String
   description String?
-  tags        String[]
+  featureTags FeatureTag[]
 
   @@map("features")
 }
 
 model Scenario {
-  id        String   @id @default(cuid())
-  featureId String
-  keyword   String
-  name      String
-  tags      String[]
+  id           String        @id @default(cuid())
+  featureId    String
+  keyword      String
+  name         String
+  scenarioTags ScenarioTag[]
+
+  steps ScenarioStep[]
 
   @@index([featureId])
   @@map("scenarios")
@@ -60,8 +62,52 @@ model Step {
   name       String
   media      Json?
 
+  scenarios ScenarioStep[]
+
   @@index([scenarioId])
   @@map("steps")
+}
+
+model ScenarioStep {
+  scenarioId String
+  stepId     String
+
+  scenario Scenario @relation(fields: [scenarioId], references: [id])
+  step     Step     @relation(fields: [stepId], references: [id])
+
+  @@id([scenarioId, stepId])
+  @@map("scenario_steps")
+}
+
+model Tag {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  featureTags  FeatureTag[]
+  scenarioTags ScenarioTag[]
+
+  @@map("tags")
+}
+
+model FeatureTag {
+  featureId String
+  tagId     String
+
+  feature Feature @relation(fields: [featureId], references: [id])
+  tag     Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([featureId, tagId])
+  @@map("features_tags")
+}
+
+model ScenarioTag {
+  scenarioId String
+  tagId      String
+
+  scenario Scenario @relation(fields: [scenarioId], references: [id])
+  tag      Tag      @relation(fields: [tagId], references: [id])
+
+  @@id([scenarioId, tagId])
+  @@map("scenarios_tags")
 }
 
 enum StepStatus {

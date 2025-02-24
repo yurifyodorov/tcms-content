@@ -35,7 +35,7 @@ async function setupNodeEvents(
 
 
     const runId = createId();
-    const browser = process.env.BROWSER || "chrome";
+    const browser = process.env.CYPRESS_BROWSER || 'unknown';
     const platform = process.platform;
     const databaseUrl = process.env.DATABASE_URL;
     const environment = process.env.ENVIRONMENT || "localhost"
