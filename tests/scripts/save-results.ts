@@ -5,8 +5,10 @@ import { dbClient } from '../shared/lib/db';
 import { synchronizeFeatures } from "./synchronize-features";
 import { collectFeatures } from "./collect-features";
 
+import { synchronizeScenarios } from "./synchronize-scenarios";
 import { collectScenarios } from './collect-scenarios';
 
+import { synchronizeSteps } from "./synchronize-steps";
 import { collectSteps } from './collect-steps';
 
 import { synchronizeTags } from "./synchronize-tags";

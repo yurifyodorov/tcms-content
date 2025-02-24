@@ -1,3 +1,4 @@
+@feature-tag-test
 Feature: Auth
 
   Background:
@@ -17,7 +18,6 @@ Feature: Auth
       | TESTER   | tester@example.com  |
       | GUEST    | guest@example.com   |
 
-  @github
   Scenario: Sign in with GitHub
     When I am on the home page
     And I click on sign in button
