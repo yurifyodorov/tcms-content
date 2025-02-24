@@ -1,9 +1,14 @@
-import { dbClient } from '../shared/lib/db';
+import { ParsedFeature, ParsedScenario, ParsedStep, FeatureTag, ScenarioTag, TestData } from "./types";
 import { createId } from '../shared/lib/id';
-import { TestData, FeatureTag, ScenarioTag } from "./types";
+import { dbClient } from '../shared/lib/db';
+
+import { synchronizeFeatures } from "./synchronize-features";
 import { collectFeatures } from "./collect-features";
+
 import { collectScenarios } from './collect-scenarios';
+
 import { collectSteps } from './collect-steps';
+
 import { synchronizeTags } from "./synchronize-tags";
 import { collectTags } from "./collect-tags";
 
@@ -23,6 +28,7 @@ export async function saveResults(
     console.log(`databaseUrl: ${databaseUrl}`);
 
     await synchronizeTags(testData);
+    await synchronizeFeatures(testData);
 
     const tags = collectTags(testData);
 
@@ -49,9 +55,9 @@ export async function saveResults(
     let skipCount = 0;
     let stepsCount = 0;
 
-    let featuresToCreate = [];
-    let scenariosToCreate = [];
-    let stepsToCreate = [];
+    let featuresToCreate: ParsedFeature[] = [];
+    let scenariosToCreate: ParsedScenario[] = [];
+    let stepsToCreate: ParsedStep[] = [];
 
     let status = 'completed';
 
@@ -74,18 +80,34 @@ export async function saveResults(
     for (const feature of testData) {
         featuresCount++;
 
-        const featureId = createId();
-
         const tags = (feature.tags || []).map((tag: { name: string }) => tag.name.trim());
 
-        const featureData = {
-            id: featureId,
-            keyword: feature.keyword,
-            name: feature.name,
-            description: feature.description || '',
-        };
+        const existingFeature = await dbClient.feature.findFirst({
+            where: { name: feature.name.trim() }
+        });
 
-        featuresToCreate.push(featureData);
+        let featureId: string;
+
+        if (existingFeature) {
+            featureId = existingFeature.id;
+            await dbClient.feature.update({
+                where: { id: featureId },
+                data: {
+                    keyword: feature.keyword,
+                    description: feature.description || '',
+                },
+            });
+        } else {
+            featureId = createId();
+            await dbClient.feature.create({
+                data: {
+                    id: featureId,
+                    keyword: feature.keyword,
+                    name: feature.name,
+                    description: feature.description || '',
+                },
+            });
+        }
 
         for (const tagName of tags) {
             let tagId = tagMap.get(tagName);
@@ -124,7 +146,7 @@ export async function saveResults(
                 });
             }
 
-            const scenarioData = {
+            const scenarioData: ParsedScenario = {
                 id: scenarioId,
                 featureId: featureId,
                 keyword: feature.keyword,
@@ -134,7 +156,7 @@ export async function saveResults(
             scenariosToCreate.push(scenarioData);
 
             for (const step of scenario.steps) {
-                const stepData = {
+                const stepData: ParsedStep = {
                     id: createId(),
                     scenarioId: scenarioId,
                     keyword: step.keyword,
@@ -181,7 +203,7 @@ export async function saveResults(
     });
 
     await dbClient.$transaction([
-        dbClient.feature.createMany({ data: featuresToCreate }),
+        dbClient.feature.createMany({ data: featuresToCreate, skipDuplicates: true }),
         dbClient.scenario.createMany({ data: scenariosToCreate }),
         dbClient.step.createMany({ data: stepsToCreate }),
         dbClient.featureTag.createMany({ data: featureTagsToCreate }),

@@ -72,8 +72,8 @@ model ScenarioStep {
   scenarioId String
   stepId     String
 
-  scenario Scenario @relation(fields: [scenarioId], references: [id])
-  step     Step     @relation(fields: [stepId], references: [id])
+  scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  step     Step     @relation(fields: [stepId], references: [id], onDelete: Cascade)
 
   @@id([scenarioId, stepId])
   @@map("scenario_steps")
@@ -92,7 +92,7 @@ model FeatureTag {
   featureId String
   tagId     String
 
-  feature Feature @relation(fields: [featureId], references: [id])
+  feature Feature @relation(fields: [featureId], references: [id], onDelete: Cascade)
   tag     Tag     @relation(fields: [tagId], references: [id])
 
   @@id([featureId, tagId])
@@ -103,7 +103,7 @@ model ScenarioTag {
   scenarioId String
   tagId      String
 
-  scenario Scenario @relation(fields: [scenarioId], references: [id])
+  scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
   tag      Tag      @relation(fields: [tagId], references: [id])
 
   @@id([scenarioId, tagId])

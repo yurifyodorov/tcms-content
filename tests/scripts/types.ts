@@ -49,7 +49,7 @@ export interface ParsedFeature {
     name: string;
     description: string;
     keyword: string;
-    tags?: { connect: { id: string }[] }; // Помечаем как опциональное
+    tags?: { connect: { id: string }[] };
 }
 
 export interface Tag {
