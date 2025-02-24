@@ -3,7 +3,11 @@ import * as path from 'path';
 require('dotenv').config();
 import { defineConfig } from 'cypress';
 import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
-import { addCucumberPreprocessorPlugin, beforeRunHandler } from '@badeball/cypress-cucumber-preprocessor';
+import {
+  addCucumberPreprocessorPlugin,
+  afterRunHandler,
+  beforeRunHandler
+} from '@badeball/cypress-cucumber-preprocessor';
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
 import { specPaths } from "@tests/specs";
 import { createId } from "@/tests/shared/lib/id";
@@ -27,12 +31,14 @@ async function setupNodeEvents(
   });
 
   on("after:run", async () => {
-    const runId = createId();
+    await afterRunHandler(config);
 
-    const browser = process.env.CYPRESS_BROWSER || 'unknown';
+
+    const runId = createId();
+    const browser = process.env.BROWSER || "chrome";
     const platform = process.platform;
     const databaseUrl = process.env.DATABASE_URL;
-    const environment = process.env.ENVIRONMENT || "localhost";
+    const environment = process.env.ENVIRONMENT || "localhost"
 
     const reportPath = path.join(__dirname, "tests/reports/cucumber-report.json");
 
@@ -42,7 +48,7 @@ async function setupNodeEvents(
 
       if (databaseUrl) {
         // FIXME: remove this later (for debug)
-        await saveResults(runId, browser, platform, environment, databaseUrl, testData);
+        await saveResults(runId, browser, platform, environment, databaseUrl, testData)
 
         // TODO: use this later
         // tcms.saveResults(runId, browser, platform, databaseUrl, testData);
@@ -70,7 +76,6 @@ export default defineConfig({
     screenshotsFolder: "tests/reports/screenshots",
     supportFile: "tests/support/e2e.ts",
     env: {
-      NEXTAUTH_URL: process.env.NEXTAUTH_URL,
       grepFilterSpecs: true,
       omitFiltered: false,
       filterSpecs: true,

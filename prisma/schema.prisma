@@ -8,20 +8,19 @@ datasource db {
 }
 
 model Run {
-  id             String    @id @default(cuid())
-  runNumber      Int       @unique @default(autoincrement())
+  id             String   @id @default(cuid())
+  runNumber      Int      @unique @default(autoincrement())
   status         String
   browser        String
   platform       String
   featuresCount  Int
   scenariosCount Int
   stepsCount     Int
-  passCount      Int       @default(0)
-  failCount      Int       @default(0)
-  skipCount      Int       @default(0)
-  features       Feature[]
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  passCount      Int      @default(0)
+  failCount      Int      @default(0)
+  skipCount      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
   duration       Int?
   auto           Boolean
 
@@ -34,53 +33,34 @@ model Run {
 }
 
 model Feature {
-  id          String     @id @default(cuid())
+  id          String   @id @default(cuid())
+  keyword     String
   name        String
   description String?
-  uri         String
-  runId       String
-  run         Run        @relation(fields: [runId], references: [id])
-  scenarios   Scenario[]
-  duration    Int?
+  tags        String[]
 
-  @@index([runId])
   @@map("features")
 }
 
 model Scenario {
   id        String   @id @default(cuid())
   featureId String
-  runId     String
+  keyword   String
   name      String
-  line      Int?
-  status    String
-  message   String?
   tags      String[]
-  feature   Feature  @relation(fields: [featureId], references: [id])
-  steps     Step[]
-  duration  Int?
 
   @@index([featureId])
-  @@index([runId])
   @@map("scenarios")
 }
 
 model Step {
-  id         String     @id @default(cuid())
+  id         String @id @default(cuid())
   scenarioId String
-  runId      String
+  keyword    String
   name       String
-  status     StepStatus
-  duration   Int?
-  message    String?
   media      Json?
-  scenario   Scenario   @relation(fields: [scenarioId], references: [id])
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
 
   @@index([scenarioId])
-  @@index([status])
-  @@index([runId])
   @@map("steps")
 }
 

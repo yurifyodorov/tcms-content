@@ -1,14 +1,10 @@
-/// <reference types="cypress" />
-
-import * as fs from 'fs';
-import * as path from 'path';
 import { dbClient } from '../shared/lib/db';
 import { createId } from '../shared/lib/id';
 import { TestData } from "@tests/scripts/types";
 
 import { collectFeatures } from "./collect-features";
 import { collectScenarios } from './collect-scenarios';
-import { collectSteps } from './collect-steps';
+// import { collectSteps } from './collect-steps';
 
 export async function saveResults(
     runId: string,
@@ -38,8 +34,8 @@ export async function saveResults(
     const features = collectFeatures(testData, scenarioMap);
     console.log("Features to be saved:", JSON.stringify(features, null, 2));
 
-    const steps = collectSteps(scenarios);
-    console.log("Steps to be saved:", JSON.stringify(steps, null, 2));
+    // const steps = collectSteps(scenarios);
+    // console.log("Steps to be saved:", JSON.stringify(steps, null, 2));
 
     let featuresCount = 0;
     let scenariosCount = 0;
@@ -50,99 +46,61 @@ export async function saveResults(
 
     let featuresToCreate = [];
     let scenariosToCreate = [];
-    let stepsToCreate = [];
+    // let stepsToCreate = [];
 
     let status = 'completed';
 
     let runDuration = 0;
 
     for (const feature of testData) {
-        let featureDuration = 0;
+
         featuresCount++;
 
         const featureId = createId();
+
+        const tags = (feature.tags || []).map((tag: { name: string }) => tag.name);
+
         const featureData = {
             id: featureId,
+            keyword: feature.keyword,
             name: feature.name,
             description: feature.description || '',
-            uri: feature.uri,
-            runId: runId,
-            duration: featureDuration,
+            tags: tags,
         };
 
         featuresToCreate.push(featureData);
 
         for (const scenario of feature.elements) {
-            let scenarioDuration = 0;
-            let scenarioStatus = 'passed';
             const scenarioId = createId();
 
             const tags = (scenario.tags || []).map((tag: { name: string }) => tag.name);
 
             const scenarioData = {
                 id: scenarioId,
-                runId: runId,
                 featureId: featureId,
+                keyword: feature.keyword,
                 name: scenario.name,
-                line: scenario.line,
-                status: scenarioStatus,
-                message: '', // TODO: что сохранять?
                 tags: tags,
-                duration: scenarioDuration,
             };
 
             scenariosToCreate.push(scenarioData);
 
-            let scenarioFailed = false;
-            let scenarioSkipped = true;
-
-            for (const step of scenario.steps) {
-                const stepDuration = step.result.duration;
-                const stepDurationInMs = Math.floor(stepDuration / 1000000);
-                scenarioDuration += stepDurationInMs;
-
-                const stepData = {
-                    id: createId(),
-                    runId: runId,
-                    scenarioId: scenarioId,
-                    name: `${step.keyword.trim()} ${step.name}`,
-                    status: step.result.status,
-                    duration: stepDurationInMs,
-                    message: step.result.error_message || '',
-                };
-
-                stepsToCreate.push(stepData);
-                stepsCount++;
-
-                if (step.result.status === 'failed') {
-                    scenarioFailed = true;
-                }
-
-                if (step.result.status !== 'skipped') {
-                    scenarioSkipped = false;
-                }
-            }
-
-            if (scenarioSkipped) {
-                scenarioStatus = 'skipped';
-                skipCount++;
-            } else if (scenarioFailed) {
-                scenarioStatus = 'failed';
-                failCount++;
-            } else {
-                scenarioStatus = 'passed';
-                passCount++;
-            }
+            // for (const step of scenario.steps) {
+            //
+            //     const stepData = {
+            //         id: createId(),
+            //         scenarioId: scenarioId,
+            //         keyword: step.keyword,
+            //         name: step.name,
+            //         media: step.media
+            //     };
+            //
+            //     stepsToCreate.push(stepData);
+            //     stepsCount++;
+            // }
 
             scenariosCount++;
-            scenarioData.status = scenarioStatus;
-            scenarioData.duration = scenarioDuration;
         }
-
-        featureDuration += scenariosToCreate.reduce((acc, scenario) => acc + scenario.duration, 0);
-        featureData.duration = featureDuration;
-
-        runDuration += featureDuration;
     }
 
     if (failCount > 0) {
@@ -153,8 +111,8 @@ export async function saveResults(
         data: {
             id: runId,
             status: status,
-            browser: 'test',
-            platform: 'test',
+            browser: browser,
+            platform: platform,
             featuresCount,
             scenariosCount,
             passCount,
@@ -169,7 +127,7 @@ export async function saveResults(
     await dbClient.$transaction([
         dbClient.feature.createMany({ data: featuresToCreate }),
         dbClient.scenario.createMany({ data: scenariosToCreate }),
-        dbClient.step.createMany({ data: stepsToCreate }),
+        // dbClient.step.createMany({ data: stepsToCreate }),
         dbClient.run.update({
             where: { id: runId },
             data: {
