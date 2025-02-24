@@ -58,13 +58,13 @@ export async function saveResults(
     const tags = collectTags(testData);
     const tagsSet = new Set<string>();
     tags.forEach(tag => {
-        tagsSet.add(tag.name);
+        tagsSet.add(tag.name.trim());
     });
 
     const tagsInDb = await dbClient.tag.findMany();
     const tagMap = new Map<string, string>();
     tagsInDb.forEach(tag => {
-        tagMap.set(tag.name, tag.id);
+        tagMap.set(tag.name.trim(), tag.id);
     });
 
     for (const feature of testData) {
@@ -72,7 +72,7 @@ export async function saveResults(
 
         const featureId = createId();
 
-        const tags = (feature.tags || []).map((tag: { name: string }) => tag.name);
+        const tags = (feature.tags || []).map((tag: { name: string }) => tag.name.trim());
 
         const featureData = {
             id: featureId,
@@ -83,33 +83,42 @@ export async function saveResults(
 
         featuresToCreate.push(featureData);
 
-        tags.forEach((tagName: string) => {
-            const tagId = tagMap.get(tagName);
-            if (tagId) {
-                featureTagsToCreate.push({
-                    featureId: featureId,
-                    tagId: tagId,
+        for (const tagName of tags) {
+            let tagId = tagMap.get(tagName);
+            if (!tagId) {
+                const newTag = await dbClient.tag.create({
+                    data: { name: tagName },
                 });
-            } else {
-                console.warn(`Tag with name ${tagName} not found in database.`);
+                tagId = newTag.id;
+                tagMap.set(tagName, tagId);
             }
-        });
+
+            featureTagsToCreate.push({
+                featureId: featureId,
+                tagId: tagId,
+            });
+        }
 
         for (const scenario of feature.elements) {
             const scenarioId = createId();
 
-            const scenarioTags = (scenario.tags || []).map((tag: { name: string }) => tag.name);
-            scenarioTags.forEach((tagName: string) => {
-                const tagId = tagMap.get(tagName);
-                if (tagId) {
-                    scenarioTagsToCreate.push({
-                        scenarioId: scenarioId,
-                        tagId: tagId,
+            const scenarioTags = (scenario.tags || []).map((tag: { name: string }) => tag.name.trim());
+
+            for (const tagName of scenarioTags) {
+                let tagId = tagMap.get(tagName);
+                if (!tagId) {
+                    const newTag = await dbClient.tag.create({
+                        data: { name: tagName },
                     });
-                } else {
-                    console.warn(`Tag with name ${tagName} not found in database.`);
+                    tagId = newTag.id;
+                    tagMap.set(tagName, tagId);
                 }
-            });
+
+                scenarioTagsToCreate.push({
+                    scenarioId: scenarioId,
+                    tagId: tagId,
+                });
+            }
 
             const scenarioData = {
                 id: scenarioId,
