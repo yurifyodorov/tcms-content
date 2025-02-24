@@ -1,9 +1,10 @@
 import { dbClient } from '../shared/lib/db';
 import { createId } from '../shared/lib/id';
-import { TestData, FeatureTag, ScenarioTag } from "@tests/scripts/types";
+import { TestData, FeatureTag, ScenarioTag } from "./types";
 import { collectFeatures } from "./collect-features";
 import { collectScenarios } from './collect-scenarios';
 import { collectSteps } from './collect-steps';
+import { synchronizeTags } from "./synchronize-tags";
 import { collectTags } from "./collect-tags";
 
 export async function saveResults(
@@ -20,6 +21,10 @@ export async function saveResults(
     console.log(`platform: ${platform}`);
     console.log(`environment: ${environment}`);
     console.log(`databaseUrl: ${databaseUrl}`);
+
+    await synchronizeTags(testData);
+
+    const tags = collectTags(testData);
 
     const scenarios = collectScenarios(testData);
     console.log("Scenarios to be saved:", JSON.stringify(scenarios, null, 2));
@@ -55,7 +60,6 @@ export async function saveResults(
     const featureTagsToCreate: FeatureTag[] = [];
     const scenarioTagsToCreate: ScenarioTag[] = [];
 
-    const tags = collectTags(testData);
     const tagsSet = new Set<string>();
     tags.forEach(tag => {
         tagsSet.add(tag.name.trim());

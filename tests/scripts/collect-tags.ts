@@ -1,5 +1,5 @@
-import {Tag, TestData} from './types';
-import {createId} from '@tests/shared/lib/id';
+import { Tag, TestData } from './types';
+import { createId } from '@tests/shared/lib/id';
 
 const collectTags = (testData: TestData): Tag[] => {
     const tagSet = new Set<string>();
@@ -14,7 +14,7 @@ const collectTags = (testData: TestData): Tag[] => {
 
     return Array.from(tagSet).map((tagName) => ({
         id: createId(),
-        name: tagName
+        name: tagName,
     }));
 };
 
