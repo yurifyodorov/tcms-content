@@ -1,4 +1,3 @@
-@test1
 Feature: Auth
 
   Background:

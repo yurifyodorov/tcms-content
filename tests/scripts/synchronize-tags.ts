@@ -58,4 +58,26 @@ export async function synchronizeTags(testData: TestData): Promise<void> {
 
         console.log(`Добавлены новые теги: ${newTagsToAdd.map(tag => tag.name).join(', ')}`);
     }
+
+    const existingTags = tagsInDb.filter(tag => tagsSetFromTests.has(tag.name.trim()));
+
+    if (existingTags.length > 0) {
+        await dbClient.featureTag.deleteMany({
+            where: {
+                tagId: {
+                    in: existingTags.map(tag => tag.id),
+                },
+            },
+        });
+
+        await dbClient.scenarioTag.deleteMany({
+            where: {
+                tagId: {
+                    in: existingTags.map(tag => tag.id),
+                },
+            },
+        });
+
+        console.log(`Удалены старые связи с фичами и сценариями для тегов: ${existingTags.map(tag => tag.name).join(', ')}`);
+    }
 }
