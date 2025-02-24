@@ -11,7 +11,6 @@ export async function synchronizeFeatures(testData: Feature[]): Promise<void> {
         featureMapFromDb.set(trimmedName, feature.id);
     });
 
-    // Удаляем фичи, которых больше нет в testData
     const featuresToDelete = featuresInDb.filter(
         (feature) => !featureNamesFromTestData.includes(feature.name.trim())
     );
@@ -28,13 +27,11 @@ export async function synchronizeFeatures(testData: Feature[]): Promise<void> {
         console.log(`Удалены фичи: ${featuresToDelete.map((feature) => feature.name).join(', ')}`);
     }
 
-    // Обновляем существующие фичи и добавляем новые
     for (const feature of testData) {
         const trimmedFeatureName = feature.name.trim();
         const existingFeatureId = featureMapFromDb.get(trimmedFeatureName);
 
         if (existingFeatureId) {
-            // Обновляем существующую фичу
             await dbClient.feature.update({
                 where: { id: existingFeatureId },
                 data: {
@@ -44,8 +41,7 @@ export async function synchronizeFeatures(testData: Feature[]): Promise<void> {
             });
             console.log(`Обновлена фича: ${feature.name}`);
         } else {
-            // Добавляем новую фичу
-            await dbClient.feature.create({
+            const newFeature = await dbClient.feature.create({
                 data: {
                     name: feature.name,
                     keyword: feature.keyword || 'Feature',
@@ -53,6 +49,8 @@ export async function synchronizeFeatures(testData: Feature[]): Promise<void> {
                 },
             });
             console.log(`Добавлена новая фича: ${feature.name}`);
+
+            featureMapFromDb.set(newFeature.name.trim(), newFeature.id);
         }
     }
 
