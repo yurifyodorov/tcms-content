@@ -57,12 +57,12 @@ model Scenario {
 }
 
 model Step {
-  id      String @id @default(cuid())
-  keyword String
-  name    String
-  media   Json?
-
-  scenarios ScenarioStep[]
+  id           String         @id @default(cuid())
+  keyword      String
+  name         String
+  media        Json?
+  scenarioIds  String[]
+  ScenarioStep ScenarioStep[]
 
   @@map("steps")
 }

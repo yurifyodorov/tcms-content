@@ -18,7 +18,13 @@ const collectSteps = (testData: Feature[]): Step[] => {
                             name: step.name,
                             media: step.media || '',
                             keyword: step.keyword,
+                            scenarioIds: [scenario.id],
                         });
+                    } else {
+                        const existingStep = stepsMap.get(stepName);
+                        if (existingStep) {
+                            existingStep.scenarioIds.push(scenario.id);
+                        }
                     }
                 });
             }
@@ -31,5 +37,7 @@ const collectSteps = (testData: Feature[]): Step[] => {
 
     return collectedSteps;
 };
+
+
 
 export { collectSteps };

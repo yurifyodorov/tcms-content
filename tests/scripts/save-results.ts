@@ -172,7 +172,7 @@ export async function saveResults(
             for (const step of scenario.steps) {
                 const stepData: ParsedStep = {
                     id: createId(),
-                    scenarioId: scenarioId,
+                    scenarioIds: [scenarioId],
                     keyword: step.keyword,
                     name: step.name,
                     media: step.media
