@@ -7,35 +7,45 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
 
     const allScenarios: ParsedScenario[] = [];
 
-    testData.forEach(feature => {
+    for (const feature of testData) {
         const featureInDb = featuresInDb.find(f => f.name.trim().toLowerCase() === feature.name.trim().toLowerCase());
 
         if (!featureInDb) {
             console.error(`Feature "${feature.name}" not found in the database.`);
-            return;
+            continue;
         }
 
-        // Логирование данных фичи
         console.log(`Обработка фичи: "${feature.name}" с ID: ${featureInDb.id}`);
 
-        feature.elements
-            .filter(scenario => scenario.keyword === 'Scenario' || scenario.keyword === 'Scenario Outline')
-            .forEach(scenario => {
-                const parsedScenario: ParsedScenario = {
-                    id: createId(),
-                    featureId: featureInDb.id,
-                    keyword: scenario.keyword,
-                    name: scenario.name,
-                    tags: {
-                        connect: scenario.tags ? scenario.tags.map(tag => ({ id: tag.id })) : []
-                    }
-                };
+        for (const scenario of feature.elements.filter(scenario => scenario.keyword === 'Scenario' || scenario.keyword === 'Scenario Outline')) {
+            const tagsToConnect = [];
 
-                allScenarios.push(parsedScenario);
-            });
-    });
+            for (const tag of scenario.tags || []) {
+                const existingTag = await dbClient.tag.findUnique({ where: { name: tag.name } });
+                if (existingTag) {
+                    tagsToConnect.push({ id: existingTag.id });
+                } else {
+                    const newTag = await dbClient.tag.create({ data: { name: tag.name } });
+                    tagsToConnect.push({ id: newTag.id });
+                }
+            }
 
-    // Логирование всех собранных сценариев в формате JSON
+            console.log(`Tags for scenario "${scenario.name}":`, tagsToConnect);
+
+            const parsedScenario: ParsedScenario = {
+                id: createId(),
+                featureId: featureInDb.id,
+                keyword: scenario.keyword,
+                name: scenario.name,
+                tags: {
+                    connect: tagsToConnect
+                }
+            };
+
+            allScenarios.push(parsedScenario);
+        }
+    }
+
     console.log('Collected Scenarios:', JSON.stringify(allScenarios, null, 2));
 
     return allScenarios;
