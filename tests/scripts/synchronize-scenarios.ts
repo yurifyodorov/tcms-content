@@ -17,7 +17,7 @@ export async function synchronizeScenarios(testData: TestData): Promise<void> {
         await dbClient.scenario.deleteMany({
             where: { id: { in: scenariosToDelete.map(scenario => scenario.id) } }
         });
-        console.log(`Удалены сценарии с неправильным featureId: ${scenariosToDelete.map(s => s.name).join(", ")}`);
+        // console.log(`Удалены сценарии с неправильным featureId: ${scenariosToDelete.map(s => s.name).join(", ")}`);
     }
 
     for (const { name, featureId, keyword } of scenariosFromTestData) {
@@ -32,10 +32,10 @@ export async function synchronizeScenarios(testData: TestData): Promise<void> {
                     name: name,
                 }
             });
-            console.log(`Добавлен новый сценарий: ${name}`);
+            // console.log(`Добавлен новый сценарий: ${name}`);
             scenarioMap.set(`${name}_${featureId}`, newScenario.id);
         } else {
-            console.log(`Сценарий "${name}" с featureId "${featureId}" уже существует. Обновляем.`);
+            // console.log(`Сценарий "${name}" с featureId "${featureId}" уже существует. Обновляем.`);
             await dbClient.scenario.update({
                 where: { id: existingScenarioId },
                 data: {
@@ -47,5 +47,5 @@ export async function synchronizeScenarios(testData: TestData): Promise<void> {
         }
     }
 
-    console.log(`Всего сценариев в базе данных после синхронизации: ${scenarioMap.size}`);
+    // console.log(`Всего сценариев в базе данных после синхронизации: ${scenarioMap.size}`);
 }

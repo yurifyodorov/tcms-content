@@ -15,7 +15,7 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
             continue;
         }
 
-        console.log(`Обработка фичи: "${feature.name}" с ID: ${featureInDb.id}`);
+        // console.log(`Обработка фичи: "${feature.name}" с ID: ${featureInDb.id}`);
 
         for (const scenario of feature.elements.filter(scenario => scenario.keyword === 'Scenario' || scenario.keyword === 'Scenario Outline')) {
             const tagsToConnect = [];
@@ -30,7 +30,7 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
                 }
             }
 
-            console.log(`Tags for scenario "${scenario.name}":`, tagsToConnect);
+            // console.log(`Tags for scenario "${scenario.name}":`, tagsToConnect);
 
             const parsedScenario: ParsedScenario = {
                 id: createId(),
@@ -46,7 +46,7 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
         }
     }
 
-    console.log('Collected Scenarios:', JSON.stringify(allScenarios, null, 2));
+    // console.log('Collected Scenarios:', JSON.stringify(allScenarios, null, 2));
 
     return allScenarios;
 };

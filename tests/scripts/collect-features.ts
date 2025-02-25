@@ -5,7 +5,7 @@ import { createId } from "@paralleldrive/cuid2";
 const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => {
     const featuresInDb = await dbClient.feature.findMany();
 
-    console.log('Features in DB:', JSON.stringify(featuresInDb, null, 2));
+    // console.log('Features in DB:', JSON.stringify(featuresInDb, null, 2));
 
     const allFeatures: ParsedFeature[] = [];
 
@@ -24,7 +24,7 @@ const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => 
             }
         }
 
-        console.log(`Tags for feature "${feature.name}":`, tagsToConnect);
+        // console.log(`Tags for feature "${feature.name}":`, tagsToConnect);
 
         const parsedFeature: ParsedFeature = {
             id: existingFeature ? existingFeature.id : createId(),
@@ -39,7 +39,7 @@ const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => 
         allFeatures.push(parsedFeature);
     }
 
-    console.log('Collected Features:', JSON.stringify(allFeatures, null, 2));
+    // console.log('Collected Features:', JSON.stringify(allFeatures, null, 2));
 
     return allFeatures;
 };

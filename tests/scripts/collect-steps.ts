@@ -39,8 +39,7 @@ const collectSteps = (testData: Feature[], allScenarios: ParsedScenario[]): Pars
 
     const collectedSteps = Array.from(stepsMap.values());
 
-    console.log('Собранные шаги:');
-    console.log(JSON.stringify(collectedSteps, null, 2));
+    // console.log('Собранные шаги:', JSON.stringify(collectedSteps, null, 2));
 
     return collectedSteps;
 };
