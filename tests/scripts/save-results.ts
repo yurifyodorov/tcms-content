@@ -1,6 +1,15 @@
-import { ParsedFeature, ParsedScenario, ParsedStep, FeatureTag, ScenarioTag, TestData } from "./types";
 import { createId } from '../shared/lib/id';
 import { dbClient } from '../shared/lib/db';
+
+import {
+    TestData,
+    ParsedFeature,
+    ParsedScenario,
+    ParsedStep,
+    FeatureTag,
+    ScenarioTag,
+    ScenarioStep
+} from "./types";
 
 import { synchronizeFeatures } from "./synchronize-features";
 import { collectFeatures } from "./collect-features";
@@ -67,6 +76,7 @@ export async function saveResults(
 
     const featureTagsToCreate: FeatureTag[] = [];
     const scenarioTagsToCreate: ScenarioTag[] = [];
+    const scenarioStepsToCreate: ScenarioStep[] = [];
 
     const tagsSet = new Set<string>();
     tags.forEach(tag => {
@@ -168,6 +178,11 @@ export async function saveResults(
 
                 stepsToCreate.push(stepData);
                 stepsCount++;
+
+                scenarioStepsToCreate.push({
+                    scenarioId: scenarioId,
+                    stepId: stepData.id,
+                });
             }
 
             scenariosCount++;
@@ -208,6 +223,7 @@ export async function saveResults(
         dbClient.feature.createMany({ data: featuresToCreate, skipDuplicates: true }),
         dbClient.scenario.createMany({ data: scenariosToCreate }),
         dbClient.step.createMany({ data: stepsToCreate }),
+        dbClient.scenarioStep.createMany({ data: scenarioStepsToCreate }),
         dbClient.featureTag.createMany({ data: featureTagsToCreate }),
         dbClient.scenarioTag.createMany({ data: scenarioTagsToCreate }),
         dbClient.run.update({
