@@ -209,6 +209,7 @@ export async function saveResults(
             status: status,
             browser: browser,
             platform: platform,
+            environment: environment,
             featuresCount,
             scenariosCount,
             passCount,
