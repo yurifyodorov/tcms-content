@@ -43,7 +43,7 @@ export async function saveResults(
     await synchronizeScenarios(testData);
 
     const tags = collectTags(testData);
-
+    const features = await collectFeatures(testData);
     const scenarios = await collectScenarios(testData);
     const steps: ParsedStep[] = collectSteps(testData, scenarios);
 
@@ -66,7 +66,6 @@ export async function saveResults(
     let stepsToCreate: ParsedStep[] = [];
 
     let status = 'completed';
-
     let runDuration = 0;
 
     const featureTagsToCreate: FeatureTag[] = [];
@@ -84,10 +83,12 @@ export async function saveResults(
         tagMap.set(tag.name.trim(), tag.id);
     });
 
-    for (const feature of testData) {
+    // Обработка фич
+    for (const feature of features) {
         featuresCount++;
 
-        const tags = (feature.tags || []).map((tag: { name: string }) => tag.name.trim());
+        const tags = feature.tags && Array.isArray(feature.tags) ?
+            feature.tags.map((tag: { name: string }) => tag.name.trim()) : [];
 
         const existingFeature = await dbClient.feature.findFirst({
             where: { name: feature.name.trim() }
@@ -140,10 +141,11 @@ export async function saveResults(
             });
         }
 
-        for (const scenario of feature.elements) {
+        for (const scenario of feature.scenarios || []) {
             const scenarioId = createId();
 
-            const scenarioTags = (scenario.tags || []).map((tag: { name: string }) => tag.name.trim());
+            const scenarioTags = (scenario.tags && Array.isArray(scenario.tags)) ?
+                scenario.tags.map(tag => tag.name.trim()) : [];
 
             for (const tagName of scenarioTags) {
                 let tagId = tagMap.get(tagName);

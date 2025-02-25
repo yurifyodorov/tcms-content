@@ -52,7 +52,9 @@ export interface ParsedFeature {
     description: string;
     keyword: string;
     tags?: { connect: { id: string }[] };
+    scenarios?: ParsedScenario[];
 }
+
 
 export interface Tag {
     id: string;
