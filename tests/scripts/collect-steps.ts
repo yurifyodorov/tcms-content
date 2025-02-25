@@ -4,6 +4,8 @@ import { createId } from '@tests/shared/lib/id';
 const collectSteps = (testData: Feature[]): Step[] => {
     const stepsMap = new Map<string, Step>();
 
+    console.log('Test Data:', JSON.stringify(testData, null, 2));
+
     testData.forEach((feature) => {
         feature.elements.forEach((scenario: Scenario) => {
             if (scenario.steps) {
@@ -23,7 +25,11 @@ const collectSteps = (testData: Feature[]): Step[] => {
         });
     });
 
-    return Array.from(stepsMap.values());
+    const collectedSteps = Array.from(stepsMap.values());
+
+    console.log('Collected Steps:', JSON.stringify(collectedSteps, null, 2));
+
+    return collectedSteps;
 };
 
 export { collectSteps };

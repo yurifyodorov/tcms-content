@@ -45,7 +45,6 @@ export async function saveResults(
     const tags = collectTags(testData);
 
     const scenarios = await collectScenarios(testData);
-    console.log("Scenarios to be saved:", JSON.stringify(scenarios, null, 2));
 
     const scenarioMap = new Map<string, string>();
     testData.forEach((feature, featureIndex) => {
@@ -53,12 +52,6 @@ export async function saveResults(
             scenarioMap.set(scenario.id, scenarios[featureIndex * feature.elements.length + scenarioIndex].id);
         });
     });
-
-    const features = collectFeatures(testData);
-    console.log("Features to be saved:", JSON.stringify(features, null, 2));
-
-    const steps = collectSteps(testData);
-    console.log("Steps to be saved:", JSON.stringify(steps, null, 2));
 
     let featuresCount = 0;
     let scenariosCount = 0;
