@@ -3,13 +3,14 @@ export interface Step {
     name: string;
     media: string;
     keyword: string;
+    scenarioIds: string[];
 }
 
 export interface ParsedStep {
     id: string;
     name: string;
     keyword: string;
-    scenarioId: string;
+    scenarioIds: string[];
     media?: string;
 }
 
@@ -25,6 +26,7 @@ export interface Scenario {
     name: string;
     tags: Tag[];
     steps: Step[];
+    type: string;
 }
 
 export interface ParsedScenario {
