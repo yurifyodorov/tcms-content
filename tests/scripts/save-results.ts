@@ -103,15 +103,23 @@ export async function saveResults(
 
         if (existingFeature) {
             featureId = existingFeature.id;
-            await dbClient.feature.update({
-                where: { id: featureId },
-                data: {
-                    keyword: feature.keyword,
-                    description: feature.description || '',
-                },
-            });
+            const shouldUpdateFeature = existingFeature.keyword !== feature.keyword || existingFeature.description !== feature.description;
+
+            if (shouldUpdateFeature) {
+                console.log(`Feature "${feature.name}" exists and has changes. Updating...`);
+                await dbClient.feature.update({
+                    where: { id: featureId },
+                    data: {
+                        keyword: feature.keyword,
+                        description: feature.description || '',
+                    },
+                });
+            } else {
+                console.log(`Feature "${feature.name}" exists and no changes. Skipping update.`);
+            }
         } else {
             featureId = createId();
+            console.log(`Feature "${feature.name}" is new. Creating...`);
             await dbClient.feature.create({
                 data: {
                     id: featureId,
@@ -198,6 +206,7 @@ export async function saveResults(
         name: tagName,
     }));
 
+    // Ensuring tags are added only once
     await dbClient.tag.createMany({
         data: tagsToCreate,
         skipDuplicates: true,
@@ -241,4 +250,6 @@ export async function saveResults(
             }
         }),
     ]);
+
+    console.log("Data successfully saved!");
 }
