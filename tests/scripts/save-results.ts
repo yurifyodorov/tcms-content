@@ -40,10 +40,11 @@ export async function saveResults(
 
     await synchronizeTags(testData);
     await synchronizeFeatures(testData);
+    await synchronizeScenarios(testData);
 
     const tags = collectTags(testData);
 
-    const scenarios = collectScenarios(testData);
+    const scenarios = await collectScenarios(testData);
     console.log("Scenarios to be saved:", JSON.stringify(scenarios, null, 2));
 
     const scenarioMap = new Map<string, string>();

@@ -1,24 +1,30 @@
 import { TestData, ParsedScenario } from './types';
-import { createId } from '@tests/shared/lib/id';
+import { dbClient } from '../shared/lib/db';
+import { createId } from "@paralleldrive/cuid2";
 
-const collectScenarios = (testData: TestData): ParsedScenario[] => {
-    const scenarios: ParsedScenario[] = [];
+const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> => {
+    const featuresInDb = await dbClient.feature.findMany();
 
-    testData.forEach(feature => {
-        feature.elements.forEach(scenario => {
-            scenarios.push({
+    return testData.flatMap(feature => {
+        const featureInDb = featuresInDb.find(f => f.name.trim().toLowerCase() === feature.name.trim().toLowerCase());
+
+        if (!featureInDb) {
+            console.error(`Feature "${feature.name}" not found in the database.`);
+            return [];
+        }
+
+        return feature.elements
+            .filter(scenario => scenario.keyword === 'Scenario' || scenario.keyword === 'Scenario Outline')
+            .map(scenario => ({
                 id: createId(),
-                featureId: feature.id,
-                keyword: feature.keyword,
+                featureId: featureInDb.id,
+                keyword: scenario.keyword,
                 name: scenario.name,
                 tags: {
                     connect: scenario.tags ? scenario.tags.map(tag => ({ id: tag.id })) : []
                 }
-            });
-        });
+            }));
     });
-
-    return scenarios;
 };
 
 export { collectScenarios };
