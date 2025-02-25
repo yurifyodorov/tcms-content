@@ -1,10 +1,13 @@
-import { Feature, Scenario, Step } from '@tests/scripts/types';
+import {Feature, Scenario, ParsedStep, ParsedScenario} from '@tests/scripts/types';
 import { createId } from '@tests/shared/lib/id';
 
-const collectSteps = (testData: Feature[]): Step[] => {
-    const stepsMap = new Map<string, Step>();
+const collectSteps = (testData: Feature[], allScenarios: ParsedScenario[]): ParsedStep[] => {
+    const stepsMap = new Map<string, ParsedStep>();
+    const scenarioIdMap = new Map<string, string>();
 
-    console.log('Test Data:', JSON.stringify(testData, null, 2));
+    allScenarios.forEach(scenario => {
+        scenarioIdMap.set(scenario.name, scenario.id);
+    });
 
     testData.forEach((feature) => {
         feature.elements.forEach((scenario: Scenario) => {
@@ -16,9 +19,18 @@ const collectSteps = (testData: Feature[]): Step[] => {
                         stepsMap.set(stepName, {
                             id: createId(),
                             name: step.name,
-                            media: step.media || '',
                             keyword: step.keyword,
+                            media: step.media || '',
+                            scenarioIds: [scenarioIdMap.get(scenario.name) || ''],
                         });
+                    } else {
+                        const existingStep = stepsMap.get(stepName);
+                        if (existingStep) {
+                            const scenarioId = scenarioIdMap.get(scenario.name) || '';
+                            if (scenarioId && !existingStep.scenarioIds.includes(scenarioId)) {
+                                existingStep.scenarioIds.push(scenarioId);
+                            }
+                        }
                     }
                 });
             }
@@ -27,7 +39,8 @@ const collectSteps = (testData: Feature[]): Step[] => {
 
     const collectedSteps = Array.from(stepsMap.values());
 
-    console.log('Collected Steps:', JSON.stringify(collectedSteps, null, 2));
+    console.log('Собранные шаги:');
+    console.log(JSON.stringify(collectedSteps, null, 2));
 
     return collectedSteps;
 };

@@ -45,6 +45,7 @@ export async function saveResults(
     const tags = collectTags(testData);
 
     const scenarios = await collectScenarios(testData);
+    const steps: ParsedStep[] = collectSteps(testData, scenarios);
 
     const scenarioMap = new Map<string, string>();
     testData.forEach((feature, featureIndex) => {
@@ -169,21 +170,21 @@ export async function saveResults(
 
             scenariosToCreate.push(scenarioData);
 
-            for (const step of scenario.steps) {
-                const stepData: ParsedStep = {
-                    id: createId(),
-                    scenarioId: scenarioId,
-                    keyword: step.keyword,
+            for (const step of steps.filter(step => step.scenarioIds.includes(scenarioId))) {
+                const parsedStep: ParsedStep = {
+                    id: step.id,
                     name: step.name,
-                    media: step.media
+                    keyword: step.keyword,
+                    media: step.media,
+                    scenarioIds: [scenarioId],
                 };
 
-                stepsToCreate.push(stepData);
+                stepsToCreate.push(parsedStep);
                 stepsCount++;
 
                 scenarioStepsToCreate.push({
                     scenarioId: scenarioId,
-                    stepId: stepData.id,
+                    stepId: parsedStep.id,
                 });
             }
 
@@ -199,7 +200,6 @@ export async function saveResults(
         name: tagName,
     }));
 
-    // Ensuring tags are added only once
     await dbClient.tag.createMany({
         data: tagsToCreate,
         skipDuplicates: true,
