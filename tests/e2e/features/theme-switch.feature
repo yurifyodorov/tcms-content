@@ -1,5 +1,7 @@
 Feature: Theme Switch
 
+  Choosing a color theme
+
   Background:
     Given I open website on desktop
 

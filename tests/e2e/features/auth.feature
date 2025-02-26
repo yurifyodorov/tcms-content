@@ -1,6 +1,8 @@
 @feature-tag-test
 Feature: Auth
 
+  Authorization in different ways
+
   Background:
     Given I open website on desktop
 
