@@ -223,6 +223,13 @@ export async function saveResults(
         }
     });
 
+    console.log("featuresToCreate:", JSON.stringify(featuresToCreate, null, 2));
+    console.log("scenariosToCreate:", JSON.stringify(scenariosToCreate, null, 2));
+    console.log("stepsToCreate:", JSON.stringify(stepsToCreate, null, 2));
+    console.log("scenarioStepsToCreate:", JSON.stringify(scenarioStepsToCreate, null, 2));
+    console.log("featureTagsToCreate:", JSON.stringify(featureTagsToCreate, null, 2));
+    console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
+
     await dbClient.$transaction([
         dbClient.feature.createMany({ data: featuresToCreate, skipDuplicates: true }),
         dbClient.scenario.createMany({ data: scenariosToCreate }),
@@ -243,6 +250,7 @@ export async function saveResults(
             }
         }),
     ]);
+
 
     console.log("Data successfully saved!");
 }
