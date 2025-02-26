@@ -56,8 +56,7 @@ export async function saveResults(
     });
 
     const steps = collectSteps(testData);
-
-    await synchronizeSteps(testData);
+    await synchronizeSteps(Array.from(steps.values()));
 
     let featuresCount = 0, scenariosCount = 0, passCount = 0, failCount = 0, skipCount = 0, stepsCount = 0;
     let status = 'completed', runDuration = 0;
@@ -156,7 +155,6 @@ export async function saveResults(
         }
     }
 
-
     if (failCount > 0) {
         status = 'failed';
     }
@@ -181,11 +179,13 @@ export async function saveResults(
     // console.log("featureTagsToCreate:", JSON.stringify(featureTagsToCreate, null, 2));
     // console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
 
+    const uniqueSteps = Array.from(new Map(stepsToCreate.map(step => [step.id, step])).values());
+
     await dbClient.$transaction([
         dbClient.tag.createMany({ data: tagsToCreate, skipDuplicates: true }),
         dbClient.feature.createMany({ data: featuresToCreate, skipDuplicates: true }),
         dbClient.scenario.createMany({ data: scenariosToCreate }),
-        dbClient.step.createMany({ data: stepsToCreate }),
+        dbClient.step.createMany({ data: uniqueSteps, skipDuplicates: true }),
         dbClient.scenarioStep.createMany({ data: scenarioStepsToCreate }),
         dbClient.featureTag.createMany({ data: featureTagsToCreate }),
         dbClient.scenarioTag.createMany({ data: scenarioTagsToCreate }),
