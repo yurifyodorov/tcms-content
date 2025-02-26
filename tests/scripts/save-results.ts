@@ -23,6 +23,8 @@ import { collectSteps } from './collect-steps';
 import { synchronizeTags } from "./synchronize-tags";
 import { collectTags } from "./collect-tags";
 
+export const scenarioMap = new Map<string, string>();
+
 export async function saveResults(
     runId: string,
     browser: string,
@@ -40,21 +42,24 @@ export async function saveResults(
     const tags = collectTags(testData);
     const features = await collectFeatures(testData);
     const scenarios = await collectScenarios(testData);
-    const steps = collectSteps(testData);
 
     // console.log('TAGS:', JSON.stringify(tags, null, 2));
     // console.log('FEATURES:', JSON.stringify(features, null, 2));
     // console.log('SCENARIOS:', JSON.stringify(scenarios, null, 2));
     // console.log('STEPS:', JSON.stringify(steps, null, 2));
 
-
-
-    const scenarioMap = new Map<string, string>();
     testData.forEach((feature, featureIndex) => {
         feature.elements.forEach((scenario, scenarioIndex) => {
-            scenarioMap.set(scenario.id, scenarios[featureIndex * feature.elements.length + scenarioIndex].id);
+            const scenarioId = scenarios[featureIndex * feature.elements.length + scenarioIndex].id;
+            scenarioMap.set(scenario.id, scenarioId);
         });
     });
+
+    console.log("Final Scenario Map:", JSON.stringify([...scenarioMap.entries()], null, 2));
+
+
+    const steps = collectSteps(testData);
+
 
     let featuresCount = 0, scenariosCount = 0, passCount = 0, failCount = 0, skipCount = 0, stepsCount = 0;
     let status = 'completed', runDuration = 0;

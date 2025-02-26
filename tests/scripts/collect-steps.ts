@@ -1,5 +1,6 @@
 import { Feature, Scenario, Step } from '@tests/scripts/types';
 import { createId } from '@tests/shared/lib/id';
+import { scenarioMap } from './save-results';
 
 const collectSteps = (testData: Feature[]): Map<string, Step> => {
     const stepsMap = new Map<string, Step>();
@@ -22,7 +23,12 @@ const collectSteps = (testData: Feature[]): Map<string, Step> => {
 
                 const existingStep = stepsMap.get(stepName);
                 if (existingStep) {
-                    existingStep.scenarioIds.push(scenario.id);
+                    const realScenarioId = scenarioMap.get(scenario.id);
+                    if (realScenarioId) {
+                        existingStep.scenarioIds.push(realScenarioId);
+                    } else {
+                        console.error(`Scenario ID not found for scenario: ${scenario.id}`);
+                    }
                 }
             });
         });
