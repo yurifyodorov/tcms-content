@@ -202,12 +202,6 @@ export async function saveResults(
         name: tagName,
     }));
 
-    // Ensuring tags are added only once
-    await dbClient.tag.createMany({
-        data: tagsToCreate,
-        skipDuplicates: true,
-    });
-
     await dbClient.run.create({
         data: {
             id: runId,
@@ -226,6 +220,7 @@ export async function saveResults(
         }
     });
 
+    console.log("tagsToCreate:", JSON.stringify(tagsToCreate, null, 2));
     console.log("featuresToCreate:", JSON.stringify(featuresToCreate, null, 2));
     // console.log("scenariosToCreate:", JSON.stringify(scenariosToCreate, null, 2));
     // console.log("stepsToCreate:", JSON.stringify(stepsToCreate, null, 2));
@@ -234,6 +229,7 @@ export async function saveResults(
     // console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
 
     await dbClient.$transaction([
+        dbClient.tag.createMany({ data: tagsToCreate, skipDuplicates: true }),
         dbClient.feature.createMany({ data: featuresToCreate, skipDuplicates: true }),
         dbClient.scenario.createMany({ data: scenariosToCreate }),
         dbClient.step.createMany({ data: stepsToCreate }),

@@ -12,8 +12,6 @@ const collectTags = (testData: TestData): Tag[] => {
         });
     });
 
-    console.log('Collected Tags:', JSON.stringify(Array.from(tagSet), null, 2));
-
     return Array.from(tagSet).map((tagName) => ({
         id: createId(),
         name: tagName,
