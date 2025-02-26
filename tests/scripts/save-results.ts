@@ -113,6 +113,13 @@ export async function saveResults(
             } else {
                 console.log(`Feature "${feature.name}" exists and no changes. Skipping update.`);
             }
+
+            featuresToCreate.push({
+                id: featureId,
+                keyword: feature.keyword,
+                name: feature.name,
+                description: feature.description || '',
+            });
         } else {
             featureId = createId();
             console.log(`Feature "${feature.name}" is new. Creating...`);
@@ -123,6 +130,13 @@ export async function saveResults(
                     name: feature.name,
                     description: feature.description || '',
                 },
+            });
+
+            featuresToCreate.push({
+                id: featureId,
+                keyword: feature.keyword,
+                name: feature.name,
+                description: feature.description || '',
             });
         }
 
@@ -193,6 +207,7 @@ export async function saveResults(
             scenariosCount++;
         }
     }
+
 
     if (failCount > 0) {
         status = 'failed';
