@@ -55,11 +55,9 @@ export async function saveResults(
         });
     });
 
-    console.log("Final Scenario Map:", JSON.stringify([...scenarioMap.entries()], null, 2));
-
-
     const steps = collectSteps(testData);
 
+    await synchronizeSteps(testData);
 
     let featuresCount = 0, scenariosCount = 0, passCount = 0, failCount = 0, skipCount = 0, stepsCount = 0;
     let status = 'completed', runDuration = 0;
@@ -81,7 +79,6 @@ export async function saveResults(
         featuresCount++;
         const featureTags = (feature.tags || []).map(tag => tag.name.trim());
 
-        // Обрезаем пробелы в описании фичи
         const featureDescription = feature.description ? feature.description.trim() : '';
 
         let featureId: string;
@@ -89,9 +86,7 @@ export async function saveResults(
 
         if (existingFeature) {
             featureId = existingFeature.id;
-            // Обрезаем пробелы и обновляем данные
             if (existingFeature.keyword !== feature.keyword || existingFeature.description !== featureDescription) {
-                console.log(`Updating feature: ${feature.name}`);
                 await dbClient.feature.update({
                     where: { id: featureId },
                     data: { keyword: feature.keyword, description: featureDescription }
@@ -99,7 +94,6 @@ export async function saveResults(
             }
         } else {
             featureId = createId();
-            console.log(`Creating feature: ${feature.name}`);
             await dbClient.feature.create({
                 data: { id: featureId, keyword: feature.keyword, name: feature.name, description: featureDescription }
             });
@@ -179,7 +173,7 @@ export async function saveResults(
         }
     });
 
-    console.log("tagsToCreate:", JSON.stringify(tagsToCreate, null, 2));
+    // console.log("tagsToCreate:", JSON.stringify(tagsToCreate, null, 2));
     // console.log("featuresToCreate:", JSON.stringify(featuresToCreate, null, 2));
     // console.log("scenariosToCreate:", JSON.stringify(scenariosToCreate, null, 2));
     // console.log("stepsToCreate:", JSON.stringify(stepsToCreate, null, 2));
