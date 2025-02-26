@@ -1,6 +1,6 @@
-import { ParsedFeature, TestData } from './types';
-import { dbClient } from '../shared/lib/db';
-import { createId } from "@paralleldrive/cuid2";
+import {ParsedFeature, TestData} from './types';
+import {dbClient} from '../shared/lib/db';
+import {createId} from "@paralleldrive/cuid2";
 
 const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => {
     const featuresInDb = await dbClient.feature.findMany();
@@ -19,17 +19,42 @@ const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => 
                     console.warn(`⚠️ Tag "${tag.name}" not found in DB, it needs to be created.`);
                     return null;
                 }
-                return { id: tagId };
+                return {id: tagId};
             })
             .filter((tag): tag is { id: string } => Boolean(tag));
 
-        return {
+        // Формируем данные для фичи
+        const featureResult = {
             id: existingFeature ? existingFeature.id : createId(),
             name: feature.name,
             description: feature.description || '',
             keyword: feature.keyword,
-            tags: tagsToConnect.length > 0 ? { connect: tagsToConnect } : undefined
+            tags: tagsToConnect.length > 0 ? {connect: tagsToConnect} : undefined,
+            scenarios: feature.elements.map((scenario) => {
+                const scenarioTagsToConnect = (scenario.tags || [])
+                    .map(tag => {
+                        let tagId = tagMap.get(tag.name.trim());
+                        if (!tagId) {
+                            console.warn(`⚠️ Tag "${tag.name}" not found in DB, it needs to be created.`);
+                            return null;
+                        }
+                        return {id: tagId};
+                    })
+                    .filter((tag): tag is { id: string } => Boolean(tag));
+
+                return {
+                    id: scenario.id,
+                    name: scenario.name,
+                    description: scenario.description || '',
+                    keyword: scenario.keyword,
+                    tags: scenarioTagsToConnect.length > 0 ? {connect: scenarioTagsToConnect} : undefined
+                };
+            })
         };
+
+        console.log('Feature result:', JSON.stringify(featureResult, null, 2));
+
+        return featureResult;
     });
 };
 
