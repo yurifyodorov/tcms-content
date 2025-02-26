@@ -4,6 +4,10 @@ import { createId } from "@paralleldrive/cuid2";
 
 const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> => {
     const featuresInDb = await dbClient.feature.findMany();
+    const tagsInDb = await dbClient.tag.findMany();
+
+    const tagMap = new Map<string, string>();
+    tagsInDb.forEach(tag => tagMap.set(tag.name.trim(), tag.id));
 
     const allScenarios: ParsedScenario[] = [];
 
@@ -15,28 +19,31 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
             return;
         }
 
-        // Логирование данных фичи
-        // console.log(`Обработка фичи: "${feature.name}" с ID: ${featureInDb.id}`);
-
         feature.elements
             .filter(scenario => scenario.keyword === 'Scenario' || scenario.keyword === 'Scenario Outline')
             .forEach(scenario => {
+                const tagsToConnect = (scenario.tags || [])
+                    .map(tag => {
+                        let tagId = tagMap.get(tag.name.trim());
+                        if (!tagId) {
+                            console.warn(`⚠️ Tag "${tag.name}" not found in DB, it needs to be created.`);
+                            return null;
+                        }
+                        return { id: tagId };
+                    })
+                    .filter((tag): tag is { id: string } => Boolean(tag));
+
                 const parsedScenario: ParsedScenario = {
                     id: createId(),
                     featureId: featureInDb.id,
                     keyword: scenario.keyword,
                     name: scenario.name,
-                    tags: {
-                        connect: scenario.tags ? scenario.tags.map(tag => ({ id: tag.id })) : []
-                    }
+                    tags: tagsToConnect.length > 0 ? { connect: tagsToConnect } : undefined
                 };
 
                 allScenarios.push(parsedScenario);
             });
     });
-
-    // Логирование всех собранных сценариев в формате JSON
-    // console.log('Collected Scenarios:', JSON.stringify(allScenarios, null, 2));
 
     return allScenarios;
 };
