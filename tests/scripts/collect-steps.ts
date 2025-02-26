@@ -1,43 +1,34 @@
 import { Feature, Scenario, Step } from '@tests/scripts/types';
 import { createId } from '@tests/shared/lib/id';
 
-const collectSteps = (testData: Feature[]): Step[] => {
+const collectSteps = (testData: Feature[]): Map<string, Step> => {
     const stepsMap = new Map<string, Step>();
-
-    console.log('Test Data:', JSON.stringify(testData, null, 2));
 
     testData.forEach((feature) => {
         feature.elements.forEach((scenario: Scenario) => {
-            if (scenario.steps) {
-                scenario.steps.forEach((step) => {
-                    const stepName = step.name;
+            scenario.steps.forEach((step) => {
+                const stepName = step.name.trim();
 
-                    if (!stepsMap.has(stepName)) {
-                        stepsMap.set(stepName, {
-                            id: createId(),
-                            name: step.name,
-                            media: step.media || '',
-                            keyword: step.keyword,
-                            scenarioIds: [scenario.id],
-                        });
-                    } else {
-                        const existingStep = stepsMap.get(stepName);
-                        if (existingStep) {
-                            existingStep.scenarioIds.push(scenario.id);
-                        }
-                    }
-                });
-            }
+                if (!stepsMap.has(stepName)) {
+                    const stepId = step.id || createId();
+                    stepsMap.set(stepName, {
+                        id: stepId,
+                        name: stepName,
+                        media: step.media || '',
+                        keyword: step.keyword || '',
+                        scenarioIds: [],
+                    });
+                }
+
+                const existingStep = stepsMap.get(stepName);
+                if (existingStep) {
+                    existingStep.scenarioIds.push(scenario.id);
+                }
+            });
         });
     });
 
-    const collectedSteps = Array.from(stepsMap.values());
-
-    console.log('Collected Steps:', JSON.stringify(collectedSteps, null, 2));
-
-    return collectedSteps;
+    return stepsMap;
 };
-
-
 
 export { collectSteps };
