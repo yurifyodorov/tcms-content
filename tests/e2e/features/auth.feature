@@ -8,6 +8,9 @@ Feature: Auth
 
   @smoke
   Scenario Outline: Sign in with Email - "<userEmail>"
+
+    Login via email
+
     When I am on the home page
     And I click on sign in button
     And I enter the user email: <userEmail>

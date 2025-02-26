@@ -43,7 +43,7 @@ export async function saveResults(
     const steps = collectSteps(testData);
 
     // console.log('TAGS:', JSON.stringify(tags, null, 2));
-    console.log('FEATURES:', JSON.stringify(features, null, 2));
+    // console.log('FEATURES:', JSON.stringify(features, null, 2));
     // console.log('SCENARIOS:', JSON.stringify(scenarios, null, 2));
     // console.log('STEPS:', JSON.stringify(steps, null, 2));
 
