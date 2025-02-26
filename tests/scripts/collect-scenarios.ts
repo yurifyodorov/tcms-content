@@ -33,11 +33,14 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
                     })
                     .filter((tag): tag is { id: string } => Boolean(tag));
 
+                const scenarioDescription = scenario.description ? scenario.description.trim() : '';
+
                 const parsedScenario: ParsedScenario = {
                     id: createId(),
                     featureId: featureInDb.id,
                     keyword: scenario.keyword,
                     name: scenario.name,
+                    description: scenarioDescription,
                     tags: tagsToConnect.length > 0 ? { connect: tagsToConnect } : undefined
                 };
 

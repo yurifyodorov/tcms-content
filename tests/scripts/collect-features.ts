@@ -25,7 +25,6 @@ const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => 
             })
             .filter((tag): tag is { id: string } => Boolean(tag));
 
-        // Формируем данные для фичи
         const featureResult = {
             id: existingFeature ? existingFeature.id : createId(),
             name: feature.name,

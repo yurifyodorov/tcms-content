@@ -76,22 +76,31 @@ export async function saveResults(
         featuresCount++;
         const featureTags = (feature.tags || []).map(tag => tag.name.trim());
 
+        // Обрезаем пробелы в описании фичи
+        const featureDescription = feature.description ? feature.description.trim() : '';
+
         let featureId: string;
         const existingFeature = await dbClient.feature.findFirst({ where: { name: feature.name.trim() } });
 
         if (existingFeature) {
             featureId = existingFeature.id;
-            if (existingFeature.keyword !== feature.keyword || existingFeature.description !== feature.description) {
+            // Обрезаем пробелы и обновляем данные
+            if (existingFeature.keyword !== feature.keyword || existingFeature.description !== featureDescription) {
                 console.log(`Updating feature: ${feature.name}`);
-                await dbClient.feature.update({ where: { id: featureId }, data: { keyword: feature.keyword, description: feature.description || '' } });
+                await dbClient.feature.update({
+                    where: { id: featureId },
+                    data: { keyword: feature.keyword, description: featureDescription }
+                });
             }
         } else {
             featureId = createId();
             console.log(`Creating feature: ${feature.name}`);
-            await dbClient.feature.create({ data: { id: featureId, keyword: feature.keyword, name: feature.name, description: feature.description || '' } });
+            await dbClient.feature.create({
+                data: { id: featureId, keyword: feature.keyword, name: feature.name, description: featureDescription }
+            });
         }
 
-        featuresToCreate.push({ id: featureId, keyword: feature.keyword, name: feature.name, description: feature.description || '' });
+        featuresToCreate.push({ id: featureId, keyword: feature.keyword, name: feature.name, description: featureDescription });
 
         for (const tagName of featureTags) {
             let tagId = tagMap.get(tagName);
@@ -104,7 +113,14 @@ export async function saveResults(
 
         for (const scenario of feature.elements) {
             const scenarioId = createId();
-            scenariosToCreate.push({ id: scenarioId, featureId, keyword: feature.keyword, name: scenario.name });
+            const scenarioDescription = scenario.description ? scenario.description.trim() : '';
+            scenariosToCreate.push({
+                id: scenarioId,
+                featureId,
+                keyword: feature.keyword,
+                name: scenario.name,
+                description: scenarioDescription
+            });
 
             for (const tagName of (scenario.tags || []).map(tag => tag.name.trim())) {
                 let tagId = tagMap.get(tagName);

@@ -34,6 +34,7 @@ export interface ParsedScenario {
     featureId: string;
     keyword: string;
     name: string;
+    description: string;
     tags?: { connect: { id: string }[] };
 }
 
