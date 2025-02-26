@@ -44,7 +44,10 @@ export async function saveResults(
 
     const tags = collectTags(testData);
 
+    const features = await collectFeatures(testData);
     const scenarios = await collectScenarios(testData);
+
+    console.log('FEATURES:', JSON.stringify(features, null, 2));
 
     const scenarioMap = new Map<string, string>();
     testData.forEach((feature, featureIndex) => {
@@ -224,11 +227,11 @@ export async function saveResults(
     });
 
     console.log("featuresToCreate:", JSON.stringify(featuresToCreate, null, 2));
-    console.log("scenariosToCreate:", JSON.stringify(scenariosToCreate, null, 2));
-    console.log("stepsToCreate:", JSON.stringify(stepsToCreate, null, 2));
-    console.log("scenarioStepsToCreate:", JSON.stringify(scenarioStepsToCreate, null, 2));
-    console.log("featureTagsToCreate:", JSON.stringify(featureTagsToCreate, null, 2));
-    console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
+    // console.log("scenariosToCreate:", JSON.stringify(scenariosToCreate, null, 2));
+    // console.log("stepsToCreate:", JSON.stringify(stepsToCreate, null, 2));
+    // console.log("scenarioStepsToCreate:", JSON.stringify(scenarioStepsToCreate, null, 2));
+    // console.log("featureTagsToCreate:", JSON.stringify(featureTagsToCreate, null, 2));
+    // console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
 
     await dbClient.$transaction([
         dbClient.feature.createMany({ data: featuresToCreate, skipDuplicates: true }),

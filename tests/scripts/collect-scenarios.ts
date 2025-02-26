@@ -16,7 +16,7 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
         }
 
         // Логирование данных фичи
-        console.log(`Обработка фичи: "${feature.name}" с ID: ${featureInDb.id}`);
+        // console.log(`Обработка фичи: "${feature.name}" с ID: ${featureInDb.id}`);
 
         feature.elements
             .filter(scenario => scenario.keyword === 'Scenario' || scenario.keyword === 'Scenario Outline')
@@ -36,7 +36,7 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
     });
 
     // Логирование всех собранных сценариев в формате JSON
-    console.log('Collected Scenarios:', JSON.stringify(allScenarios, null, 2));
+    // console.log('Collected Scenarios:', JSON.stringify(allScenarios, null, 2));
 
     return allScenarios;
 };
