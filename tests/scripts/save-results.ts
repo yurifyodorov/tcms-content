@@ -46,7 +46,6 @@ export async function saveResults(
     // console.log('TAGS:', JSON.stringify(tags, null, 2));
     // console.log('FEATURES:', JSON.stringify(features, null, 2));
     // console.log('SCENARIOS:', JSON.stringify(scenarios, null, 2));
-    // console.log('SCENARIOS:', JSON.stringify(scenarios, null, 2));
 
     testData.forEach((feature, featureIndex) => {
         feature.elements.forEach((scenario, scenarioIndex) => {
