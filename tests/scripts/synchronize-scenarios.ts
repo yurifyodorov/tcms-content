@@ -1,51 +1,54 @@
 import { dbClient } from "@tests/shared/lib/db";
-import { TestData } from "@tests/scripts/types";
+import { Scenario} from "@tests/scripts/types";
 import { createId } from "@paralleldrive/cuid2";
-import { collectScenarios } from './collect-scenarios';
 
-export async function synchronizeScenarios(testData: TestData): Promise<void> {
-    const scenariosFromTestData = await collectScenarios(testData);
+export async function synchronizeScenarios(testData: Scenario[]): Promise<void> {
+    const scenarioIdsFromTestData = testData.map((scenario) => scenario.id);
 
-    const scenariosInDb = await dbClient.scenario.findMany({ select: { id: true, name: true, featureId: true } });
-    const scenarioMap = new Map(scenariosInDb.map(scenario => [`${scenario.name.trim()}_${scenario.featureId}`, scenario.id]));
+    const scenariosInDb = await dbClient.scenario.findMany();
 
-    const scenariosToDelete = scenariosInDb.filter(scenario =>
-        !scenariosFromTestData.some(s => s.name === scenario.name.trim() && s.featureId === scenario.featureId)
+    const scenarioMapFromDb = new Map<string, string>();
+    scenariosInDb.forEach((scenario) => {
+        scenarioMapFromDb.set(scenario.id, scenario.id);
+    });
+
+    const scenariosToDelete = scenariosInDb.filter(
+        (scenario) => !scenarioIdsFromTestData.includes(scenario.id)
     );
+
 
     if (scenariosToDelete.length > 0) {
         await dbClient.scenario.deleteMany({
-            where: { id: { in: scenariosToDelete.map(scenario => scenario.id) } }
+            where: {
+                id: {
+                    in: scenariosToDelete.map((scenario) => scenario.id),
+                },
+            },
         });
-        console.log(`Удалены сценарии с неправильным featureId: ${scenariosToDelete.map(s => s.name).join(", ")}`);
     }
 
-    for (const { name, featureId, keyword } of scenariosFromTestData) {
-        const existingScenarioId = scenarioMap.get(`${name}_${featureId}`);
+    for (const scenario of testData) {
+        const existingScenarioId = scenarioMapFromDb.get(scenario.id);
 
-        if (!existingScenarioId) {
-            const newScenario = await dbClient.scenario.create({
-                data: {
-                    id: createId(),
-                    featureId: featureId,
-                    keyword: keyword,
-                    name: name,
-                }
-            });
-            console.log(`Добавлен новый сценарий: ${name}`);
-            scenarioMap.set(`${name}_${featureId}`, newScenario.id);
-        } else {
-            console.log(`Сценарий "${name}" с featureId "${featureId}" уже существует. Обновляем.`);
+        if (existingScenarioId) {
             await dbClient.scenario.update({
                 where: { id: existingScenarioId },
                 data: {
-                    featureId: featureId,
-                    keyword: keyword,
-                    name: name,
+                    keyword: scenario.keyword,
+                    name: scenario.name || '',
                 },
             });
+        } else {
+            const newScenario = await dbClient.scenario.create({
+                data: {
+                    id: scenario.id || createId(),
+                    featureId: scenario.id,
+                    keyword: scenario.keyword,
+                    name: scenario.name || '',
+                },
+            });
+
+            scenarioMapFromDb.set(newScenario.id, newScenario.id);
         }
     }
-
-    console.log(`Всего сценариев в базе данных после синхронизации: ${scenarioMap.size}`);
 }
