@@ -116,8 +116,8 @@ export async function saveResults(
             const scenarioDescription = scenario.description ? scenario.description.trim() : '';
             scenariosToCreate.push({
                 id: scenarioId,
-                featureId,
-                keyword: feature.keyword,
+                featureId: featureId,
+                keyword: scenario.keyword,
                 name: scenario.name,
                 description: scenarioDescription
             });

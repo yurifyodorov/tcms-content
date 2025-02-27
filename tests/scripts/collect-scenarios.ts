@@ -19,9 +19,8 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
             return;
         }
 
-        feature.elements
-            .filter(scenario => scenario.keyword === 'Scenario' || scenario.keyword === 'Scenario Outline')
-            .forEach(scenario => {
+        feature.elements.forEach(scenario => {
+            if (scenario.type === 'scenario') {
                 const tagsToConnect = (scenario.tags || [])
                     .map(tag => {
                         let tagId = tagMap.get(tag.name.trim());
@@ -45,7 +44,10 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
                 };
 
                 allScenarios.push(parsedScenario);
-            });
+            } else {
+                console.warn(`Skipping non-scenario element with type: ${scenario.type} - ${scenario.name}`);
+            }
+        });
     });
 
     return allScenarios;
