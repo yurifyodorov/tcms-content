@@ -1,6 +1,6 @@
-import {ParsedFeature, TestData} from './types';
-import {dbClient} from '../shared/lib/db';
-import {createId} from "@paralleldrive/cuid2";
+import { ParsedFeature, TestData } from './types';
+import { dbClient } from '../shared/lib/db';
+import { createId } from "@paralleldrive/cuid2";
 
 const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => {
     const featuresInDb = await dbClient.feature.findMany();
