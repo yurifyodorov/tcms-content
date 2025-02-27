@@ -16,7 +16,6 @@ export async function synchronizeScenarios(testData: Scenario[]): Promise<void> 
         (scenario) => !scenarioIdsFromTestData.includes(scenario.id)
     );
 
-
     if (scenariosToDelete.length > 0) {
         await dbClient.scenario.deleteMany({
             where: {
@@ -36,15 +35,17 @@ export async function synchronizeScenarios(testData: Scenario[]): Promise<void> 
                 data: {
                     keyword: scenario.keyword,
                     name: scenario.name || '',
+                    description: scenario.description || null,
                 },
             });
         } else {
             const newScenario = await dbClient.scenario.create({
                 data: {
                     id: scenario.id || createId(),
-                    featureId: scenario.id,
+                    featureId: scenario.featureId,
                     keyword: scenario.keyword,
                     name: scenario.name || '',
+                    description: scenario.description || null,
                 },
             });
 

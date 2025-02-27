@@ -75,13 +75,14 @@ export async function saveResults(
     const tagsInDb = await dbClient.tag.findMany();
     const tagMap = new Map(tagsInDb.map(tag => [tag.name.trim(), tag.id]));
 
-    for (const feature of testData) {
+    for (const feature of features) {
         featuresCount++;
-        const featureTags = (feature.tags || []).map(tag => tag.name.trim());
 
-        const featureDescription = feature.description ? feature.description.trim() : '';
+        const featureTags = feature.tags?.connect.map(tag => tag.id) || [];
+        const featureDescription = feature.description || '';
 
-        let featureId: string;
+        let featureId = feature.id;
+
         const existingFeature = await dbClient.feature.findFirst({ where: { name: feature.name.trim() } });
 
         if (existingFeature) {
@@ -93,7 +94,6 @@ export async function saveResults(
                 });
             }
         } else {
-            featureId = createId();
             await dbClient.feature.create({
                 data: { id: featureId, keyword: feature.keyword, name: feature.name, description: featureDescription }
             });
@@ -101,18 +101,17 @@ export async function saveResults(
 
         featuresToCreate.push({ id: featureId, keyword: feature.keyword, name: feature.name, description: featureDescription });
 
-        for (const tagName of featureTags) {
-            let tagId = tagMap.get(tagName);
-            if (!tagId) {
-                tagId = (await dbClient.tag.create({ data: { name: tagName } })).id;
-                tagMap.set(tagName, tagId);
-            }
+        for (const tagId of featureTags) {
             featureTagsToCreate.push({ featureId, tagId });
         }
 
-        for (const scenario of feature.elements) {
+        const originalFeature = testData.find(f => f.name.trim() === feature.name.trim());
+        if (!originalFeature) continue;
+
+        for (const scenario of originalFeature.elements) {
             const scenarioId = createId();
-            const scenarioDescription = scenario.description ? scenario.description.trim() : '';
+            const scenarioDescription = scenario.description?.trim() || '';
+
             scenariosToCreate.push({
                 id: scenarioId,
                 featureId: featureId,
@@ -121,11 +120,11 @@ export async function saveResults(
                 description: scenarioDescription
             });
 
-            for (const tagName of (scenario.tags || []).map(tag => tag.name.trim())) {
-                let tagId = tagMap.get(tagName);
+            for (const tag of scenario.tags || []) {
+                let tagId = tagMap.get(tag.name.trim());
                 if (!tagId) {
-                    tagId = (await dbClient.tag.create({ data: { name: tagName } })).id;
-                    tagMap.set(tagName, tagId);
+                    tagId = (await dbClient.tag.create({ data: { name: tag.name.trim() } })).id;
+                    tagMap.set(tag.name.trim(), tagId);
                 }
                 scenarioTagsToCreate.push({ scenarioId, tagId });
             }

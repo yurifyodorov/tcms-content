@@ -20,14 +20,16 @@ export interface ScenarioStep {
 }
 
 export interface Scenario {
-    description: string;
     id: string;
+    featureId: string;
+    description: string;
     keyword: string;
     name: string;
     tags: Tag[];
     steps: Step[];
     type: string;
 }
+
 
 export interface ParsedScenario {
     id: string;
