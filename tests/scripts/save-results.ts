@@ -112,6 +112,15 @@ export async function saveResults(
 
         featuresToCreate.push({ id: featureId, keyword: feature.keyword, name: feature.name, description: featureDescription });
 
+        runFeaturesToCreate.push({
+            id: createId(),
+            featureId,
+            runId: runId,
+            status: 'blocked',
+            duration: 0,
+            createdAt: new Date()
+        });
+
         for (const tagId of featureTags) {
             featureTagsToCreate.push({ featureId, tagId });
         }
@@ -130,6 +139,17 @@ export async function saveResults(
                 name: scenario.name,
                 description: scenarioDescription
             });
+
+            runScenariosToCreate.push({
+                id: createId(),
+                scenarioId,
+                featureId,
+                runId: runId,
+                status: 'blocked',
+                duration: 0,
+                createdAt: new Date()
+            });
+
 
             for (const tag of scenario.tags || []) {
                 let tagId = tagMap.get(tag.name.trim());
@@ -150,6 +170,18 @@ export async function saveResults(
                 }
 
                 scenarioStepsToCreate.push({ scenarioId, stepId: stepData.id });
+
+                runStepsToCreate.push({
+                    id: createId(),
+                    stepId: stepData.id,
+                    scenarioId,
+                    runId: runId,
+                    status: 'blocked',
+                    duration: 0,
+                    createdAt: new Date(),
+                    errorMessage: null,
+                    stackTrace: null
+                });
 
                 if (!stepsToCreate.find(s => s.id === stepData.id)) {
                     stepsToCreate.push({
