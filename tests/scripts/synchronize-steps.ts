@@ -1,5 +1,5 @@
 import { dbClient } from "@tests/shared/lib/db";
-import { Step } from "@tests/scripts/types"; // Убедитесь, что это Step
+import { Step } from "@tests/scripts/types";
 import { createId } from "@paralleldrive/cuid2";
 
 export async function synchronizeSteps(testData: Step[]): Promise<void> {
@@ -41,7 +41,6 @@ export async function synchronizeSteps(testData: Step[]): Promise<void> {
                 },
             });
         } else {
-            // Добавляем новый шаг
             const newStep = await dbClient.step.create({
                 data: {
                     id: step.id || createId(),

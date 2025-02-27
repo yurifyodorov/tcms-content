@@ -6,10 +6,17 @@ import {
     ParsedFeature,
     ParsedScenario,
     ParsedStep,
+} from "./types";
+
+import {
     FeatureTag,
     ScenarioTag,
-    ScenarioStep
-} from "./types";
+    ScenarioStep,
+    RunFeature,
+    RunScenario,
+    RunStep,
+    Status
+} from "@prisma/client";
 
 import { synchronizeFeatures } from "./synchronize-features";
 import { collectFeatures } from "./collect-features";
@@ -69,6 +76,10 @@ export async function saveResults(
     const featureTagsToCreate: FeatureTag[] = [];
     const scenarioTagsToCreate: ScenarioTag[] = [];
     const scenarioStepsToCreate: ScenarioStep[] = [];
+
+    const runFeaturesToCreate: RunFeature[] = [];
+    const runScenariosToCreate: RunScenario[] = [];
+    const runStepsToCreate: RunStep[] = [];
 
     const tagsSet = new Set<string>(tags.map(tag => tag.name.trim()));
 
@@ -171,6 +182,21 @@ export async function saveResults(
         name: tagName,
     }));
 
+    const runFeaturesToCreateMapped = runFeaturesToCreate.map((item) => ({
+        ...item,
+        status: item.status as Status,
+    }));
+
+    const runScenariosToCreateMapped = runScenariosToCreate.map((item) => ({
+        ...item,
+        status: item.status as Status,
+    }));
+
+    const runStepsToCreateMapped = runStepsToCreate.map((item) => ({
+        ...item,
+        status: item.status as Status,
+    }));
+
     await dbClient.run.create({
         data: {
             id: runId, status, browser, platform, environment,
@@ -186,6 +212,10 @@ export async function saveResults(
     // console.log("scenarioStepsToCreate:", JSON.stringify(scenarioStepsToCreate, null, 2));
     // console.log("featureTagsToCreate:", JSON.stringify(featureTagsToCreate, null, 2));
     // console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
+    console.log("runFeaturesToCreate:", JSON.stringify(runFeaturesToCreateMapped, null, 2));
+    console.log("runScenariosToCreate:", JSON.stringify(runScenariosToCreateMapped, null, 2));
+    console.log("runStepsToCreate:", JSON.stringify(runStepsToCreateMapped, null, 2));
+
 
     const uniqueSteps = Array.from(new Map(stepsToCreate.map(step => [step.id, step])).values());
 
@@ -197,7 +227,13 @@ export async function saveResults(
         dbClient.scenarioStep.createMany({ data: scenarioStepsToCreate }),
         dbClient.featureTag.createMany({ data: featureTagsToCreate }),
         dbClient.scenarioTag.createMany({ data: scenarioTagsToCreate }),
-        dbClient.run.update({ where: { id: runId }, data: { featuresCount, scenariosCount, passCount, failCount, skipCount, stepsCount, duration: runDuration } }),
+        dbClient.runFeature.createMany({ data: runFeaturesToCreateMapped }),
+        dbClient.runScenario.createMany({ data: runScenariosToCreateMapped }),
+        dbClient.runStep.createMany({ data: runStepsToCreateMapped }),
+        dbClient.run.update({
+            where: { id: runId },
+            data: { featuresCount, scenariosCount, passCount, failCount, skipCount, stepsCount, duration: runDuration }
+        }),
     ]);
 
     console.log("Data successfully saved!");

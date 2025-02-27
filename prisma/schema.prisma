@@ -39,9 +39,9 @@ model Run {
 model RunFeature {
   runId     String
   featureId String
-  status    StepStatus
+  status    Status
   duration  Int
-  createdAt DateTime   @default(now())
+  createdAt DateTime @default(now())
 
   run     Run     @relation(fields: [runId], references: [id], onDelete: Cascade)
   feature Feature @relation(fields: [featureId], references: [id], onDelete: Cascade)
@@ -53,9 +53,9 @@ model RunFeature {
 model RunScenario {
   runId      String
   scenarioId String
-  status     StepStatus
+  status     Status
   duration   Int
-  createdAt  DateTime   @default(now())
+  createdAt  DateTime @default(now())
 
   run      Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
   scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
@@ -68,11 +68,11 @@ model RunStep {
   runId        String
   stepId       String
   scenarioId   String
-  status       StepStatus
+  status       Status
   duration     Int
   errorMessage String?
   stackTrace   String?
-  createdAt    DateTime   @default(now())
+  createdAt    DateTime @default(now())
 
   run      Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
   step     Step     @relation(fields: [stepId], references: [id], onDelete: Cascade)
@@ -163,7 +163,7 @@ model ScenarioTag {
   @@map("scenarios_tags")
 }
 
-enum StepStatus {
+enum Status {
   passed
   failed
   skipped

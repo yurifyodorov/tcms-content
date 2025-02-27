@@ -14,11 +14,6 @@ export interface ParsedStep {
     media?: string;
 }
 
-export interface ScenarioStep {
-    scenarioId: string;
-    stepId: string;
-}
-
 export interface Scenario {
     id: string;
     featureId: string;
@@ -60,16 +55,6 @@ export interface ParsedFeature {
 export interface Tag {
     id: string;
     name: string;
-}
-
-export interface FeatureTag {
-    featureId: string;
-    tagId: string;
-}
-
-export interface ScenarioTag {
-    scenarioId: string;
-    tagId: string;
 }
 
 export type TestData = Feature[];
