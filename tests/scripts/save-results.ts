@@ -37,7 +37,6 @@ export async function saveResults(
 
     await synchronizeTags(testData);
     await synchronizeFeatures(testData);
-    await synchronizeScenarios(testData);
 
     const tags = collectTags(testData);
     const features = await collectFeatures(testData);
@@ -157,6 +156,14 @@ export async function saveResults(
         }
     }
 
+    await synchronizeScenarios(scenariosToCreate.map(scenario => ({
+        ...scenario,
+        steps: [],
+        tags: [],
+        type: 'Scenario' as const
+    })));
+
+
     if (failCount > 0) {
         status = 'failed';
     }
@@ -186,7 +193,7 @@ export async function saveResults(
     await dbClient.$transaction([
         dbClient.tag.createMany({ data: tagsToCreate, skipDuplicates: true }),
         dbClient.feature.createMany({ data: featuresToCreate, skipDuplicates: true }),
-        dbClient.scenario.createMany({ data: scenariosToCreate }),
+        dbClient.scenario.createMany({ data: scenariosToCreate, skipDuplicates: true }),
         dbClient.step.createMany({ data: uniqueSteps, skipDuplicates: true }),
         dbClient.scenarioStep.createMany({ data: scenarioStepsToCreate }),
         dbClient.featureTag.createMany({ data: featureTagsToCreate }),
