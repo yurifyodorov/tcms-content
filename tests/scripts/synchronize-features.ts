@@ -34,7 +34,6 @@ export async function synchronizeFeatures(testData: Feature[]): Promise<void> {
             await dbClient.feature.update({
                 where: { id: existingFeatureId },
                 data: {
-                    keyword: feature.keyword || 'Feature',
                     description: feature.description || '',
                 },
             });
@@ -42,7 +41,7 @@ export async function synchronizeFeatures(testData: Feature[]): Promise<void> {
             const newFeature = await dbClient.feature.create({
                 data: {
                     name: feature.name,
-                    keyword: feature.keyword || 'Feature',
+                    keyword: feature.keyword,
                     description: feature.description || '',
                 },
             });
