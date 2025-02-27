@@ -1,6 +1,5 @@
 import { dbClient } from "@tests/shared/lib/db";
 import { Step } from "@tests/scripts/types";
-import { createId } from "@paralleldrive/cuid2";
 
 export async function synchronizeSteps(testData: Step[]): Promise<void> {
 
@@ -43,7 +42,7 @@ export async function synchronizeSteps(testData: Step[]): Promise<void> {
         } else {
             const newStep = await dbClient.step.create({
                 data: {
-                    id: step.id || createId(),
+                    id: step.id,
                     keyword: step.keyword || 'Step',
                     name: step.name || '',
                     media: step.media || '',

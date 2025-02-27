@@ -1,6 +1,5 @@
 import { dbClient } from "@tests/shared/lib/db";
-import { Scenario} from "@tests/scripts/types";
-import { createId } from "@paralleldrive/cuid2";
+import { Scenario } from "@tests/scripts/types";
 
 export async function synchronizeScenarios(testData: Scenario[]): Promise<void> {
     const scenarioIdsFromTestData = testData.map((scenario) => scenario.id);
@@ -41,7 +40,7 @@ export async function synchronizeScenarios(testData: Scenario[]): Promise<void> 
         } else {
             const newScenario = await dbClient.scenario.create({
                 data: {
-                    id: scenario.id || createId(),
+                    id: scenario.id,
                     featureId: scenario.featureId,
                     keyword: scenario.keyword,
                     name: scenario.name || '',

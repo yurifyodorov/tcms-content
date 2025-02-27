@@ -1,6 +1,5 @@
 import { ParsedFeature, TestData } from './types';
 import { dbClient } from '../shared/lib/db';
-import { createId } from "@paralleldrive/cuid2";
 
 const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => {
     const featuresInDb = await dbClient.feature.findMany();
@@ -48,7 +47,7 @@ const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => 
         });
 
         return {
-            id: existingFeature ? existingFeature.id : createId(),
+            id: existingFeature ? existingFeature.id : feature.id,
             name: feature.name,
             description: featureDescription,
             keyword: feature.keyword,

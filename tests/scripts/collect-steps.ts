@@ -1,5 +1,4 @@
 import { Feature, Scenario, Step } from '@tests/scripts/types';
-import { createId } from '@tests/shared/lib/id';
 import { scenarioMap } from './save-results';
 
 const collectSteps = (testData: Feature[]): Map<string, Step> => {
@@ -11,7 +10,7 @@ const collectSteps = (testData: Feature[]): Map<string, Step> => {
                 const stepName = step.name.trim();
 
                 if (!stepsMap.has(stepName)) {
-                    const stepId = step.id || createId();
+                    const stepId = step.id || stepName;
                     stepsMap.set(stepName, {
                         id: stepId,
                         name: stepName,

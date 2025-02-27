@@ -143,7 +143,6 @@ export async function saveResults(
             runScenariosToCreate.push({
                 id: createId(),
                 scenarioId,
-                featureId,
                 runId: runId,
                 status: 'blocked',
                 duration: 0,

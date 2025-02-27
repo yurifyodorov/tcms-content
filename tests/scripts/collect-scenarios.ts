@@ -1,6 +1,5 @@
 import { TestData, ParsedScenario } from './types';
 import { dbClient } from '../shared/lib/db';
-import { createId } from "@paralleldrive/cuid2";
 
 const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> => {
     const featuresInDb = await dbClient.feature.findMany();
@@ -35,7 +34,7 @@ const collectScenarios = async (testData: TestData): Promise<ParsedScenario[]> =
                 const scenarioDescription = scenario.description ? scenario.description.trim() : '';
 
                 const parsedScenario: ParsedScenario = {
-                    id: createId(),
+                    id: scenario.id,
                     featureId: featureInDb.id,
                     keyword: scenario.keyword,
                     name: scenario.name,

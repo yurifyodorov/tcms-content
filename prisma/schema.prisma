@@ -37,6 +37,7 @@ model Run {
 }
 
 model RunFeature {
+  id        String   @id @default(cuid())
   runId     String
   featureId String
   status    Status
@@ -46,11 +47,12 @@ model RunFeature {
   run     Run     @relation(fields: [runId], references: [id], onDelete: Cascade)
   feature Feature @relation(fields: [featureId], references: [id], onDelete: Cascade)
 
-  @@id([runId, featureId])
+  @@unique([runId, featureId])
   @@map("run_features")
 }
 
 model RunScenario {
+  id         String   @id @default(cuid())
   runId      String
   scenarioId String
   status     Status
@@ -60,11 +62,12 @@ model RunScenario {
   run      Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
   scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
 
-  @@id([runId, scenarioId])
+  @@unique([runId, scenarioId])
   @@map("run_scenarios")
 }
 
 model RunStep {
+  id           String   @id @default(cuid())
   runId        String
   stepId       String
   scenarioId   String
@@ -78,7 +81,7 @@ model RunStep {
   step     Step     @relation(fields: [stepId], references: [id], onDelete: Cascade)
   scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
 
-  @@id([runId, stepId, scenarioId])
+  @@unique([runId, stepId, scenarioId])
   @@map("run_steps")
 }
 
@@ -166,5 +169,7 @@ model ScenarioTag {
 enum Status {
   passed
   failed
+  blocked
+  retest
   skipped
 }
