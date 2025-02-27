@@ -8,8 +8,8 @@ datasource db {
 }
 
 model Run {
-  id             String   @id @default(cuid())
-  runNumber      Int      @unique @default(autoincrement())
+  id             String        @id @default(cuid())
+  runNumber      Int           @unique @default(autoincrement())
   status         String
   browser        String
   platform       String
@@ -17,13 +17,16 @@ model Run {
   featuresCount  Int
   scenariosCount Int
   stepsCount     Int
-  passCount      Int      @default(0)
-  failCount      Int      @default(0)
-  skipCount      Int      @default(0)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  passCount      Int           @default(0)
+  failCount      Int           @default(0)
+  skipCount      Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
   duration       Int?
   auto           Boolean
+  RunFeature     RunFeature[]
+  RunScenario    RunScenario[]
+  RunStep        RunStep[]
 
   @@index([status])
   @@index([platform])
@@ -33,12 +36,59 @@ model Run {
   @@map("runs")
 }
 
+model RunFeature {
+  runId     String
+  featureId String
+  status    StepStatus
+  duration  Int
+  createdAt DateTime   @default(now())
+
+  run     Run     @relation(fields: [runId], references: [id], onDelete: Cascade)
+  feature Feature @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@id([runId, featureId])
+  @@map("run_features")
+}
+
+model RunScenario {
+  runId      String
+  scenarioId String
+  status     StepStatus
+  duration   Int
+  createdAt  DateTime   @default(now())
+
+  run      Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
+  scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+
+  @@id([runId, scenarioId])
+  @@map("run_scenarios")
+}
+
+model RunStep {
+  runId        String
+  stepId       String
+  scenarioId   String
+  status       StepStatus
+  duration     Int
+  errorMessage String?
+  stackTrace   String?
+  createdAt    DateTime   @default(now())
+
+  run      Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
+  step     Step     @relation(fields: [stepId], references: [id], onDelete: Cascade)
+  scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+
+  @@id([runId, stepId, scenarioId])
+  @@map("run_steps")
+}
+
 model Feature {
   id          String       @id @default(cuid())
   keyword     String
   name        String
   description String?
   featureTags FeatureTag[]
+  RunFeature  RunFeature[]
 
   @@map("features")
 }
@@ -51,7 +101,9 @@ model Scenario {
   description  String?
   scenarioTags ScenarioTag[]
 
-  steps ScenarioStep[]
+  steps       ScenarioStep[]
+  RunScenario RunScenario[]
+  RunStep     RunStep[]
 
   @@index([featureId])
   @@map("scenarios")
@@ -64,6 +116,7 @@ model Step {
   media        Json?
   scenarioIds  String[]
   ScenarioStep ScenarioStep[]
+  RunStep      RunStep[]
 
   @@map("steps")
 }
