@@ -243,9 +243,9 @@ export async function saveResults(
     // console.log("scenarioStepsToCreate:", JSON.stringify(scenarioStepsToCreate, null, 2));
     // console.log("featureTagsToCreate:", JSON.stringify(featureTagsToCreate, null, 2));
     // console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
-    console.log("runFeaturesToCreate:", JSON.stringify(runFeaturesToCreateMapped, null, 2));
-    console.log("runScenariosToCreate:", JSON.stringify(runScenariosToCreateMapped, null, 2));
-    console.log("runStepsToCreate:", JSON.stringify(runStepsToCreateMapped, null, 2));
+    // console.log("runFeaturesToCreate:", JSON.stringify(runFeaturesToCreateMapped, null, 2));
+    // console.log("runScenariosToCreate:", JSON.stringify(runScenariosToCreateMapped, null, 2));
+    // console.log("runStepsToCreate:", JSON.stringify(runStepsToCreateMapped, null, 2));
 
 
     const uniqueSteps = Array.from(new Map(stepsToCreate.map(step => [step.id, step])).values());
