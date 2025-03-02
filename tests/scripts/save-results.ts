@@ -213,21 +213,6 @@ export async function saveResults(
         name: tagName,
     }));
 
-    const runFeaturesToCreateMapped = runFeaturesToCreate.map((item) => ({
-        ...item,
-        status: item.status as Status,
-    }));
-
-    const runScenariosToCreateMapped = runScenariosToCreate.map((item) => ({
-        ...item,
-        status: item.status as Status,
-    }));
-
-    const runStepsToCreateMapped = runStepsToCreate.map((item) => ({
-        ...item,
-        status: item.status as Status,
-    }));
-
     await dbClient.run.create({
         data: {
             id: runId, status, browser, platform, environment,
@@ -258,12 +243,46 @@ export async function saveResults(
         dbClient.scenarioStep.createMany({ data: scenarioStepsToCreate }),
         dbClient.featureTag.createMany({ data: featureTagsToCreate }),
         dbClient.scenarioTag.createMany({ data: scenarioTagsToCreate }),
-        dbClient.runFeature.createMany({ data: runFeaturesToCreateMapped }),
-        dbClient.runScenario.createMany({ data: runScenariosToCreateMapped }),
-        dbClient.runStep.createMany({ data: runStepsToCreateMapped }),
+
+        dbClient.runFeature.createMany({
+            data: runFeaturesToCreate.map(item => ({
+                id: item.id,
+                featureId: item.featureId,
+                runId: item.runId,
+                status: item.status as Status,
+                duration: item.duration,
+                createdAt: item.createdAt,
+            })),
+        }),
+
+        dbClient.runScenario.createMany({
+            data: runScenariosToCreate.map(item => ({
+                id: item.id,
+                scenarioId: item.scenarioId,
+                runId: item.runId,
+                status: item.status as Status,
+                duration: item.duration,
+                createdAt: item.createdAt,
+            })),
+        }),
+
+        dbClient.runStep.createMany({
+            data: runStepsToCreate.map(item => ({
+                id: item.id,
+                stepId: item.stepId,
+                scenarioId: item.scenarioId,
+                runId: item.runId,
+                status: item.status as Status,
+                duration: item.duration,
+                createdAt: item.createdAt,
+                errorMessage: item.errorMessage,
+                stackTrace: item.stackTrace,
+            })),
+        }),
+
         dbClient.run.update({
             where: { id: runId },
-            data: { featuresCount, scenariosCount, passCount, failCount, skipCount, stepsCount, duration: runDuration }
+            data: { featuresCount, scenariosCount, passCount, failCount, skipCount, stepsCount, duration: runDuration },
         }),
     ]);
 
