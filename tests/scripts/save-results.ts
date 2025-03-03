@@ -145,7 +145,7 @@ export async function saveResults(
                 description: scenarioDescription
             });
 
-            let scenarioStatus: Status = 'passed';
+            let scenarioStatus: Status = 'untested';
             let scenarioDuration: number = 0;
 
             for (const [index, step] of scenario.steps.entries()) {
