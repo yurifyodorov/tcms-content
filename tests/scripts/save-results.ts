@@ -117,11 +117,13 @@ export async function saveResults(
 
         featuresToCreate.push({ id: featureId, keyword: feature.keyword, name: feature.name, description: featureDescription });
 
+        let featureStatus: Status = 'passed'; // Assume passed unless any scenario fails
+
         runFeaturesToCreate.push({
             id: createId(),
             featureId,
             runId: runId,
-            status: 'blocked',
+            status: featureStatus,
             duration: 0,
             createdAt: new Date()
         });
@@ -147,6 +149,15 @@ export async function saveResults(
 
             let scenarioStatus: Status = 'untested';
             let scenarioDuration: number = 0;
+
+            for (const tag of scenario.tags || []) {
+                let tagId = tagMap.get(tag.name.trim());
+                if (!tagId) {
+                    tagId = (await dbClient.tag.create({ data: { name: tag.name.trim() } })).id;
+                    tagMap.set(tag.name.trim(), tagId);
+                }
+                scenarioTagsToCreate.push({ scenarioId, tagId });
+            }
 
             for (const [index, step] of scenario.steps.entries()) {
                 const stepName = step.name.trim().toLowerCase();
@@ -206,8 +217,27 @@ export async function saveResults(
             });
 
             scenariosCount++;
+
+            // Check if scenario was failed, if so, mark the feature as failed
+            if (scenarioStatus === 'failed') {
+                featureStatus = 'failed';
+            }
         }
 
+        // If no scenario was failed, we can keep the feature status as passed
+        if (featureStatus !== 'failed') {
+            featureStatus = 'passed';
+        }
+
+        // Update runFeature status after processing all scenarios
+        runFeaturesToCreate.push({
+            id: createId(),
+            featureId,
+            runId: runId,
+            status: featureStatus, // Set the final status for the feature
+            duration: 0,
+            createdAt: new Date()
+        });
     }
 
     await synchronizeScenarios(scenariosToCreate.map(scenario => ({
@@ -267,6 +297,7 @@ export async function saveResults(
                 duration: item.duration,
                 createdAt: item.createdAt,
             })),
+            skipDuplicates: true
         }),
 
         dbClient.runScenario.createMany({
@@ -278,6 +309,7 @@ export async function saveResults(
                 duration: item.duration,
                 createdAt: item.createdAt,
             })),
+            skipDuplicates: true
         }),
 
         dbClient.runStep.createMany({
@@ -292,6 +324,7 @@ export async function saveResults(
                 errorMessage: item.errorMessage,
                 stackTrace: item.stackTrace,
             })),
+            skipDuplicates: true
         }),
 
         dbClient.run.update({
