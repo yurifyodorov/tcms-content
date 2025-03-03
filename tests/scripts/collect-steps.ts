@@ -5,9 +5,6 @@ const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
     const stepsInDb = await dbClient.step.findMany();
     const allSteps: ParsedStep[] = [];
 
-    // Логирование всех шагов в базе данных для отладки
-    console.log("Steps in database:", stepsInDb.map(step => step.name.trim()));
-
     for (const feature of testData) {
         for (const scenario of feature.elements) {
             if (scenario.type !== 'scenario') {
@@ -18,7 +15,6 @@ const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
             for (const step of scenario.steps) {
                 const normalizedStepName = step.name.trim().toLowerCase();
 
-                // Ищем шаг в базе данных
                 let stepInDb = stepsInDb.find(s => s.name.trim().toLowerCase() === normalizedStepName);
 
                 if (!stepInDb) {
@@ -32,8 +28,7 @@ const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
                         },
                     });
 
-                    // Добавляем новый шаг в локальный массив
-                    stepsInDb.push(stepInDb); // Сразу добавляем новый шаг в массив шагов в базе
+                    stepsInDb.push(stepInDb);
                 }
 
                 const duration = 0;
