@@ -6,6 +6,13 @@ export interface Step {
     scenarioIds: string[];
 }
 
+export interface StepResult extends Step {
+    result: {
+        status: string;
+        duration: number;
+    };
+}
+
 export interface ParsedStep {
     id: string;
     name: string;
