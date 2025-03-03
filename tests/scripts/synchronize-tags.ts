@@ -56,7 +56,7 @@ export async function synchronizeTags(testData: TestData): Promise<void> {
             skipDuplicates: true,
         });
 
-        console.log(`Добавлены новые теги: ${newTagsToAdd.map(tag => tag.name).join(', ')}`);
+        // console.log(`Добавлены новые теги: ${newTagsToAdd.map(tag => tag.name).join(', ')}`);
     }
 
     const existingTags = tagsInDb.filter(tag => tagsSetFromTests.has(tag.name.trim()));
@@ -78,6 +78,8 @@ export async function synchronizeTags(testData: TestData): Promise<void> {
             },
         });
 
-        console.log(`Удалены старые связи с фичами и сценариями для тегов: ${existingTags.map(tag => tag.name).join(', ')}`);
+        // console.log(`Удалены старые связи с фичами и сценариями для тегов: ${existingTags.map(tag => tag.name).join(', ')}`);
     }
+
+    await dbClient.$disconnect();
 }

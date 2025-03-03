@@ -49,4 +49,6 @@ export async function synchronizeFeatures(testData: Feature[]): Promise<void> {
             featureMapFromDb.set(newFeature.name.trim(), newFeature.id);
         }
     }
+
+    await dbClient.$disconnect();
 }

@@ -53,4 +53,6 @@ export async function synchronizeSteps(testData: Step[]): Promise<void> {
             stepMapFromDb.set(newStep.id, newStep.id);
         }
     }
+
+    await dbClient.$disconnect();
 }

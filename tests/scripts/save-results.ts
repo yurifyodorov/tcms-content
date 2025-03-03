@@ -224,7 +224,7 @@ export async function saveResults(
     // console.log("tagsToCreate:", JSON.stringify(tagsToCreate, null, 2));
     // console.log("featuresToCreate:", JSON.stringify(featuresToCreate, null, 2));
     // console.log("scenariosToCreate:", JSON.stringify(scenariosToCreate, null, 2));
-    console.log("stepsToCreate:", JSON.stringify(stepsToCreate, null, 2));
+    // console.log("stepsToCreate:", JSON.stringify(stepsToCreate, null, 2));
     // console.log("scenarioStepsToCreate:", JSON.stringify(scenarioStepsToCreate, null, 2));
     // console.log("featureTagsToCreate:", JSON.stringify(featureTagsToCreate, null, 2));
     // console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
@@ -233,7 +233,9 @@ export async function saveResults(
     // console.log("runStepsToCreate:", JSON.stringify(runStepsToCreateMapped, null, 2));
 
 
-    const uniqueSteps = Array.from(new Map(stepsToCreate.map(step => [step.id, step])).values());
+    const uniqueSteps = Array.from(new Map(
+        stepsToCreate.map(step => [`${step.name.trim().toLowerCase()}-${step.keyword.trim().toLowerCase()}`, step])
+    ).values());
 
     await dbClient.$transaction([
         dbClient.tag.createMany({ data: tagsToCreate, skipDuplicates: true }),
@@ -286,5 +288,6 @@ export async function saveResults(
         }),
     ]);
 
+    await dbClient.$disconnect();
     console.log("Data successfully saved!");
 }

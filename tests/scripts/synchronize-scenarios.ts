@@ -51,4 +51,6 @@ export async function synchronizeScenarios(testData: Scenario[]): Promise<void> 
             scenarioMapFromDb.set(newScenario.id, newScenario.id);
         }
     }
+
+    await dbClient.$disconnect();
 }
