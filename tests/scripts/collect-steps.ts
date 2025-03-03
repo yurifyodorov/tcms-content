@@ -20,7 +20,6 @@ const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
                 if (!stepInDb) {
                     console.error(`Step "${step.name}" not found in the database. Adding it now.`);
 
-                    // Если шаг не найден, сохраняем его в базу данных
                     stepInDb = await dbClient.step.create({
                         data: {
                             name: step.name.trim(),
@@ -30,9 +29,6 @@ const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
 
                     stepsInDb.push(stepInDb);
                 }
-
-                const duration = 0;
-                const status = 'unknown';
 
                 const parsedStep: ParsedStep = {
                     id: stepInDb.id,
