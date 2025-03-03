@@ -40,7 +40,14 @@ export async function saveResults(
     databaseUrl: string,
     testData: TestData
 ): Promise<void> {
-    console.log(`Run details - ID: ${runId}, Browser: ${browser}, Platform: ${platform}, Env: ${environment}, DB: ${databaseUrl}`);
+
+    console.log(`
+        Run ID: ${runId}, 
+        Browser: ${browser}, 
+        Platform: ${platform}, 
+        Env: ${environment}, 
+        DB: ${databaseUrl}
+    `);
 
     await synchronizeTags(testData);
     await synchronizeFeatures(testData);
