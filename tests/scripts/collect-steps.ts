@@ -18,9 +18,6 @@ const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
             for (const step of scenario.steps) {
                 const normalizedStepName = step.name.trim().toLowerCase();
 
-                // Логируем каждый шаг, который мы ищем
-                console.log(`Searching for step: "${normalizedStepName}"`);
-
                 // Ищем шаг в базе данных
                 let stepInDb = stepsInDb.find(s => s.name.trim().toLowerCase() === normalizedStepName);
 
@@ -54,9 +51,6 @@ const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
             }
         }
     }
-
-    // Логируем итоговый список собранных шагов
-    console.log("Collected steps:", JSON.stringify(allSteps, null, 2));
 
     return allSteps;
 };
