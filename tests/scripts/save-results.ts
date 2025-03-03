@@ -5,7 +5,7 @@ import {
     TestData,
     ParsedFeature,
     ParsedScenario,
-    ParsedStep, StepResult,
+    ParsedStep,
 } from "./types";
 
 import {
@@ -145,24 +145,8 @@ export async function saveResults(
                 description: scenarioDescription
             });
 
-            runScenariosToCreate.push({
-                id: createId(),
-                scenarioId,
-                runId: runId,
-                status: 'blocked',
-                duration: 0,
-                createdAt: new Date()
-            });
-
-
-            for (const tag of scenario.tags || []) {
-                let tagId = tagMap.get(tag.name.trim());
-                if (!tagId) {
-                    tagId = (await dbClient.tag.create({ data: { name: tag.name.trim() } })).id;
-                    tagMap.set(tag.name.trim(), tagId);
-                }
-                scenarioTagsToCreate.push({ scenarioId, tagId });
-            }
+            let scenarioStatus: Status = 'passed';
+            let scenarioDuration: number = 0;
 
             for (const [index, step] of scenario.steps.entries()) {
                 const stepName = step.name.trim().toLowerCase();
@@ -187,6 +171,8 @@ export async function saveResults(
                     stackTrace: null
                 });
 
+                scenarioDuration += stepResults[index].duration;
+
                 if (!stepsToCreate.some(s => s.id === stepData.id)) {
                     stepsToCreate.push({
                         id: stepData.id,
@@ -196,11 +182,30 @@ export async function saveResults(
                         media: stepData.media
                     });
                 }
+
+                // Если хотя бы один шаг в сценарии не прошел успешно
+                if (stepResults[index].status === 'failed') {
+                    scenarioStatus = 'failed';
+                }
+
+                // Если хотя бы один шаг был пропущен
+                if (stepResults[index].status === 'skipped' && scenarioStatus !== 'failed') {
+                    scenarioStatus = 'skipped';
+                }
             }
 
+            runScenariosToCreate.push({
+                id: createId(),
+                scenarioId,
+                runId: runId,
+                status: scenarioStatus,
+                duration: scenarioDuration, // TODO: сверить корректность расчетов позже
+                createdAt: new Date()
+            });
 
             scenariosCount++;
         }
+
     }
 
     await synchronizeScenarios(scenariosToCreate.map(scenario => ({
