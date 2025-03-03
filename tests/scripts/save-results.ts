@@ -183,15 +183,17 @@ export async function saveResults(
                     });
                 }
 
-                // Если хотя бы один шаг в сценарии не прошел успешно
                 if (stepResults[index].status === 'failed') {
                     scenarioStatus = 'failed';
                 }
 
-                // Если хотя бы один шаг был пропущен
                 if (stepResults[index].status === 'skipped' && scenarioStatus !== 'failed') {
                     scenarioStatus = 'skipped';
                 }
+            }
+
+            if (scenarioStatus !== 'failed' && scenarioStatus !== 'skipped') {
+                scenarioStatus = 'passed';
             }
 
             runScenariosToCreate.push({
@@ -199,7 +201,7 @@ export async function saveResults(
                 scenarioId,
                 runId: runId,
                 status: scenarioStatus,
-                duration: scenarioDuration, // TODO: сверить корректность расчетов позже
+                duration: scenarioDuration,
                 createdAt: new Date()
             });
 
