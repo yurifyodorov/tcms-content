@@ -18,8 +18,6 @@ const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
                 let stepInDb = stepsInDb.find(s => s.name.trim().toLowerCase() === normalizedStepName);
 
                 if (!stepInDb) {
-                    console.error(`Step "${step.name}" not found in the database. Adding it now.`);
-
                     stepInDb = await dbClient.step.create({
                         data: {
                             name: step.name.trim(),

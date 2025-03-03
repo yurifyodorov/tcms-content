@@ -5,7 +5,7 @@ import {
     TestData,
     ParsedFeature,
     ParsedScenario,
-    ParsedStep,
+    ParsedStep, StepResult,
 } from "./types";
 
 import {
@@ -66,9 +66,6 @@ export async function saveResults(
     });
 
     const steps = await collectSteps(testData);
-    console.log("Collected Steps:", steps);
-
-
     await synchronizeSteps(steps);
 
     const stepResults = await collectStepsResults(testData);
@@ -167,7 +164,7 @@ export async function saveResults(
                 scenarioTagsToCreate.push({ scenarioId, tagId });
             }
 
-            for (const step of scenario.steps) {
+            for (const [index, step] of scenario.steps.entries()) {
                 const stepName = step.name.trim().toLowerCase();
                 const stepData = steps.find(s => s.name.trim().toLowerCase() === stepName);
 
@@ -183,8 +180,8 @@ export async function saveResults(
                     stepId: stepData.id,
                     scenarioId,
                     runId,
-                    status: 'blocked',
-                    duration: 0,
+                    status: stepResults[index].status as Status,
+                    duration: stepResults[index].duration,
                     createdAt: new Date(),
                     errorMessage: null,
                     stackTrace: null
@@ -200,6 +197,7 @@ export async function saveResults(
                     });
                 }
             }
+
 
             scenariosCount++;
         }
@@ -228,6 +226,17 @@ export async function saveResults(
             auto: true, duration: runDuration,
         }
     });
+
+    // console.log("tagsToCreate:", JSON.stringify(tagsToCreate, null, 2));
+    // console.log("featuresToCreate:", JSON.stringify(featuresToCreate, null, 2));
+    // console.log("scenariosToCreate:", JSON.stringify(scenariosToCreate, null, 2));
+    // console.log("stepsToCreate:", JSON.stringify(stepsToCreate, null, 2));
+    // console.log("scenarioStepsToCreate:", JSON.stringify(scenarioStepsToCreate, null, 2));
+    // console.log("featureTagsToCreate:", JSON.stringify(featureTagsToCreate, null, 2));
+    // console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
+    // console.log("runFeaturesToCreate:", JSON.stringify(runFeaturesToCreate, null, 2));
+    // console.log("runScenariosToCreate:", JSON.stringify(runScenariosToCreat, null, 2));
+    console.log("runStepsToCreate:", JSON.stringify(runStepsToCreate, null, 2));
 
     const uniqueSteps = Array.from(new Map(
         stepsToCreate.map(step => [`${step.name.trim().toLowerCase()}-${step.keyword.trim().toLowerCase()}`, step])

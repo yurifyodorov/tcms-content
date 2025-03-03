@@ -7,7 +7,10 @@ const collectStepsResults = async (testData: TestData): Promise<{ status: string
         feature.elements.forEach(scenario => {
             (scenario.steps as StepResult[]).forEach(step => {
                 const { status, duration } = step.result;
-                results.push({ status, duration });
+
+                const durationInMs = Math.floor(duration / 1000000);
+
+                results.push({ status, duration: durationInMs });
             });
         });
     });

@@ -41,7 +41,7 @@ model RunFeature {
   runId     String
   featureId String
   status    Status
-  duration  Int
+  duration  Int?
   createdAt DateTime @default(now())
 
   run     Run     @relation(fields: [runId], references: [id], onDelete: Cascade)
@@ -56,7 +56,7 @@ model RunScenario {
   runId      String
   scenarioId String
   status     Status
-  duration   Int
+  duration   Int?
   createdAt  DateTime @default(now())
 
   run      Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
@@ -72,7 +72,7 @@ model RunStep {
   stepId       String
   scenarioId   String
   status       Status
-  duration     Int
+  duration     Int?
   errorMessage String?
   stackTrace   String?
   createdAt    DateTime @default(now())
