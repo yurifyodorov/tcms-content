@@ -1,39 +1,43 @@
-import { Feature, Scenario, Step } from '@tests/scripts/types';
-import { scenarioMap } from './save-results';
+import { ParsedStep, TestData } from '@tests/scripts/types';
+import { dbClient } from "@tests/shared/lib/db";
 
-const collectSteps = (testData: Feature[]): Map<string, Step> => {
-    const stepsMap = new Map<string, Step>();
+const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
+    const stepsInDb = await dbClient.step.findMany();
+    const allSteps: ParsedStep[] = [];
 
-    testData.forEach((feature) => {
-        feature.elements.forEach((scenario: Scenario) => {
-            scenario.steps.forEach((step) => {
-                const stepName = step.name.trim();
+    testData.forEach(feature => {
+        feature.elements.forEach(scenario => {
+            if (scenario.type !== 'scenario') {
+                console.warn(`Skipping non-scenario element: ${scenario.type} - ${scenario.name}`);
+                return;
+            }
 
-                if (!stepsMap.has(stepName)) {
-                    const stepId = step.id || stepName;
-                    stepsMap.set(stepName, {
-                        id: stepId,
-                        name: stepName,
-                        media: step.media || '',
-                        keyword: step.keyword || '',
-                        scenarioIds: [],
-                    });
+            scenario.steps.forEach(step => {
+                const stepInDb = stepsInDb.find(s => s.name.trim().toLowerCase() === step.name.trim().toLowerCase());
+
+                if (!stepInDb) {
+                    console.error(`Step "${step.name}" not found in the database.`);
+                    return;
                 }
 
-                const existingStep = stepsMap.get(stepName);
-                if (existingStep) {
-                    const realScenarioId = scenarioMap.get(scenario.id);
-                    if (realScenarioId) {
-                        existingStep.scenarioIds.push(realScenarioId);
-                    } else {
-                        console.error(`Scenario ID not found for scenario: ${scenario.id}`);
-                    }
-                }
+                const duration = 0;
+                const status = 'unknown';
+
+                const parsedStep: ParsedStep = {
+                    id: stepInDb.id,
+                    name: step.name.trim(),
+                    keyword: step.keyword,
+                    scenarioIds: [scenario.id],
+                    media: step.media,
+                };
+
+
+                allSteps.push(parsedStep);
             });
         });
     });
 
-    return stepsMap;
+    return allSteps;
 };
 
 export { collectSteps };

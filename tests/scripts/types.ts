@@ -11,7 +11,7 @@ export interface ParsedStep {
     name: string;
     keyword: string;
     scenarioIds: string[];
-    media?: string;
+    media: string;
 }
 
 export interface Scenario {

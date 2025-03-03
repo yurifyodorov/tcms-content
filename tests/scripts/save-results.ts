@@ -60,8 +60,8 @@ export async function saveResults(
         });
     });
 
-    const steps = collectSteps(testData);
-    await synchronizeSteps(Array.from(steps.values()));
+    const steps = await collectSteps(testData);
+    await synchronizeSteps(steps);
 
     // console.log('STEPS:', JSON.stringify(steps, null, 2));
 
@@ -161,10 +161,10 @@ export async function saveResults(
 
             scenario.steps.forEach(step => {
                 const stepName = step.name.trim();
-                const stepData = steps.get(stepName);
+                const stepData = steps.find(s => s.name.trim().toLowerCase() === stepName.toLowerCase());
 
                 if (!stepData) {
-                    console.error(`Step "${stepName}" not found in stepsMap`);
+                    console.error(`Step "${stepName}" not found in steps`);
                     return;
                 }
 
@@ -204,7 +204,7 @@ export async function saveResults(
         type: 'Scenario' as const
     })));
 
-
+    // Handle failed status if necessary
     if (failCount > 0) {
         status = 'failed';
     }
