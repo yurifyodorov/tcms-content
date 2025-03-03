@@ -51,7 +51,7 @@ async function setupNodeEvents(
         await saveResults(runId, browser, platform, environment, databaseUrl, testData)
 
         // TODO: use this later
-        // tcms.saveResults(runId, browser, platform, databaseUrl, testData);
+        // await tcms.saveResults(runId, browser, platform, environment, databaseUrl, testData);
       }
 
       await tcms.sendSlackReport();
