@@ -71,7 +71,7 @@ const saveResults = async (
     await synchronizeSteps(steps, databaseUrl);
 
     const stepResults = await collectStepsResults(testData);
-    console.log("Collected Step Results:", stepResults);
+    // console.log("Collected Step Results:", stepResults);
 
     let featuresCount = 0;
     let scenariosCount = 0;
@@ -81,7 +81,8 @@ const saveResults = async (
     let failCount = stepResults.filter(step => step.status === "failed").length;
     let skipCount = stepResults.filter(step => step.status === "skipped").length;
 
-    let status = 'completed', runDuration = 0;
+    let status = 'completed';
+    let duration = stepResults.reduce((total, step) => total + step.duration, 0);
 
     const featuresToCreate: ParsedFeature[] = [];
     const scenariosToCreate: ParsedScenario[] = [];
@@ -273,7 +274,7 @@ const saveResults = async (
         data: {
             id: runId, status, browser, platform, environment,
             featuresCount, scenariosCount, stepsCount, passCount, failCount, skipCount,
-            auto: true, duration: runDuration,
+            auto: true, duration,
         }
     });
 
@@ -286,7 +287,7 @@ const saveResults = async (
     // console.log("scenarioTagsToCreate:", JSON.stringify(scenarioTagsToCreate, null, 2));
     // console.log("runFeaturesToCreate:", JSON.stringify(runFeaturesToCreate, null, 2));
     // console.log("runScenariosToCreate:", JSON.stringify(runScenariosToCreat, null, 2));
-    console.log("runStepsToCreate:", JSON.stringify(runStepsToCreate, null, 2));
+    // console.log("runStepsToCreate:", JSON.stringify(runStepsToCreate, null, 2));
 
     const uniqueSteps = Array.from(new Map(
         stepsToCreate.map(step => [`${step.name.trim().toLowerCase()}-${step.keyword.trim().toLowerCase()}`, step])
@@ -349,7 +350,7 @@ const saveResults = async (
                 passCount,
                 failCount,
                 skipCount,
-                duration: runDuration
+                duration
             },
         }),
     ]);
