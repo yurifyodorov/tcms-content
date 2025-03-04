@@ -43,12 +43,17 @@ const saveResults = async (
     testData: TestData
 ): Promise<void> => {
 
+    const maskString = (str: string) => {
+        if (str.length <= 8) return '*'.repeat(str.length);
+        return str.slice(0, 12) + '*'.repeat(12) + str.slice(-12);
+    };
+
     console.log(`
         Run ID: ${runId}, 
         Browser: ${browser}, 
         Platform: ${platform}, 
         Env: ${environment}, 
-        DB: ${databaseUrl}
+        DB: ${maskString(databaseUrl)}
     `);
 
     const dbClient = getDbClient(databaseUrl);
