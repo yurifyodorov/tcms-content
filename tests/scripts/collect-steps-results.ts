@@ -1,4 +1,4 @@
-import { TestData, StepResult } from "@tests/scripts/types";
+import { TestData, StepResult } from "./types";
 
 const collectStepsResults = async (testData: TestData): Promise<{ status: string, duration: number }[]> => {
     let results: { status: string, duration: number }[] = [];

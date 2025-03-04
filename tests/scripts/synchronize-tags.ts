@@ -1,8 +1,14 @@
-import { dbClient } from '../shared/lib/db';
+import { getDbClient } from '../shared/lib/db';
 import { TestData } from './types';
-import { collectTags } from "@tests/scripts/collect-tags";
+import { collectTags } from "./collect-tags";
 
-export async function synchronizeTags(testData: TestData): Promise<void> {
+export async function synchronizeTags(testData: TestData, databaseUrl: string): Promise<void> {
+
+    const dbClient = getDbClient(databaseUrl);
+
+    if (!dbClient) {
+        throw new Error('dbClient is not initialized.');
+    }
 
     const tagsFromTests = collectTags(testData);
     const tagsSetFromTests = new Set<string>();

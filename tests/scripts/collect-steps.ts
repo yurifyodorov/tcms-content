@@ -1,7 +1,9 @@
-import { ParsedStep, TestData } from '@tests/scripts/types';
-import { dbClient } from "@tests/shared/lib/db";
+import { ParsedStep, TestData } from './types';
+import { getDbClient } from '../shared/lib/db';
 
-const collectSteps = async (testData: TestData): Promise<ParsedStep[]> => {
+const collectSteps = async (testData: TestData, databaseUrl: string): Promise<ParsedStep[]> => {
+    const dbClient = getDbClient(databaseUrl);
+
     const stepsInDb = await dbClient.step.findMany();
     const allSteps: ParsedStep[] = [];
 

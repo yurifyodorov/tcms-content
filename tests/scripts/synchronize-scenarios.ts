@@ -1,7 +1,9 @@
-import { dbClient } from "@tests/shared/lib/db";
-import { Scenario } from "@tests/scripts/types";
+import { getDbClient } from '../shared/lib/db';
+import { Scenario } from "./types";
 
-export async function synchronizeScenarios(testData: Scenario[]): Promise<void> {
+export async function synchronizeScenarios(testData: Scenario[], databaseUrl: string): Promise<void> {
+    const dbClient = getDbClient(databaseUrl);
+
     const scenarioIdsFromTestData = testData.map((scenario) => scenario.id);
 
     const scenariosInDb = await dbClient.scenario.findMany();

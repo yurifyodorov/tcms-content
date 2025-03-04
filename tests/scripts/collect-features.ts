@@ -1,7 +1,9 @@
 import { ParsedFeature, TestData } from './types';
-import { dbClient } from '../shared/lib/db';
+import { getDbClient } from '../shared/lib/db';
 
-const collectFeatures = async (testData: TestData): Promise<ParsedFeature[]> => {
+const collectFeatures = async (testData: TestData, databaseUrl: string): Promise<ParsedFeature[]> => {
+    const dbClient = getDbClient(databaseUrl);
+
     const featuresInDb = await dbClient.feature.findMany();
     const tagsInDb = await dbClient.tag.findMany();
 

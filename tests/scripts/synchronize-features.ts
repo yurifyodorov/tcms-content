@@ -1,7 +1,9 @@
-import { dbClient } from '../shared/lib/db';
+import { getDbClient } from '../shared/lib/db';
 import { Feature } from './types';
 
-export async function synchronizeFeatures(testData: Feature[]): Promise<void> {
+export async function synchronizeFeatures(testData: Feature[], databaseUrl: string): Promise<void> {
+    const dbClient = getDbClient(databaseUrl);
+
     const featureNamesFromTestData = testData.map((feature: Feature) => feature.name.trim());
 
     const featuresInDb = await dbClient.feature.findMany();

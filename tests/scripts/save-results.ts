@@ -1,5 +1,5 @@
 import { createId } from '../shared/lib/id';
-import { dbClient } from '../shared/lib/db';
+import { getDbClient } from '../shared/lib/db';
 
 import {
     TestData,
@@ -34,14 +34,14 @@ import { collectStepsResults } from './collect-steps-results';
 
 export const scenarioMap = new Map<string, string>();
 
-export async function saveResults(
+const saveResults = async (
     runId: string,
     browser: string,
     platform: string,
     environment: string,
     databaseUrl: string,
     testData: TestData
-): Promise<void> {
+): Promise<void> => {
 
     console.log(`
         Run ID: ${runId}, 
@@ -51,12 +51,14 @@ export async function saveResults(
         DB: ${databaseUrl}
     `);
 
-    await synchronizeTags(testData);
-    await synchronizeFeatures(testData);
+    const dbClient = getDbClient(databaseUrl);
+
+    await synchronizeTags(testData, databaseUrl);
+    await synchronizeFeatures(testData, databaseUrl);
 
     const tags = collectTags(testData);
-    const features = await collectFeatures(testData);
-    const scenarios = await collectScenarios(testData);
+    const features = await collectFeatures(testData, databaseUrl);
+    const scenarios = await collectScenarios(testData, databaseUrl);
 
     testData.forEach((feature, featureIndex) => {
         feature.elements.forEach((scenario, scenarioIndex) => {
@@ -65,8 +67,8 @@ export async function saveResults(
         });
     });
 
-    const steps = await collectSteps(testData);
-    await synchronizeSteps(steps);
+    const steps = await collectSteps(testData, databaseUrl);
+    await synchronizeSteps(steps, databaseUrl);
 
     const stepResults = await collectStepsResults(testData);
     console.log("Collected Step Results:", stepResults);
@@ -240,12 +242,15 @@ export async function saveResults(
         });
     }
 
-    await synchronizeScenarios(scenariosToCreate.map(scenario => ({
-        ...scenario,
-        steps: [],
-        tags: [],
-        type: 'Scenario' as const
-    })));
+    await synchronizeScenarios(
+        scenariosToCreate.map(scenario => ({
+            ...scenario,
+            steps: [],
+            tags: [],
+            type: 'Scenario' as const
+        })),
+        databaseUrl
+    );
 
     // Handle failed status if necessary
     if (failCount > 0) {
@@ -334,5 +339,8 @@ export async function saveResults(
     ]);
 
     await dbClient.$disconnect();
+
     console.log("Data successfully saved!");
 }
+
+export { saveResults };

@@ -1,7 +1,8 @@
-import { dbClient } from "@tests/shared/lib/db";
-import { Step } from "@tests/scripts/types";
+import { getDbClient } from '../shared/lib/db';
+import { Step } from "./types";
 
-export async function synchronizeSteps(testData: Step[]): Promise<void> {
+export async function synchronizeSteps(testData: Step[], databaseUrl: string): Promise<void> {
+    const dbClient = getDbClient(databaseUrl);
 
     const stepIdsFromTestData = testData.map((step) => step.id);
 
