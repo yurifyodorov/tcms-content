@@ -73,7 +73,14 @@ const saveResults = async (
     const stepResults = await collectStepsResults(testData);
     console.log("Collected Step Results:", stepResults);
 
-    let featuresCount = 0, scenariosCount = 0, passCount = 0, failCount = 0, skipCount = 0, stepsCount = 0;
+    let featuresCount = 0;
+    let scenariosCount = 0;
+    let stepsCount = 0;
+
+    let passCount = stepResults.filter(step => step.status === "passed").length;
+    let failCount = stepResults.filter(step => step.status === "failed").length;
+    let skipCount = stepResults.filter(step => step.status === "skipped").length;
+
     let status = 'completed', runDuration = 0;
 
     const featuresToCreate: ParsedFeature[] = [];
