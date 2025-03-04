@@ -184,6 +184,7 @@ const saveResults = async (
                     stackTrace: null
                 });
 
+                stepsCount++;
                 scenarioDuration += stepResults[index].duration;
 
                 if (!stepsToCreate.some(s => s.id === stepData.id)) {
@@ -264,7 +265,7 @@ const saveResults = async (
     await dbClient.run.create({
         data: {
             id: runId, status, browser, platform, environment,
-            featuresCount, scenariosCount, passCount, failCount, skipCount, stepsCount,
+            featuresCount, scenariosCount, stepsCount, passCount, failCount, skipCount,
             auto: true, duration: runDuration,
         }
     });
@@ -334,7 +335,15 @@ const saveResults = async (
 
         dbClient.run.update({
             where: { id: runId },
-            data: { featuresCount, scenariosCount, passCount, failCount, skipCount, stepsCount, duration: runDuration },
+            data: {
+                featuresCount,
+                scenariosCount,
+                stepsCount,
+                passCount,
+                failCount,
+                skipCount,
+                duration: runDuration
+            },
         }),
     ]);
 
