@@ -132,8 +132,6 @@ const saveResults = async (
     const tagsInDb = await dbClient.tag.findMany();
     const tagMap = new Map(tagsInDb.map(tag => [tag.name.trim(), tag.id]));
 
-    console.log("Теги в БД:", tagMap);
-
     for (const feature of features) {
         featuresCount++;
 
