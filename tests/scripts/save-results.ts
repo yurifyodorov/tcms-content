@@ -69,10 +69,10 @@ const saveResults = async (
         feature.elements.forEach((scenario, scenarioIndex) => {
             const scenarioData = scenarios[featureIndex * feature.elements.length + scenarioIndex];
 
-            if (!scenarioData) {
-                console.error(`❌ Ошибка: сценарий ${scenario.name} не найден в collectScenarios`);
-                return;
-            }
+            // if (!scenarioData) {
+            //     console.error(`❌ Ошибка: сценарий ${scenario.name} не найден в collectScenarios`);
+            //     return;
+            // }
 
             const scenarioId = scenarioData.id;
             scenarioMap.set(scenario.id, scenarioId);
