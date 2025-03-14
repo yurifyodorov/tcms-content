@@ -6,7 +6,7 @@ const collectTags = (testData: TestData): Tag[] => {
     testData.forEach((feature) => {
         feature.elements.forEach((scenario) => {
             scenario.tags.forEach((tag) => {
-                tagSet.add(tag.name);
+                tagSet.add(tag.name.trim());
             });
         });
     });
@@ -15,8 +15,6 @@ const collectTags = (testData: TestData): Tag[] => {
         id: tagName,
         name: tagName,
     }));
-
-    // console.log("Собранные теги из тестов:", collectedTags);
 
     return collectedTags;
 };

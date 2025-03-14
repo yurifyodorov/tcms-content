@@ -322,14 +322,17 @@ const saveResults = async (
     console.log("Связи featureTag к созданию:", featureTagsToCreate);
     console.log("Связи scenarioTag к созданию:", scenarioTagsToCreate);
 
+    console.log("scenarioTagsToCreate:", scenarioTagsToCreate);
+
+
     await dbClient.$transaction([
         dbClient.tag.createMany({ data: tagsToCreate, skipDuplicates: true }),
         dbClient.feature.createMany({ data: featuresToCreate, skipDuplicates: true }),
         dbClient.scenario.createMany({ data: scenariosToCreate, skipDuplicates: true }),
         dbClient.step.createMany({ data: uniqueSteps, skipDuplicates: true }),
-        dbClient.scenarioStep.createMany({ data: scenarioStepsToCreate }),
-        dbClient.featureTag.createMany({ data: featureTagsToCreate }),
-        dbClient.scenarioTag.createMany({ data: scenarioTagsToCreate }),
+        dbClient.scenarioStep.createMany({ data: scenarioStepsToCreate, skipDuplicates: true }),
+        dbClient.featureTag.createMany({ data: featureTagsToCreate, skipDuplicates: true }),
+        dbClient.scenarioTag.createMany({ data: scenarioTagsToCreate, skipDuplicates: true }),
 
         dbClient.runFeature.createMany({
             data: runFeaturesToCreate.map(item => ({
