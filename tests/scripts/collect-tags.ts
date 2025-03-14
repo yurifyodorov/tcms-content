@@ -11,10 +11,14 @@ const collectTags = (testData: TestData): Tag[] => {
         });
     });
 
-    return Array.from(tagSet).map((tagName) => ({
+    const collectedTags = Array.from(tagSet).map((tagName) => ({
         id: tagName,
         name: tagName,
     }));
+
+    // console.log("Собранные теги из тестов:", collectedTags);
+
+    return collectedTags;
 };
 
 export { collectTags };

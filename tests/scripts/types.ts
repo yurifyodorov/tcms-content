@@ -3,7 +3,6 @@ export interface Step {
     name: string;
     media: string;
     keyword: string;
-    scenarioIds: string[];
 }
 
 export interface StepResult extends Step {
@@ -17,7 +16,6 @@ export interface ParsedStep {
     id: string;
     name: string;
     keyword: string;
-    scenarioIds: string[];
     media: string;
 }
 

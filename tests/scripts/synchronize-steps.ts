@@ -37,7 +37,6 @@ export async function synchronizeSteps(testData: Step[], databaseUrl: string): P
                     keyword: step.keyword || 'Step',
                     name: step.name || '',
                     media: step.media || '',
-                    scenarioIds: step.scenarioIds || [],
                 },
             });
         } else {
@@ -47,7 +46,6 @@ export async function synchronizeSteps(testData: Step[], databaseUrl: string): P
                     keyword: step.keyword || 'Step',
                     name: step.name || '',
                     media: step.media || '',
-                    scenarioIds: step.scenarioIds || [],
                 },
             });
 

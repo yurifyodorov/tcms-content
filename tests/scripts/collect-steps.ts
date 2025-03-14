@@ -34,7 +34,6 @@ const collectSteps = async (testData: TestData, databaseUrl: string): Promise<Pa
                     id: stepInDb.id,
                     name: step.name.trim(),
                     keyword: step.keyword,
-                    scenarioIds: [scenario.id],
                     media: step.media,
                 };
 

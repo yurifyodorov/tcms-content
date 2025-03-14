@@ -67,7 +67,14 @@ const saveResults = async (
 
     testData.forEach((feature, featureIndex) => {
         feature.elements.forEach((scenario, scenarioIndex) => {
-            const scenarioId = scenarios[featureIndex * feature.elements.length + scenarioIndex].id;
+            const scenarioData = scenarios[featureIndex * feature.elements.length + scenarioIndex];
+
+            if (!scenarioData) {
+                console.error(`❌ Ошибка: сценарий ${scenario.name} не найден в collectScenarios`);
+                return;
+            }
+
+            const scenarioId = scenarioData.id;
             scenarioMap.set(scenario.id, scenarioId);
         });
     });
@@ -105,6 +112,8 @@ const saveResults = async (
 
     const tagsInDb = await dbClient.tag.findMany();
     const tagMap = new Map(tagsInDb.map(tag => [tag.name.trim(), tag.id]));
+
+    console.log("Теги в БД:", tagMap);
 
     for (const feature of features) {
         featuresCount++;
@@ -147,6 +156,9 @@ const saveResults = async (
             featureTagsToCreate.push({ featureId, tagId });
         }
 
+        // Логируем теги перед созданием связей
+        console.log(`Обрабатываем фичу "${feature.name}", ID: ${featureId}`);
+
         const originalFeature = testData.find(f => f.name.trim() === feature.name.trim());
         if (!originalFeature) continue;
 
@@ -168,10 +180,20 @@ const saveResults = async (
             for (const tag of scenario.tags || []) {
                 let tagId = tagMap.get(tag.name.trim());
                 if (!tagId) {
-                    tagId = (await dbClient.tag.create({ data: { name: tag.name.trim() } })).id;
+                    const newTag = await dbClient.tag.create({ data: { name: tag.name.trim() } });
+                    if (!newTag || !newTag.id) {
+                        console.error(`❌ Ошибка: Не удалось создать тег "${tag.name}"`);
+                        continue;
+                    }
+                    tagId = newTag.id;
                     tagMap.set(tag.name.trim(), tagId);
                 }
-                scenarioTagsToCreate.push({ scenarioId, tagId });
+
+                if (tagId) {
+                    scenarioTagsToCreate.push({ scenarioId, tagId });
+                } else {
+                    console.warn(`⚠️ Ошибка: Не найден ID для тега "${tag.name}"`);
+                }
             }
 
             for (const [index, step] of scenario.steps.entries()) {
@@ -179,7 +201,7 @@ const saveResults = async (
                 const stepData = steps.find(s => s.name.trim().toLowerCase() === stepName);
 
                 if (!stepData) {
-                    console.error(`Step "${step.name}" not found in steps`);
+                    console.error(`⚠️ Ошибка: Шаг "${step.name}" не найден в collectSteps.`);
                     continue;
                 }
 
@@ -190,31 +212,30 @@ const saveResults = async (
                     stepId: stepData.id,
                     scenarioId,
                     runId,
-                    status: stepResults[index].status as Status,
-                    duration: stepResults[index].duration,
+                    status: stepResults[index]?.status as Status ?? "unknown",
+                    duration: stepResults[index]?.duration ?? 0,
                     createdAt: new Date(),
                     errorMessage: null,
                     stackTrace: null
                 });
 
                 stepsCount++;
-                scenarioDuration += stepResults[index].duration;
+                scenarioDuration += stepResults[index]?.duration ?? 0;
 
                 if (!stepsToCreate.some(s => s.id === stepData.id)) {
                     stepsToCreate.push({
                         id: stepData.id,
-                        scenarioIds: stepData.scenarioIds,
                         keyword: stepData.keyword,
                         name: stepData.name,
                         media: stepData.media
                     });
                 }
 
-                if (stepResults[index].status === 'failed') {
+                if (stepResults[index]?.status === 'failed') {
                     scenarioStatus = 'failed';
                 }
 
-                if (stepResults[index].status === 'skipped' && scenarioStatus !== 'failed') {
+                if (stepResults[index]?.status === 'skipped' && scenarioStatus !== 'failed') {
                     scenarioStatus = 'skipped';
                 }
             }
@@ -297,6 +318,9 @@ const saveResults = async (
     const uniqueSteps = Array.from(new Map(
         stepsToCreate.map(step => [`${step.name.trim().toLowerCase()}-${step.keyword.trim().toLowerCase()}`, step])
     ).values());
+
+    console.log("Связи featureTag к созданию:", featureTagsToCreate);
+    console.log("Связи scenarioTag к созданию:", scenarioTagsToCreate);
 
     await dbClient.$transaction([
         dbClient.tag.createMany({ data: tagsToCreate, skipDuplicates: true }),
