@@ -65,17 +65,36 @@ const saveResults = async (
     const features = await collectFeatures(testData, databaseUrl);
     const scenarios = await collectScenarios(testData, databaseUrl);
 
+    if (!tags) {
+        console.error("❌ Ошибка: collectTags вернул undefined");
+        return;
+    }
+
+    if (!features) {
+        console.error("❌ Ошибка: collectFeatures вернул undefined");
+        return;
+    }
+
+    if (!scenarios) {
+        console.error("❌ Ошибка: collectScenarios вернул undefined");
+        return;
+    }
+
     testData.forEach((feature, featureIndex) => {
         feature.elements.forEach((scenario, scenarioIndex) => {
             const scenarioData = scenarios[featureIndex * feature.elements.length + scenarioIndex];
 
-            // if (!scenarioData) {
-            //     console.error(`❌ Ошибка: сценарий ${scenario.name} не найден в collectScenarios`);
-            //     return;
-            // }
+            if (!scenarioData) {
+                console.error(`❌ Ошибка: сценарий ${scenario.name} не найден в collectScenarios`);
+                return;
+            }
 
-            const scenarioId = scenarioData.id;
-            scenarioMap.set(scenario.id, scenarioId);
+            if (!scenario.id) {
+                console.error(`❌ Ошибка: у сценария ${scenario.name} отсутствует ID`);
+                return;
+            }
+
+            scenarioMap.set(scenario.id, scenarioData.id);
         });
     });
 
@@ -175,6 +194,11 @@ const saveResults = async (
             let scenarioDuration: number = 0;
 
             for (const tag of scenario.tags || []) {
+                if (!tag.name) {
+                    console.error(`❌ Ошибка: найден тег без имени в сценарии "${scenario.name}"`);
+                    continue;
+                }
+
                 let tagId = tagMap.get(tag.name.trim());
                 if (!tagId) {
                     const newTag = await dbClient.tag.create({ data: { name: tag.name.trim() } });
@@ -186,11 +210,7 @@ const saveResults = async (
                     tagMap.set(tag.name.trim(), tagId);
                 }
 
-                if (tagId) {
-                    scenarioTagsToCreate.push({ scenarioId, tagId });
-                } else {
-                    console.warn(`⚠️ Ошибка: Не найден ID для тега "${tag.name}"`);
-                }
+                scenarioTagsToCreate.push({ scenarioId, tagId });
             }
 
             for (const [index, step] of scenario.steps.entries()) {
@@ -236,6 +256,7 @@ const saveResults = async (
                     scenarioStatus = 'skipped';
                 }
             }
+
 
             if (scenarioStatus !== 'failed' && scenarioStatus !== 'skipped') {
                 scenarioStatus = 'passed';
