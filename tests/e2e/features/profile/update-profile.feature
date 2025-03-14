@@ -12,7 +12,7 @@ Feature: Update Profile
     # Then I see app header on profile page
 
   @skip
-  Scenario Outline: Update username
+  Scenario Outline: Update username - "<username>"
     When I am on the home page
     And I click on avatar
     And I click on profile link
