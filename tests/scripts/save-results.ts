@@ -156,9 +156,6 @@ const saveResults = async (
             featureTagsToCreate.push({ featureId, tagId });
         }
 
-        // Логируем теги перед созданием связей
-        console.log(`Обрабатываем фичу "${feature.name}", ID: ${featureId}`);
-
         const originalFeature = testData.find(f => f.name.trim() === feature.name.trim());
         if (!originalFeature) continue;
 
@@ -318,12 +315,6 @@ const saveResults = async (
     const uniqueSteps = Array.from(new Map(
         stepsToCreate.map(step => [`${step.name.trim().toLowerCase()}-${step.keyword.trim().toLowerCase()}`, step])
     ).values());
-
-    console.log("Связи featureTag к созданию:", featureTagsToCreate);
-    console.log("Связи scenarioTag к созданию:", scenarioTagsToCreate);
-
-    console.log("scenarioTagsToCreate:", scenarioTagsToCreate);
-
 
     await dbClient.$transaction([
         dbClient.tag.createMany({ data: tagsToCreate, skipDuplicates: true }),
