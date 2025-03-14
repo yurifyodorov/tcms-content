@@ -33,7 +33,7 @@ Feature: Update Profile
       | GUEST    | GuestNew   |
 
   @skip
-  Scenario Outline: Update avatar
+  Scenario Outline: Update avatar - "<avatar>"
     When I am on the home page
     And I click on avatar
     And I click on profile link
