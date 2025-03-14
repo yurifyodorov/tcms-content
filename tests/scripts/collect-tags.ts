@@ -1,4 +1,4 @@
-import { Tag, TestData } from './types';
+import {Tag, TestData} from './types';
 
 const collectTags = (testData: TestData): Tag[] => {
     const tagSet = new Set<string>();
@@ -11,12 +11,10 @@ const collectTags = (testData: TestData): Tag[] => {
         });
     });
 
-    const collectedTags = Array.from(tagSet).map((tagName) => ({
+    return Array.from(tagSet).map((tagName) => ({
         id: tagName,
         name: tagName,
     }));
-
-    return collectedTags;
 };
 
 export { collectTags };
