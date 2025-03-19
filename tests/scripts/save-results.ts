@@ -117,7 +117,8 @@ const saveResults = async (
 
     for (const scenario of stepResults) {
         let scenarioFailed = false;
-        let scenarioPassed = true;
+        let scenarioPassed = false;
+        let scenarioSkipped = true;
 
         for (const step of scenario.steps) {
             duration += step.duration;
@@ -128,15 +129,16 @@ const saveResults = async (
                     scenarioFailed = true;
                 }
             } else if (step.status === "skipped") {
-                skipCount++;
-            }
-
-            if (step.status === "passed") {
+                scenarioSkipped = scenarioSkipped && true;
+            } else if (step.status === "passed") {
                 scenarioPassed = true;
+                scenarioSkipped = false;
             }
         }
 
-        if (!scenarioFailed) {
+        if (scenarioSkipped) {
+            skipCount++;
+        } else if (!scenarioFailed) {
             passCount++;
         }
 
