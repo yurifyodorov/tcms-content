@@ -102,18 +102,50 @@ const saveResults = async (
     await synchronizeSteps(steps, databaseUrl);
 
     const stepResults = await collectStepsResults(testData);
-    // console.log("Collected Step Results:", stepResults);
+    console.log("Collected Step Results:", JSON.stringify(stepResults, null, 2));
 
     let featuresCount = 0;
     let scenariosCount = 0;
     let stepsCount = 0;
 
-    let passCount = stepResults.filter(step => step.status === "passed").length;
-    let failCount = stepResults.filter(step => step.status === "failed").length;
-    let skipCount = stepResults.filter(step => step.status === "skipped").length;
-
+    let passCount = 0;
+    let failCount = 0;
+    let skipCount = 0;
     let status = 'completed';
-    let duration = stepResults.reduce((total, step) => total + step.duration, 0);
+    let duration = 0;
+    let totalScenarios = 0;
+
+    for (const scenario of stepResults) {
+        let scenarioFailed = false;
+        let scenarioPassed = true;
+
+        for (const step of scenario.steps) {
+            duration += step.duration;
+
+            if (step.status === "failed") {
+                if (!scenarioFailed) {
+                    failCount++;
+                    scenarioFailed = true;
+                }
+            } else if (step.status === "skipped") {
+                skipCount++;
+            }
+
+            if (step.status === "passed") {
+                scenarioPassed = true;
+            }
+        }
+
+        if (!scenarioFailed) {
+            passCount++;
+        }
+
+        totalScenarios++;
+    }
+
+    if (status !== 'failed') {
+        status = 'completed';
+    }
 
     const featuresToCreate: ParsedFeature[] = [];
     const scenariosToCreate: ParsedScenario[] = [];
@@ -222,20 +254,23 @@ const saveResults = async (
 
                 scenarioStepsToCreate.push({ scenarioId, stepId: stepData.id });
 
+                const scenarioResult = stepResults.find(sr => sr.scenarioName.trim().toLowerCase() === scenario.name.trim().toLowerCase());
+                const stepResult = scenarioResult?.steps[index];
+
                 runStepsToCreate.push({
                     id: createId(),
                     stepId: stepData.id,
                     scenarioId,
                     runId,
-                    status: stepResults[index]?.status as Status ?? "unknown",
-                    duration: stepResults[index]?.duration ?? 0,
+                    status: stepResult?.status as Status ?? "unknown",
+                    duration: stepResult?.duration ?? 0,
                     createdAt: new Date(),
                     errorMessage: null,
                     stackTrace: null
                 });
 
                 stepsCount++;
-                scenarioDuration += stepResults[index]?.duration ?? 0;
+                scenarioDuration += stepResult?.duration ?? 0;
 
                 if (!stepsToCreate.some(s => s.id === stepData.id)) {
                     stepsToCreate.push({
@@ -246,11 +281,11 @@ const saveResults = async (
                     });
                 }
 
-                if (stepResults[index]?.status === 'failed') {
+                if (stepResult?.status === 'failed') {
                     scenarioStatus = 'failed';
                 }
 
-                if (stepResults[index]?.status === 'skipped' && scenarioStatus !== 'failed') {
+                if (stepResult?.status === 'skipped' && scenarioStatus !== 'failed') {
                     scenarioStatus = 'skipped';
                 }
             }

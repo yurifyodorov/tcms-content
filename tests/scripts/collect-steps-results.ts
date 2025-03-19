@@ -1,16 +1,24 @@
 import { TestData, StepResult } from "./types";
 
-const collectStepsResults = async (testData: TestData): Promise<{ status: string, duration: number }[]> => {
-    let results: { status: string, duration: number }[] = [];
+interface ScenarioResult {
+    scenarioName: string;
+    steps: { status: string; duration: number }[];
+}
+
+const collectStepsResults = async (testData: TestData): Promise<ScenarioResult[]> => {
+    let results: ScenarioResult[] = [];
 
     testData.forEach(feature => {
         feature.elements.forEach(scenario => {
-            (scenario.steps as StepResult[]).forEach(step => {
+            const steps = (scenario.steps as StepResult[]).map(step => {
                 const { status, duration } = step.result;
-
                 const durationInMs = Math.floor(duration / 1000000);
+                return { status, duration: durationInMs };
+            });
 
-                results.push({ status, duration: durationInMs });
+            results.push({
+                scenarioName: scenario.name,
+                steps,
             });
         });
     });
