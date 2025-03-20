@@ -2,7 +2,7 @@ import { TestData, StepResult } from "./types";
 
 interface ScenarioResult {
     scenarioName: string;
-    steps: { status: string; duration: number }[];
+    steps: { status: string; duration: number; errorMessage?: string }[];
 }
 
 const collectStepsResults = async (testData: TestData): Promise<ScenarioResult[]> => {
@@ -11,9 +11,11 @@ const collectStepsResults = async (testData: TestData): Promise<ScenarioResult[]
     testData.forEach(feature => {
         feature.elements.forEach(scenario => {
             const steps = (scenario.steps as StepResult[]).map(step => {
-                const { status, duration } = step.result;
+                const { status, duration, error_message } = step.result;
                 const durationInMs = Math.floor(duration / 1000000);
-                return { status, duration: durationInMs };
+                return error_message
+                    ? { status, duration: durationInMs, errorMessage: error_message }
+                    : { status, duration: durationInMs };
             });
 
             results.push({

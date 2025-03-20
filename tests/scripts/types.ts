@@ -9,6 +9,7 @@ export interface StepResult extends Step {
     result: {
         status: string;
         duration: number;
+        error_message?: string;
     };
 }
 
