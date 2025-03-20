@@ -267,7 +267,7 @@ const saveResults = async (
                     status: stepResult?.status as Status ?? "unknown",
                     duration: stepResult?.duration ?? 0,
                     createdAt: new Date(),
-                    errorMessage: null,
+                    errorMessage: stepResult?.errorMessage ?? null,
                     stackTrace: null
                 });
 
