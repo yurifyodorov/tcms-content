@@ -51,6 +51,16 @@ async function setupNodeEvents(
 
   on("file:preprocessor", createBundler({ plugins: [createEsbuildPlugin(config)] }));
 
+  /**
+   * TODO:
+   * В будущем интегрировать cypress-s3-upload или аналогичный плагин
+   * для автоматической загрузки скриншотов/видео в Supabase S3
+   * Использовать endpoint:
+   *   https://<project-ref>.supabase.co/storage/v1/s3
+   * + Access Key / Secret Key
+   * и настроить bucket.
+   */
+
   return config;
 }
 
