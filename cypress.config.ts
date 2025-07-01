@@ -61,7 +61,7 @@ export default defineConfig({
     setupNodeEvents,
     downloadsFolder: "downloaded-files",
     screenshotOnRunFailure: false,
-    video: true,
+    video: false,
     videoCompression: 32,
     videosFolder: "tests/reports/videos",
     screenshotsFolder: "tests/reports/screenshots",
