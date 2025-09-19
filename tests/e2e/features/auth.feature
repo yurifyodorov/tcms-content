@@ -19,11 +19,5 @@ Feature: Auth
 
     Examples:
       | userRole | userEmail           |
-      | ADMIN    | admin@example.com   |
-      | TESTER   | tester@example.com  |
-      | GUEST    | guest@example.com   |
-
-  Scenario: Sign in with GitHub
-    When I am on the home page
-    And I click on sign in button
-    Then I see "GitHub" button
+      | MANAGER  | manager@example.com |
+      | CLIENT   | client@example.com  |

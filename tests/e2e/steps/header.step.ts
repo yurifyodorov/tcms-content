@@ -39,10 +39,6 @@ Then('I click on profile link', function () {
   page.header.profileMenu.click('Profile')
 })
 
-Then('I click on map link', function () {
-  page.header.mainNavigation.click('Map')
-})
-
 Then('I see username {word} in profile menu', function (username: string) {
   cy.log('username:', username)
   // TODO: check username

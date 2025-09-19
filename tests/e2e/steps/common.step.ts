@@ -10,6 +10,6 @@ Given('I am on the home page', function () {
   cy.url().should('eq', Cypress.config('baseUrl'));
 })
 
-Given('I am on the map page', function () {
-  cy.url().should('eq', Cypress.config('baseUrl') + 'map');
+Given('I am on the profile page', function () {
+  cy.url().should('eq', Cypress.config('baseUrl') + 'profile');
 })
