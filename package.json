@@ -1,7 +1,7 @@
 {
-  "name": "tcms-content",
+  "name": "tcms-demo-project",
   "version": "1.0.0",
-  "description": "Хранилище тест кейсов для [TCMS](https://tcms.yurifedorov.com/)",
+  "description": "Демо проект для демонстрации возможностей [TCMS](https://tcms.yurifedorov.com/)",
   "main": "index.js",
   "scripts": {
     "test": "cypress run",
