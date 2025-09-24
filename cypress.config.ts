@@ -1,8 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
+
 require('dotenv').config();
+
 import { defineConfig } from 'cypress';
+
 import createBundler from '@bahmutov/cypress-esbuild-preprocessor';
+
 import {
   addCucumberPreprocessorPlugin,
   afterRunHandler,
@@ -11,12 +15,14 @@ import {
 import { createEsbuildPlugin } from '@badeball/cypress-cucumber-preprocessor/esbuild';
 import { specPaths } from "@tests/specs";
 import { createId } from "@/tests/shared/lib/id";
+
 import tcms from "@yurifyodorov/tcms-data-sync";
 
 async function setupNodeEvents(
     on: Cypress.PluginEvents,
     config: Cypress.PluginConfigOptions
 ): Promise<Cypress.PluginConfigOptions> {
+
   await addCucumberPreprocessorPlugin(on, config, {
     omitBeforeRunHandler: true,
     omitAfterRunHandler: true,

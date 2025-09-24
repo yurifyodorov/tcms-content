@@ -1,12 +1,12 @@
 import { Then } from "@badeball/cypress-cucumber-preprocessor";
-import { ADMIN, TESTER, GUEST } from "@tests/stabs/users";
+import { MANAGER, CLIENT } from "@tests/stabs/users";
 
 Then('I have been authorized as manager', function () {
-  cy.login(ADMIN.email)
+  cy.login(MANAGER.email)
 })
 
 Then('I have been authorized as client', function () {
-  cy.loginViaUI(GUEST.email)
+  cy.loginViaUI(CLIENT.email)
 })
 
 Then('I enter the user email: {word}', function (email: string) {

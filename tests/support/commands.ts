@@ -68,8 +68,6 @@ Cypress.Commands.add('loginViaUI', (email: string) => {
   homePage.header.signInButton.click()
   signinPage.form.input.enterValue('email', email)
   signinPage.form.button.click('Войти через Email')
-  signinPage.form.link.verify('Упрощённый тестовый вход')
-  signinPage.form.link.click('Упрощённый тестовый вход')
 })
 
 Cypress.Commands.add('login', (userRole) => {

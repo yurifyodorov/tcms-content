@@ -1,23 +1,15 @@
-export const ADMIN = {
-  id: "admin",
-  email: "admin@example.com",
-  name: "ADMIN",
+export const MANAGER = {
+  id: "manager",
+  email: "manager@example.com",
+  name: "Manager",
   testPassword: "123456",
-  role: 'ADMIN',
+  role: 'MANAGER',
 };
 
-export const TESTER = {
-  id: "tester",
-  email: "tester@example.com",
-  name: "TESTER",
+export const CLIENT = {
+  id: "client",
+  email: "client@example.com",
+  name: "Client",
   testPassword: "123456",
-  role: 'TESTER',
-};
-
-export const GUEST = {
-  id: "guest",
-  email: "guest@example.com",
-  name: "GUEST",
-  testPassword: "123456",
-  role: 'GUEST',
+  role: 'CLIENT',
 };
