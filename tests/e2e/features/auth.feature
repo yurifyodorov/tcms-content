@@ -1,4 +1,3 @@
-@feature-tag-test
 Feature: Auth
 
   Authorization in different ways
