@@ -4,7 +4,6 @@ Feature: Update account
     Given I open website on desktop
     And I click on profile link
 
-  @skip
   Scenario: Update email
     When I am on the profile page
     And I enter new email
